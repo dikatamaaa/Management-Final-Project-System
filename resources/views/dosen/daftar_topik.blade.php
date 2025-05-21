@@ -155,10 +155,51 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
+                                                    <form action="{{ route('daftar_topik.ubah_status', $data->id) }}" method="POST" style="display:inline-block;">
+                                                        @csrf
+                                                        <select name="status" class="form-select form-select-sm d-inline w-auto" style="display:inline-block;">
+                                                            <option value="Tersedia" {{ $data->status == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
+                                                            <option value="Penuh" {{ $data->status == 'Penuh' ? 'selected' : '' }}>Penuh</option>
+                                                            <option value="Fix" {{ $data->status == 'Fix' ? 'selected' : '' }}>Fix</option>
+                                                        </select>
+                                                        <button type="submit" class="btn btn-primary btn-sm ms-1">Ubah Status</button>
+                                                    </form>
                                                     @if ($data->status == "Tersedia")
                                                         <span class="badge rounded-pill bg-success">Tersedia</span>
                                                     @elseif ($data->status == "Penuh")
                                                         <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                        <div class="mt-2">
+                                                            <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                <input type="hidden" name="judul" value="{{ $data->judul }}">
+                                                                <button type="submit" class="btn btn-success btn-sm ms-1" {{ $data->status == 'Fix' ? 'disabled' : '' }}>Diterima</button>
+                                                            </form>
+                                                            <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" {{ $data->status == 'Fix' ? 'disabled' : '' }}>Ditolak</button>
+                                                        </div>
+                                                        <!-- Modal Alasan Ditolak -->
+                                                        <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <form action="{{ route('kelompok.tolak') }}" method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="judul" value="{{ $data->judul }}">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="modalTolakLabel{{ $data->id }}">Alasan Penolakan</h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <textarea name="alasan" class="form-control" rows="3" placeholder="Tulis alasan penolakan..." required></textarea>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                                            <button type="submit" class="btn btn-danger">Kirim Penolakan</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @elseif ($data->status == "Fix")
+                                                        <span class="badge rounded-pill bg-primary">Kelompok Fix</span>
                                                     @else
                                                         <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
                                                     @endif

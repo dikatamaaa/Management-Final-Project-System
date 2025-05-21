@@ -278,4 +278,12 @@ class DosenController extends Controller
         return redirect('/dosen/daftar_topik')->with(['success' => 'Data Berhasil Diperbarui!']);
       
     }
+
+    public function UbahStatusTopik(Request $request, $id)
+    {
+        $topik = \App\Models\DaftarTopik::findOrFail($id);
+        $topik->status = $request->status;
+        $topik->save();
+        return back()->with('success', 'Status topik berhasil diubah!');
+    }
 }

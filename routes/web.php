@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\KelompokController;
 
 // Landing Page
 Route::get('/', [PageController::class, 'index']);
@@ -93,6 +94,7 @@ Route::post('/dosen/daftar_topik', [DosenController::class, 'TambahDataDaftarTop
 Route::get('/dosen/daftar_topik', [DosenController::class, 'MenampilkanDataDaftarTopik'])->middleware('auth:dosen');
 Route::get('/dosen/daftar_topik/hapus/{id}', [DosenController::class, 'HapusDataDaftarTopik'])->name('daftar_topik.hapus')->middleware('auth:dosen');
 Route::post('/dosen/daftar_topik/edit/{id}', [DosenController::class, 'EditDataDaftarTopik'])->name('daftar_topik.edit')->middleware('auth:dosen');
+Route::post('/dosen/daftar_topik/ubah_status/{id}', [DosenController::class, 'UbahStatusTopik'])->name('daftar_topik.ubah_status')->middleware('auth:dosen');
 
 Route::post('/dosen/profil/editFoto/{id}', [DosenController::class, 'EditFotoDosen'])->name('dosen.editFoto')->middleware('auth:dosen');
 Route::post('/dosen/profil/editBiodata/{id}', [DosenController::class, 'EditBiodataDosen'])->name('dosen.editBiodata')->middleware('auth:dosen');
@@ -109,3 +111,11 @@ Route::get('/mahasiswa/kelompok', [PageController::class, 'kelompokMahasiswa'])-
 // CRUD Pada Role Mahasiwa
 Route::get('/mahasiswa/kelompok', [MahasiswaController::class, 'dataMahasiswa'])->middleware('auth:mahasiswa');
 Route::post('/mahasiswa/daftar_topik/pilih/{id}', [PageController::class, 'pilihTopikMahasiswa'])->name('mahasiswa.pilih_topik')->middleware('auth:mahasiswa');
+
+Route::post('/kelompok/terima', [KelompokController::class, 'terima'])->name('kelompok.terima');
+Route::post('/kelompok/tolak', [KelompokController::class, 'tolak'])->name('kelompok.tolak');
+
+Route::post('/mahasiswa/notifications/read-all', function () {
+    auth()->guard('mahasiswa')->user()->unreadNotifications->markAsRead();
+    return response()->json(['success' => true]);
+})->name('mahasiswa.notifications.read')->middleware('auth:mahasiswa');

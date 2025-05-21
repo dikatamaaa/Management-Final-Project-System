@@ -44,30 +44,31 @@
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <ul class="navbar-nav flex-nowrap ms-auto">
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                                        <span class="badge bg-danger badge-counter">
+                                            {{ Auth::guard('mahasiswa')->user()->unreadNotifications->count() }}
+                                        </span>
+                                        <i class="fas fa-bell fa-fw"></i>
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                        <h6 class="dropdown-header">alerts center</h6><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 12, 2019</span>
-                                                <p>A new monthly report is ready to download!</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 7, 2019</span>
-                                                <p>$290.29 has been deposited into your account!</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Spending Alert: We've noticed unusually high spending for your account.</p>
-                                            </div>
-                                        </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                        <h6 class="dropdown-header">Alerts Center</h6>
+                                        @forelse (Auth::guard('mahasiswa')->user()->notifications as $notif)
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="me-3">
+                                                    <div class="bg-warning icon-circle">
+                                                        <i class="fas fa-exclamation-triangle text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <span class="small text-gray-500">{{ $notif->created_at->format('d M Y H:i') }}</span>
+                                                    <p>{{ $notif->data['pesan'] }}</p>
+                                                </div>
+                                            </a>
+                                        @empty
+                                            <a class="dropdown-item text-center small text-gray-500" href="#">Tidak ada notifikasi</a>
+                                        @endforelse
+                                        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                                     </div>
                                 </div>
                             </li>
@@ -355,6 +356,17 @@
                         }
                     }
                 }
+            });
+        });
+
+        // Mark notifications as read when Alerts Center is opened
+        $(function() {
+            $('.nav-item.dropdown.no-arrow.mx-1').on('show.bs.dropdown', function () {
+                $.post("{{ route('mahasiswa.notifications.read') }}", {
+                    _token: '{{ csrf_token() }}'
+                }, function() {
+                    $('.badge-counter').text('0');
+                });
             });
         });
     </script>
