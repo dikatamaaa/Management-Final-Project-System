@@ -1,65 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login | infoTA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gradient-to-r from-red-700 to-red-900 text-white min-h-screen flex flex-col items-center justify-center">
+<html data-bs-theme="light" lang="en">
 
-    <div class="text-center mb-6">
-        <h1 class="text-5xl font-bold"><span class="text-gray-100">info</span><span class="text-red-300">TA</span></h1>
-        <div class="mt-2">
-            <a href="/" class="text-gray-300 hover:text-white transition-all">Back to Homepage</a> |
-            <a href="/dashboard" class="text-gray-300 hover:text-white transition-all">Test Dashboard</a>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>infoTA - Login</title>
+    <link rel="stylesheet" href="{{ asset('/storage/assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap">
+</head>
+
+<body style="background: #881d1d;">
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-center" style="width: 100%;height: 100vh;">
+            <div class="col-xxl-4">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <p class="text-center">
+                            <img class="img-fluid" src="{{ asset('/storage/assets/img/Logo/Logo%20(250%20x%20250%20piksel).png') }}" style="width: 210px;">
+                        </p>
+                        <h2 class="text-dark card-title mb-2 mt-5" style="font-family: Poppins, sans-serif;font-weight: bold;">Login</h2>
+                            @if ($errors->has('login'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>{{ $errors->first('login') }}</strong> {{ $errors->first('login2') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+                        <form class="pt-4" method="post" action="{{ route('login.submit') }}" enctype="multipart/form-data">
+                            @csrf
+                            <label class="form-label fs-5 text-dark" style="font-family: Poppins, sans-serif;">Nama Pengguna</label>
+                            <input class="bg-light-subtle border rounded-pill border-dark-subtle shadow focus-ring form-control form-control-lg" type="text" name="nama_pengguna" placeholder="Nama Pengguna" data-bs-theme="light" style="font-size: 18px;">
+                            @error('nama_pengguna')
+                                <div class="form-tex fw-bold ms-3 mt-1" style="color:#881d1d">{{ $message }}</div>
+                            @enderror
+                            <label class="form-label fs-5 text-dark pt-4" style="font-family: Poppins, sans-serif;">Kata Sandi</label>
+                            <input class="bg-light-subtle bg-gradient border rounded-pill border-dark-subtle shadow form-control form-control-lg" type="password" placeholder="Kata Sandi" name="kata_sandi" style="font-size: 18px;" data-bs-theme="light">
+                            @error('kata_sandi')
+                                <div class="form-tex fw-bold ms-3 mt-1" style="color:#881d1d">{{ $message }}</div>
+                            @enderror
+                            <p class="text-center d-grid gap-2 pt-4">
+                                <button class="btn btn-primary btn-lg border rounded-pill" type="submit" style="background: rgb(136,29,29);">Masuk</button>
+                                <a class="text-center pt-3" href="/" style="color: rgb(136,29,29);font-family: Roboto, sans-serif; text-decoration:none;">Kembali ke Halaman Utama</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 class="text-2xl font-semibold text-gray-800 text-center mb-4">Login</h2>
-        <form action="/login" method="POST" class="space-y-4">
-            <div>
-                <label for="username" class="block text-gray-700 font-medium">Username</label>
-                <input type="text" id="username" name="username" required 
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900">
-            </div>
-
-            <div>
-                <label for="password" class="block text-gray-700 font-medium">Password</label>
-                <div class="relative">
-                    <input type="password" id="password" name="password" required 
-                        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900">
-                    <button type="button" onclick="togglePassword()" 
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500 transition">
-                        👁️
-                    </button>
-                </div>
-                <div class="mt-2">
-                    <input type="checkbox" id="showPassword" onclick="togglePassword()">
-                    <label for="showPassword" class="text-gray-700 text-sm">Tampilkan Password</label>
-                </div>
-            </div>
-
-            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-md transition-all">
-                Login
-            </button>
-        </form>
-    </div>
-
-    <script>
-        function togglePassword() {
-            let passwordInput = document.getElementById("password");
-            let checkbox = document.getElementById("showPassword");
-            
-            if (checkbox.checked) {
-                passwordInput.type = "text";
-            } else {
-                passwordInput.type = "password";
-            }
-        }
-    </script>
-
+    <script src="{{ asset('/storage/assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('/storage/assets/js/theme.js') }}"></script>
 </body>
+
 </html>
