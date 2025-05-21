@@ -141,102 +141,129 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Budidaya Ikan Air Tawar</td>
-                                            <td>STY</td>
-                                            <td>3 Orang</td>
-                                            <td><span class="badge bg-dark me-1">Internet Of Things</span><span class="badge bg-dark me-1">Artificial Intelligence</span></td>
-                                            <td><span class="badge rounded-pill bg-success">Tersedia</span></td>
-                                            <td><button class="btn btn-success btn-sm link-light ms-1 me-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalPilihTopik"><i class="fas fa-plus"></i></button><button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik"><i class="fas fa-eye"></i></button>
-                                                <div class="modal fade" role="dialog" tabindex="-1" id="ModalPilihTopik">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" style="font-weight: bold;">Pilih Topik</h5><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                                        @php $no = 1; @endphp
+                                        @foreach($daftarTopik as $topik)
+                                            @php
+                                                $anggota = \App\Models\Kelompok::where('judul', $topik->judul)->get();
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $no++ }}</td>
+                                                <td>{{ $topik->judul }}</td>
+                                                <td>{{ $topik->kode_dosen }}</td>
+                                                <td>{{ $topik->kuota }} Orang</td>
+                                                <td>
+                                                    @if(is_array($topik->bidang))
+                                                        @foreach($topik->bidang as $bidang)
+                                                            <span class="badge bg-dark me-1">{{ $bidang }}</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="badge bg-dark me-1">{{ $topik->bidang }}</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($topik->status == 'Tersedia')
+                                                        <span class="badge rounded-pill bg-success">Tersedia</span>
+                                                    @elseif($topik->status == 'Penuh')
+                                                        <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                    @else
+                                                        <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <form action="{{ route('mahasiswa.pilih_topik', $topik->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <button class="btn btn-success btn-sm link-light ms-1 me-1" type="submit" @if($topik->status != 'Tersedia') disabled @endif><i class="fas fa-plus"></i></button>
+                                                    </form>
+                                                    <button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{ $topik->id }}"><i class="fas fa-eye"></i></button>
+                                                    <!-- Modal Lihat Daftar Topik Dinamis -->
+                                                    <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatDaftarTopik{{ $topik->id }}">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" style="font-weight: bold;">Lihat Daftar Topik</h5>
+                                                                    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
+                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->judul }}</p></div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Jurusan</span></div>
+                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->program_studi ?? '-' }}</p></div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
+                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->fakultas ?? '-' }}</p></div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
+                                                                        <div class="col-8">
+                                                                            <p><span class="fw-bold">:&nbsp;</span>
+                                                                                @if(is_array($topik->bidang))
+                                                                                    @foreach($topik->bidang as $bidang)
+                                                                                        <span class="badge bg-dark me-1">{{ $bidang }}</span>
+                                                                                    @endforeach
+                                                                                @else
+                                                                                    <span class="badge bg-dark me-1">{{ $topik->bidang }}</span>
+                                                                                @endif
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
+                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->kuota }} Orang</p></div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Dosen</span></div>
+                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->dosen ?? '-' }}</p></div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Kode Dosen</span></div>
+                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->kode_dosen ?? '-' }}</p></div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Status</span></div>
+                                                                        <div class="col-8">
+                                                                            <p><span class="fw-bold">:&nbsp;</span>
+                                                                                @if($topik->status == 'Tersedia')
+                                                                                    <span class="badge rounded-pill bg-success">Tersedia</span>
+                                                                                @elseif($topik->status == 'Penuh')
+                                                                                    <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                                                @else
+                                                                                    <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
+                                                                                @endif
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Kelompok</span></div>
+                                                                        <div class="col-8">
+                                                                            <p><span class="fw-bold">:&nbsp;</span>
+                                                                                @if($anggota->count() > 0)
+                                                                                    @foreach($anggota as $a)
+                                                                                        <span class="badge rounded-pill bg-dark m-1">{{ $a->nama_anggota }} ({{ $a->nim }})</span>
+                                                                                    @endforeach
+                                                                                @else
+                                                                                    -
+                                                                                @endif
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
+                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->deskripsi ?? '-' }}</p></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
+                                                                </div>
                                                             </div>
-                                                            <div class="modal-body text-center">
-                                                                <h1 class="display-3"><i class="fas fa-exclamation-triangle"></i></h1>
-                                                                <h6>Apakah anda yakin ingin Memilih Topik?</h6>
-                                                            </div>
-                                                            <div class="modal-footer"><button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tidak</button><button class="btn btn-success btn-sm link-light" type="button"><i class="far fa-trash-alt"></i>&nbsp;Ya, Pilih</button></div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatDaftarTopik">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" style="font-weight: bold;">Lihat Daftar Topik</h5><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span>Budidaya Ikan Air Tawar</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Jurusan</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span>S1 Teknik Komputer</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span>Fakultas Tenik Elektro</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span><span class="badge bg-dark me-1">Internet Of Things</span><span class="badge bg-dark me-1">Artificial Intelligence</span></p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span>3 Orang</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Dosen</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span>Shin Tae Yong</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Kode Dosen</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span>STY</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Status</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span><span class="badge rounded-pill bg-success">Tersedia</span></p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Kelompok</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span>-</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
-                                                                    <div class="col-8">
-                                                                        <p><span class="fw-bold">:&nbsp;</span>Capstone yang berfokus pada pembuatan alat budidaya ikan air tawar</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer"><button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr>

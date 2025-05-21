@@ -72,7 +72,47 @@ class PageController extends Controller
         return view('mahasiswa.beranda');
     }
     public function daftarTopikMahasiswa() {
-        return view('mahasiswa.daftar_topik');
+        $daftarTopik = \App\Models\DaftarTopik::all();
+        return view('mahasiswa.daftar_topik', compact('daftarTopik'));
+    }
+    public function pilihTopikMahasiswa(Request $request, $id) {
+        $topik = \App\Models\DaftarTopik::findOrFail($id);
+        $user = auth()->guard('mahasiswa')->user();
+        $nim = $user->nim;
+        $nama = $user->nama;
+
+        // Cek apakah sudah pernah memilih topik ini
+        $sudah_ambil = \App\Models\Kelompok::where('judul', $topik->judul)
+            ->where('nim', $nim)
+            ->exists();
+        if ($sudah_ambil) {
+            return back()->with(['error' => 'Anda sudah memilih topik ini!']);
+        }
+
+        // Hitung jumlah anggota kelompok pada topik ini
+        $jumlah_anggota = \App\Models\Kelompok::where('judul', $topik->judul)->count();
+        if ($jumlah_anggota >= $topik->kuota) {
+            // Update status topik jika penuh
+            $topik->status = 'Penuh';
+            $topik->save();
+            return back()->with(['error' => 'Kuota topik sudah penuh!']);
+        }
+
+        // Tambahkan anggota ke tabel kelompok
+        \App\Models\Kelompok::create([
+            'judul' => $topik->judul,
+            'nim' => $nim,
+            'nama_anggota' => $nama,
+        ]);
+
+        // Update status jika sudah penuh setelah penambahan
+        $jumlah_anggota++;
+        if ($jumlah_anggota >= $topik->kuota) {
+            $topik->status = 'Penuh';
+            $topik->save();
+        }
+
+        return back()->with(['success' => 'Berhasil memilih topik!']);
     }
     public function kelompokMahasiswa() {
         return view('mahasiswa.kelompok');

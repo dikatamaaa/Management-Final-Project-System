@@ -108,3 +108,4 @@ Route::get('/mahasiswa/kelompok', [PageController::class, 'kelompokMahasiswa'])-
 
 // CRUD Pada Role Mahasiwa
 Route::get('/mahasiswa/kelompok', [MahasiswaController::class, 'dataMahasiswa'])->middleware('auth:mahasiswa');
+Route::post('/mahasiswa/daftar_topik/pilih/{id}', [PageController::class, 'pilihTopikMahasiswa'])->name('mahasiswa.pilih_topik')->middleware('auth:mahasiswa');
