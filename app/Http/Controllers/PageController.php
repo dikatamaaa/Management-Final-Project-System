@@ -52,7 +52,10 @@ class PageController extends Controller
         return view('dosen.beranda');
     }
     public function daftarTopikDosen() {
-        return view('dosen.daftar_topik');
+        $kode_dosen = auth()->guard('dosen')->user()->kode_dosen;
+        $menampilkanDataDaftarTopik = \App\Models\DaftarTopik::where('kode_dosen', $kode_dosen)->get();
+        $modalTopik = \App\Models\DaftarTopik::all();
+        return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik', 'modalTopik'));
     }
     public function templateLaporanDosen() {
         return view('dosen.template_laporan');

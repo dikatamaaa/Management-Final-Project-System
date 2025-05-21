@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DaftarTopik;
 use App\Models\Dosen;
+use App\Models\Kelompok;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -202,7 +203,18 @@ class DosenController extends Controller
         $kode_dosen = auth()->guard('dosen')->user()->kode_dosen;
         $menampilkanDataDaftarTopik = DaftarTopik::where('kode_dosen', $kode_dosen)->get();
         $modalTopik = DaftarTopik::all();
-        return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik','modalTopik'));
+        $semuaTopik = DaftarTopik::all();
+        // Attach anggota kelompok for each topik
+        foreach ($menampilkanDataDaftarTopik as $topik) {
+            $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
+        }
+        foreach ($modalTopik as $topik) {
+            $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
+        }
+        foreach ($semuaTopik as $topik) {
+            $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
+        }
+        return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik','modalTopik','semuaTopik'));
     }
 
     /**
