@@ -215,7 +215,8 @@ class DosenController extends Controller
         foreach ($semuaTopik as $topik) {
             $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
         }
-        $daftarMahasiswa = \App\Models\Mahasiswa::all(['nim', 'nama']);
+        // Filter mahasiswa yang belum punya kelompok/topik
+        $daftarMahasiswa = \App\Models\Mahasiswa::whereNotIn('nim', Kelompok::pluck('nim'))->get(['nim', 'nama']);
         return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik','modalTopik','semuaTopik','daftarMahasiswa'));
     }
 
@@ -301,17 +302,24 @@ class DosenController extends Controller
         if ($jumlah_anggota >= $topik->kuota) {
             return back()->with('error', 'Kuota topik sudah penuh!');
         }
-        // Cek sudah ada di kelompok
-        $sudah_ada = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $request->nim)->exists();
-        if ($sudah_ada) {
-            return back()->with('error', 'Mahasiswa sudah ada di kelompok!');
+        // Cek apakah mahasiswa sudah punya kelompok/topik apapun
+        $sudah_punya_kelompok = \App\Models\Kelompok::where('nim', $request->nim)->exists();
+        if ($sudah_punya_kelompok) {
+            return back()->with('error', 'Mahasiswa ini sudah memiliki kelompok/topik!');
         }
         // Tambahkan ke kelompok
         \App\Models\Kelompok::create([
             'judul' => $topik->judul,
             'nim' => $mahasiswa->nim,
             'nama_anggota' => $mahasiswa->nama,
+            'pembimbing_satu' => $topik->dosen,
         ]);
+        // Cek apakah setelah penambahan, kelompok sudah penuh
+        $jumlah_anggota_baru = \App\Models\Kelompok::where('judul', $topik->judul)->count();
+        if ($jumlah_anggota_baru >= $topik->kuota) {
+            $topik->status = 'Penuh';
+            $topik->save();
+        }
         // Kirim notifikasi ke mahasiswa
         $mahasiswa->notify(new PenambahanKelompokNotification($topik->judul));
         return back()->with('success', 'Mahasiswa berhasil ditambahkan ke kelompok!');

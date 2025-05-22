@@ -84,6 +84,12 @@ class PageController extends Controller
         $nim = $user->nim;
         $nama = $user->nama;
 
+        // Cek apakah mahasiswa sudah punya kelompok/topik apapun
+        $sudah_punya_kelompok = \App\Models\Kelompok::where('nim', $nim)->exists();
+        if ($sudah_punya_kelompok) {
+            return back()->with(['error' => 'Anda sudah memiliki kelompok/topik!']);
+        }
+
         // Cek apakah sudah pernah memilih topik ini
         $sudah_ambil = \App\Models\Kelompok::where('judul', $topik->judul)
             ->where('nim', $nim)
@@ -101,11 +107,16 @@ class PageController extends Controller
             return back()->with(['error' => 'Kuota topik sudah penuh!']);
         }
 
+        // Ambil nama dosen pembuat topik
+        $dosen = \App\Models\Dosen::where('kode_dosen', $topik->kode_dosen)->first();
+        $nama_pembimbing = $dosen ? $dosen->nama : null;
+
         // Tambahkan anggota ke tabel kelompok
         \App\Models\Kelompok::create([
             'judul' => $topik->judul,
             'nim' => $nim,
             'nama_anggota' => $nama,
+            'pembimbing_satu' => $nama_pembimbing,
         ]);
 
         // Update status jika sudah penuh setelah penambahan

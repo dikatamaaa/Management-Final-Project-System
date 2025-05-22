@@ -111,7 +111,7 @@ Route::get('/mahasiswa/template_laporan', [MahasiswaController::class, 'Template
 
 
 // CRUD Pada Role Mahasiwa
-Route::get('/mahasiswa/kelompok', [MahasiswaController::class, 'dataMahasiswa'])->middleware('auth:mahasiswa');
+Route::get('/mahasiswa/pembimbing-dua', [MahasiswaController::class, 'dataMahasiswa'])->middleware('auth:mahasiswa');
 Route::post('/mahasiswa/daftar_topik/pilih/{id}', [PageController::class, 'pilihTopikMahasiswa'])->name('mahasiswa.pilih_topik')->middleware('auth:mahasiswa');
 
 Route::post('/kelompok/terima', [KelompokController::class, 'terima'])->name('kelompok.terima');
@@ -121,3 +121,5 @@ Route::post('/mahasiswa/notifications/read-all', function () {
     auth()->guard('mahasiswa')->user()->unreadNotifications->markAsRead();
     return response()->json(['success' => true]);
 })->name('mahasiswa.notifications.read')->middleware('auth:mahasiswa');
+
+Route::post('/mahasiswa/pilih-pembimbing-dua', [MahasiswaController::class, 'pilihPembimbingDua'])->name('mahasiswa.pilih_pembimbing_dua');

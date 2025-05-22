@@ -29,7 +29,7 @@
                     <li class="nav-item"><a class="nav-link" href="/mahasiswa/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a></li>
                     <li class="nav-item"><a class="nav-link disabled" href="/mahasiswa/template_laporan"><i class="fas fa-file-word"></i><span>Template Laporan</span></a></li>
                     <li class="nav-item"><a class="nav-link disabled" href="/mahasiswa/dokumen_cd"><i class="fas fa-file-word"></i><span>Dokumen Capstone Design</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/mahasiswa/kelompok"><i class="fas fa-users"></i><span>Kelompok</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/mahasiswa/kelompok"><i class="fas fa-users"></i><span>Pembimbing 2</span></a></li>
                     <li class="nav-item"><a class="nav-link disabled" href="/mahasiswa/pengajuan_bimbingan"><i class="fas fa-comments"></i><span>Pengajuan Bimbingan</span></a></li>
                     <li class="nav-item">
                         <hr><a class="nav-link disabled" href="/mahasiswa/profil"><i class="fas fa-user"></i><span>Profil</span></a>
@@ -85,56 +85,58 @@
                 </nav>
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0">Kelompok</h3>
+                        <h3 class="text-dark mb-0">Pembimbing 2</h3>
                     </div>
                     <div class="card shadow">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                            <p class="text-dark m-0 fw-bold">Data Kelompok</p>
+                            <p class="text-dark m-0 fw-bold">Mencari Pembimbing 2</p>
                         </div>
                         <div class="card-body">
                             <div class="alert alert-warning" role="alert"><span><strong>Catatan :</strong></span>
-                                <ul>
-                                    <li>Anggota Kelompok Minimal 2 Orang Sampai Dengan 5 Orang</li>
+                                <ul>                                  
                                     <li>Pembimbing 1 Akan Otomatis Dipilih Sesuai Dengan Topik Yang Dimiliki Oleh Dosen Bersangkutan</li>
                                     <li>Pembimbing 2 Bisa Dipilih Setelah Mendapatkan Topik dan Pembimbing 1</li>
                                 </ul>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <h5>Anggota Kelompok</h5>
-                                    <div class="row mt-4" id="formContainer">
-                                        <div class="inputGroup d-flex">
-                                        <div class="col-11">
-                                            <select class="form-select form-select-sm namaAnggotaSelect" name="nama_anggota[]" id="nama_anggota_1" multiple>
-                                                @foreach ($dataMahasiswa as $data)
-                                                    <option value="{{$data->nama}}">{{$data->nim}} - {{$data->nama}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-1 ms-1">
-                                            <button class="btn btn-danger btn-sm removeInput" type="button">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 mt-3">
-                                            <div class="d-grid gap-2"><button class="btn btn-primary btn-sm" id="addInput" type="button" style="background: rgb(136,29,29);color: rgb(255,255,255);">&nbsp;<i class="fas fa-plus"></i>&nbsp;Anggota Kelompok</button></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
                                     <h5>Pembimbing</h5>
                                     <div class="row">
-                                        <div class="col"><label class="form-label">Pembimbing 1</label><input class="form-control-sm form-control" type="text"></div>
+                                        <div class="col">
+                                            <label class="form-label">Pembimbing 1</label>
+                                            @if(isset($kelompokSaya) && $kelompokSaya)
+                                                <input class="form-control-sm form-control" type="text" value="{{ $kelompokSaya->pembimbing_satu }}" readonly>
+                                            @else
+                                                <input class="form-control-sm form-control" type="text" value="" readonly placeholder="Akan muncul otomatis setelah Anda memiliki kelompok">
+                                            @endif
+                                        </div>
                                     </div>
                                     <div class="row mt-3">
-                                        <div class="col"><label class="form-label">Pembimbing 2</label><input class="form-control-sm form-control" type="text"></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 mt-3">
-                                            <div class="d-grid gap-2"><button class="btn btn-sm" type="button" style="background: #881d1d;color: rgb(255,255,255);">&nbsp;<i class="fas fa-save"></i>&nbsp;Pilih Pembimbing 2</button></div>
+                                        <div class="col">
+                                            <label class="form-label">Pembimbing 2</label>
+                                            @if(isset($kelompokSaya) && $kelompokSaya)
+                                                <form action="{{ route('mahasiswa.pilih_pembimbing_dua') }}" method="POST">
+                                                    @csrf
+                                                    <select class="form-select form-select-sm" name="pembimbing_dua" id="pembimbing_2" required>
+                                                        <option value="">-- Pilih Pembimbing 2 --</option>
+                                                        @foreach($dosenList as $dosen)
+                                                            @if(!isset($kelompokSaya) || $kelompokSaya->pembimbing_satu != $dosen->nama)
+                                                                <option value="{{ $dosen->nama }}" {{ isset($kelompokSaya) && $kelompokSaya->pembimbing_dua == $dosen->nama ? 'selected' : '' }}>{{ $dosen->nama }} ({{ $dosen->kode_dosen }})</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                    <div class="d-grid gap-2 mt-2">
+                                                        <button class="btn btn-sm" type="submit" style="background: #881d1d;color: rgb(255,255,255);">
+                                                            <i class="fas fa-save"></i>&nbsp;Pilih Pembimbing 2
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            @else
+                                                <select class="form-select form-select-sm" disabled>
+                                                    <option>-- Pilih Pembimbing 2 --</option>
+                                                </select>
+                                                <div class="alert alert-info mt-2">Fitur ini hanya bisa digunakan setelah Anda memiliki kelompok.</div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -313,6 +315,13 @@ $(document).ready(function () {
       $(this).closest('.inputGroup').remove();
       updateOptions();
     }
+  });
+
+  $(document).ready(function() {
+    $('#pembimbing_2').select2({
+        placeholder: "-- Pilih Pembimbing 2 --",
+        width: '100%'
+    });
   });
 });
         </script>
