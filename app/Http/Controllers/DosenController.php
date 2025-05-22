@@ -314,6 +314,11 @@ class DosenController extends Controller
             'nama_anggota' => $mahasiswa->nama,
             'pembimbing_satu' => $topik->dosen,
         ]);
+        // Jika status topik sebelumnya 'Tersedia', ubah ke 'Booked'
+        if ($topik->status == 'Tersedia') {
+            $topik->status = 'Booked';
+            $topik->save();
+        }
         // Cek apakah setelah penambahan, kelompok sudah penuh
         $jumlah_anggota_baru = \App\Models\Kelompok::where('judul', $topik->judul)->count();
         if ($jumlah_anggota_baru >= $topik->kuota) {

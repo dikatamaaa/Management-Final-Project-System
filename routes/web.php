@@ -123,3 +123,4 @@ Route::post('/mahasiswa/notifications/read-all', function () {
 })->name('mahasiswa.notifications.read')->middleware('auth:mahasiswa');
 
 Route::post('/mahasiswa/pilih-pembimbing-dua', [MahasiswaController::class, 'pilihPembimbingDua'])->name('mahasiswa.pilih_pembimbing_dua');
+Route::post('/mahasiswa/daftar_topik/tambah_anggota/{id}', [MahasiswaController::class, 'tambahAnggotaKelompok'])->name('mahasiswa.tambah_anggota_kelompok');

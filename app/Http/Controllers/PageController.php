@@ -90,22 +90,14 @@ class PageController extends Controller
             return back()->with(['error' => 'Anda sudah memiliki kelompok/topik!']);
         }
 
-        // Cek apakah sudah pernah memilih topik ini
-        $sudah_ambil = \App\Models\Kelompok::where('judul', $topik->judul)
-            ->where('nim', $nim)
-            ->exists();
-        if ($sudah_ambil) {
-            return back()->with(['error' => 'Anda sudah memilih topik ini!']);
+        // Cek status topik
+        if ($topik->status != 'Tersedia') {
+            return back()->with(['error' => 'Topik ini tidak tersedia untuk dipilih!']);
         }
 
-        // Hitung jumlah anggota kelompok pada topik ini
-        $jumlah_anggota = \App\Models\Kelompok::where('judul', $topik->judul)->count();
-        if ($jumlah_anggota >= $topik->kuota) {
-            // Update status topik jika penuh
-            $topik->status = 'Penuh';
-            $topik->save();
-            return back()->with(['error' => 'Kuota topik sudah penuh!']);
-        }
+        // Booking: ubah status topik jadi Booked
+        $topik->status = 'Booked';
+        $topik->save();
 
         // Ambil nama dosen pembuat topik
         $dosen = \App\Models\Dosen::where('kode_dosen', $topik->kode_dosen)->first();
@@ -119,14 +111,7 @@ class PageController extends Controller
             'pembimbing_satu' => $nama_pembimbing,
         ]);
 
-        // Update status jika sudah penuh setelah penambahan
-        $jumlah_anggota++;
-        if ($jumlah_anggota >= $topik->kuota) {
-            $topik->status = 'Penuh';
-            $topik->save();
-        }
-
-        return back()->with(['success' => 'Berhasil memilih topik!']);
+        return back()->with(['success' => 'Topik berhasil di-booking! Silakan tambahkan anggota kelompok.']);
     }
     public function kelompokMahasiswa() {
         return view('mahasiswa.kelompok');

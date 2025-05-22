@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('/storage/assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -145,6 +146,9 @@
                                         @foreach($daftarTopik as $topik)
                                             @php
                                                 $anggota = \App\Models\Kelompok::where('judul', $topik->judul)->get();
+                                                $nim = auth()->guard('mahasiswa')->user()->nim;
+                                                $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
+                                                $sudah_punya_kelompok = \App\Models\Kelompok::where('nim', $nim)->exists();
                                             @endphp
                                             <tr>
                                                 <td>{{ $no++ }}</td>
@@ -170,97 +174,18 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('mahasiswa.pilih_topik', $topik->id) }}" method="POST" style="display:inline;">
-                                                        @csrf
-                                                        <button class="btn btn-success btn-sm link-light ms-1 me-1" type="submit" @if($topik->status != 'Tersedia') disabled @endif><i class="fas fa-plus"></i></button>
-                                                    </form>
+                                                    @if($topik->status == 'Tersedia' && !$sudah_punya_kelompok)
+                                                        <form action="{{ route('mahasiswa.pilih_topik', $topik->id) }}" method="POST" style="display:inline;">
+                                                            @csrf
+                                                            <button class="btn btn-success btn-sm link-light ms-1 me-1" type="submit"><i class="fas fa-plus"></i></button>
+                                                        </form>
+                                                    @endif
+                                                    @if($sudah_booking && \App\Models\Kelompok::where('judul', $topik->judul)->count() < $topik->kuota)
+                                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}">
+                                                            <i class="fas fa-user-plus"></i> Tambah Anggota
+                                                        </button>
+                                                    @endif
                                                     <button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{ $topik->id }}"><i class="fas fa-eye"></i></button>
-                                                    <!-- Modal Lihat Daftar Topik Dinamis -->
-                                                    <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatDaftarTopik{{ $topik->id }}">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" style="font-weight: bold;">Lihat Daftar Topik</h5>
-                                                                    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
-                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->judul }}</p></div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Jurusan</span></div>
-                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->program_studi ?? '-' }}</p></div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
-                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->fakultas ?? '-' }}</p></div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
-                                                                        <div class="col-8">
-                                                                            <p><span class="fw-bold">:&nbsp;</span>
-                                                                                @if(is_array($topik->bidang))
-                                                                                    @foreach($topik->bidang as $bidang)
-                                                                                        <span class="badge bg-dark me-1">{{ $bidang }}</span>
-                                                                                    @endforeach
-                                                                                @else
-                                                                                    <span class="badge bg-dark me-1">{{ $topik->bidang }}</span>
-                                                                                @endif
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
-                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->kuota }} Orang</p></div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Dosen</span></div>
-                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->dosen ?? '-' }}</p></div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Kode Dosen</span></div>
-                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->kode_dosen ?? '-' }}</p></div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Status</span></div>
-                                                                        <div class="col-8">
-                                                                            <p><span class="fw-bold">:&nbsp;</span>
-                                                                                @if($topik->status == 'Tersedia')
-                                                                                    <span class="badge rounded-pill bg-success">Tersedia</span>
-                                                                                @elseif($topik->status == 'Penuh')
-                                                                                    <span class="badge rounded-pill bg-danger">Penuh</span>
-                                                                                @else
-                                                                                    <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
-                                                                                @endif
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Kelompok</span></div>
-                                                                        <div class="col-8">
-                                                                            <p><span class="fw-bold">:&nbsp;</span>
-                                                                                @if($anggota->count() > 0)
-                                                                                    @foreach($anggota as $a)
-                                                                                        <span class="badge rounded-pill bg-dark m-1">{{ $a->nama_anggota }} ({{ $a->nim }})</span>
-                                                                                    @endforeach
-                                                                                @else
-                                                                                    -
-                                                                                @endif
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
-                                                                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->deskripsi ?? '-' }}</p></div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -289,13 +214,13 @@
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-   <script src="{{ asset('/storage/assets/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('/storage/assets/js/theme.js') }}"></script>
+   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src="{{ asset('/storage/assets/js/theme.js') }}"></script>
     <script>
         //message with sweetalert
         @if(session('success'))
@@ -350,6 +275,151 @@
                 }
             });
         });
+
+        // Kembalikan fokus ke tombol pemicu modal setelah modal ditutup
+        document.querySelectorAll('[data-bs-toggle="modal"]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var target = btn.getAttribute('data-bs-target');
+                var modal = document.querySelector(target);
+                if (modal) {
+                    modal.addEventListener('hidden.bs.modal', function () {
+                        btn.focus();
+                    }, { once: true });
+                }
+            });
+        });
+
+        // Hilangkan warning aria-hidden dengan memindahkan fokus ke body setelah modal ditutup
+        document.querySelectorAll('.modal').forEach(function(modal) {
+            modal.addEventListener('hidden.bs.modal', function () {
+                document.activeElement.blur(); // Hilangkan fokus dari elemen manapun
+                document.body.focus(); // Pindahkan fokus ke body
+            });
+        });
     </script>
+    <!-- Setelah tabel, render semua modal tambah anggota di luar tabel -->
+    @foreach($daftarTopik as $topik)
+        @php
+            $nim = auth()->guard('mahasiswa')->user()->nim;
+            $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
+        @endphp
+        @if($sudah_booking)
+        <div class="modal fade" id="modalTambahAnggota{{ $topik->id }}" tabindex="-1" aria-labelledby="modalTambahAnggotaLabel{{ $topik->id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('mahasiswa.tambah_anggota_kelompok', $topik->id) }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTambahAnggotaLabel{{ $topik->id }}">Tambah Anggota Kelompok</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label class="form-label">Pilih Mahasiswa</label>
+                            <select name="nim" class="form-select" required>
+                                <option value="">-- Pilih Mahasiswa --</option>
+                                @foreach(\App\Models\Mahasiswa::whereNotIn('nim', \App\Models\Kelompok::pluck('nim'))->get() as $mhs)
+                                    <option value="{{ $mhs->nim }}">{{ $mhs->nama }} ({{ $mhs->nim }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Tambah</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+    @endforeach
+    <!-- Setelah tabel, render semua modal Lihat di luar tabel -->
+    @foreach($daftarTopik as $topik)
+    <div class="modal fade" id="ModalLihatDaftarTopik{{ $topik->id }}" tabindex="-1" aria-labelledby="ModalLihatDaftarTopikLabel{{ $topik->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLihatDaftarTopikLabel{{ $topik->id }}">Lihat Daftar Topik</h5>
+                    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
+                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->judul }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Jurusan</span></div>
+                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->program_studi ?? '-' }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
+                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->fakultas ?? '-' }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
+                        <div class="col-8">
+                            <p><span class="fw-bold">:&nbsp;</span>
+                                @if(is_array($topik->bidang))
+                                    @foreach($topik->bidang as $bidang)
+                                        <span class="badge bg-dark me-1">{{ $bidang }}</span>
+                                    @endforeach
+                                @else
+                                    <span class="badge bg-dark me-1">{{ $topik->bidang }}</span>
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
+                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->kuota }} Orang</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Dosen</span></div>
+                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->dosen ?? '-' }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Kode Dosen</span></div>
+                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->kode_dosen ?? '-' }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Status</span></div>
+                        <div class="col-8">
+                            <p><span class="fw-bold">:&nbsp;</span>
+                                @if($topik->status == 'Tersedia')
+                                    <span class="badge rounded-pill bg-success">Tersedia</span>
+                                @elseif($topik->status == 'Penuh')
+                                    <span class="badge rounded-pill bg-danger">Penuh</span>
+                                @else
+                                    <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Kelompok</span></div>
+                        <div class="col-8">
+                            <p><span class="fw-bold">:&nbsp;</span>
+                                @php $anggota = \App\Models\Kelompok::where('judul', $topik->judul)->get(); @endphp
+                                @if($anggota->count() > 0)
+                                    @foreach($anggota as $a)
+                                        <span class="badge rounded-pill bg-dark m-1">{{ $a->nama_anggota }} ({{ $a->nim }})</span>
+                                    @endforeach
+                                @else
+                                    -
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
+                        <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $topik->deskripsi ?? '-' }}</p></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
 </body>
 </html>

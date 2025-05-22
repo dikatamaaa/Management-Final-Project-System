@@ -155,26 +155,20 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    <form action="{{ route('daftar_topik.ubah_status', $data->id) }}" method="POST" style="display:inline-block;">
-                                                        @csrf
-                                                        <select name="status" class="form-select form-select-sm d-inline w-auto" style="display:inline-block;">
-                                                            <option value="Tersedia" {{ $data->status == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                                                            <option value="Penuh" {{ $data->status == 'Penuh' ? 'selected' : '' }}>Penuh</option>
-                                                            <option value="Fix" {{ $data->status == 'Fix' ? 'selected' : '' }}>Fix</option>
-                                                        </select>
-                                                        <button type="submit" class="btn btn-primary btn-sm ms-1">Ubah Status</button>
-                                                    </form>
-                                                    @if ($data->status == "Tersedia")
-                                                        <span class="badge rounded-pill bg-success">Tersedia</span>
-                                                    @elseif ($data->status == "Penuh")
-                                                        <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                    @php
+                                                        $jumlah_anggota = isset($data->anggota_kelompok) ? count($data->anggota_kelompok) : \App\Models\Kelompok::where('judul', $data->judul)->count();
+                                                    @endphp
+                                                    @if($data->status == 'Fix')
+                                                        <span class="badge rounded-pill bg-primary">Fix</span>
+                                                    @elseif($jumlah_anggota >= $data->kuota)
+                                                        <span class="badge rounded-pill bg-danger">Full</span>
                                                         <div class="mt-2">
                                                             <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;">
                                                                 @csrf
                                                                 <input type="hidden" name="judul" value="{{ $data->judul }}">
-                                                                <button type="submit" class="btn btn-success btn-sm ms-1" {{ $data->status == 'Fix' ? 'disabled' : '' }}>Diterima</button>
+                                                                <button type="submit" class="btn btn-success btn-sm ms-1">Diterima</button>
                                                             </form>
-                                                            <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" {{ $data->status == 'Fix' ? 'disabled' : '' }}>Ditolak</button>
+                                                            <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}">Ditolak</button>
                                                         </div>
                                                         <!-- Modal Alasan Ditolak -->
                                                         <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true">
@@ -198,8 +192,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    @elseif ($data->status == "Fix")
-                                                        <span class="badge rounded-pill bg-primary">Kelompok Fix</span>
+                                                    @elseif($data->status == 'Tersedia')
+                                                        <span class="badge rounded-pill bg-success">Available</span>
+                                                    @elseif($data->status == 'Booked')
+                                                        <span class="badge rounded-pill bg-warning text-dark">Booked</span>
                                                     @else
                                                         <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
                                                     @endif
@@ -326,7 +322,7 @@
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" style="font-weight: bold;">Lihat Topik saya dibuat</h5>
+                                                            <h5 class="modal-title" style="font-weight: bold;">Lihat Topik {{ $data->judul }}</h5>
                                                             <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                                         </div>
                                                         <div class="modal-body">
@@ -371,15 +367,20 @@
                                                             <div class="row">
                                                                 <div class="col-4"><span style="font-weight: bold;">Status</span></div>
                                                                 <div class="col-8">
-                                                                    <p><span class="fw-bold">:&nbsp;</span>
-                                                                        @if($data->status == 'Tersedia')
-                                                                            <span class="badge rounded-pill bg-success">Tersedia</span>
-                                                                        @elseif($data->status == 'Penuh')
-                                                                            <span class="badge rounded-pill bg-danger">Penuh</span>
-                                                                        @else
-                                                                            <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
-                                                                        @endif
-                                                                    </p>
+                                                                    @if($data->status == 'Fix')
+                                                                        <span class="badge rounded-pill bg-primary">Fix</span>
+                                                                        <form action="{{ route('daftar_topik.ubah_status', $data->id) }}" method="POST" class="mt-2">
+                                                                            @csrf
+                                                                            <select name="status" class="form-select form-select-sm d-inline w-auto" style="display:inline-block;">
+                                                                                <option value="Tersedia">Available</option>
+                                                                                <option value="Booked">Booked</option>
+                                                                                <option value="Penuh">Full</option>
+                                                                            </select>
+                                                                            <button type="submit" class="btn btn-primary btn-sm ms-1">Ubah Status</button>
+                                                                        </form>
+                                                                    @else
+                                                                        <span class="badge rounded-pill {{ $data->status == 'Available' ? 'bg-success' : ($data->status == 'Full' ? 'bg-danger' : ($data->status == 'Booked' ? 'bg-warning text-dark' : 'bg-warning text-dark')) }}">{{ $data->status == 'Tersedia' ? 'Available' : ($data->status == 'Penuh' ? 'Full' : $data->status) }}</span>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                             <div class="row">
@@ -490,10 +491,15 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        @if ($data->status == "Tersedia")
-                                                            <span class="badge rounded-pill bg-success">Tersedia</span>
-                                                        @elseif ($data->status == "Penuh")
-                                                            <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                        @php
+                                                            $jumlah_anggota = isset($data->anggota_kelompok) ? count($data->anggota_kelompok) : \App\Models\Kelompok::where('judul', $data->judul)->count();
+                                                        @endphp
+                                                        @if($data->status == 'Fix')
+                                                            <span class="badge rounded-pill bg-primary">Fix</span>
+                                                        @elseif($jumlah_anggota >= $data->kuota)
+                                                            <span class="badge rounded-pill bg-danger">Full</span>
+                                                        @elseif($data->status == 'Tersedia')
+                                                            <span class="badge rounded-pill bg-success">Available</span>
                                                         @else
                                                             <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
                                                         @endif
@@ -509,7 +515,7 @@
                                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" style="font-weight: bold;">Lihat Daftar Topik dari Dosen Lain</h5>
+                                                                        <h5 class="modal-title" style="font-weight: bold;">Lihat Daftar Topik dari Dosen Lain {{ $data->judul }}</h5>
                                                                         <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                                                     </div>
                                                                     <div class="modal-body">
@@ -556,11 +562,13 @@
                                                                             <div class="col-8">
                                                                                 <p><span class="fw-bold">:&nbsp;</span>
                                                                                     @if($data->status == 'Tersedia')
-                                                                                        <span class="badge rounded-pill bg-success">Tersedia</span>
+                                                                                        <span class="badge rounded-pill bg-success">Available</span>
+                                                                                    @elseif($data->status == 'Booked')
+                                                                                        <span class="badge rounded-pill bg-warning text-dark">Booked</span>
                                                                                     @elseif($data->status == 'Penuh')
-                                                                                        <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                                                        <span class="badge rounded-pill bg-danger">Full</span>
                                                                                     @else
-                                                                                        <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
+                                                                                        <span class="badge rounded-pill bg-primary">{{ $data->status }}</span>
                                                                                     @endif
                                                                                 </p>
                                                                             </div>
