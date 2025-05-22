@@ -58,7 +58,8 @@ class PageController extends Controller
         return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik', 'modalTopik'));
     }
     public function templateLaporanDosen() {
-        return view('dosen.template_laporan');
+        $templates = \App\Models\Template::all();
+        return view('dosen.template_laporan', compact('templates'));
     }
     public function dokumenCdDosen() {
         return view('dosen.dokumen_cd');

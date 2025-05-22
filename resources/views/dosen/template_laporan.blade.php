@@ -82,40 +82,32 @@
                         </ul>
                     </div>
                 </nav>
-                <div class="container-fluid">
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0">Template Laporan</h3>
-                    </div>
+                <div class="container mt-4">
+                    <h3 class="mb-4">Template Laporan</h3>
                     <div class="card shadow">
-                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                            <p class="text-dark m-0 fw-bold">Data Template Laporan</p>
-                        </div>
                         <div class="card-body">
-                            <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
-                                <table class="table table-striped table-hover" id="tableData">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>File</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CD1_template.docx</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button"><i class="fas fa-download"></i></button></td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td><strong>No</strong></td>
-                                            <td><strong>File</strong></td>
-                                            <td><strong>Aksi</strong></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                            @if($templates->count() > 0)
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Nama Dokumen</th>
+                                        <th class="text-center">Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($templates as $i => $tpl)
+                                    <tr>
+                                        <td class="text-center">{{ $i+1 }}</td>
+                                        <td class="text-center">{{ $tpl->nama_dokumen }}</td>
+                                        <td class="text-center"><a href="{{ $tpl->template_dokumen }}" target="_blank" class="btn btn-primary btn-sm">Lihat/Download</a></td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @else
+                            <div class="alert alert-info">Belum ada template laporan.</div>
+                            @endif
                         </div>
                     </div>
                 </div>
