@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\PenambahanKelompokNotification;
 
 class DosenController extends Controller
 {
@@ -214,7 +215,8 @@ class DosenController extends Controller
         foreach ($semuaTopik as $topik) {
             $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
         }
-        return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik','modalTopik','semuaTopik'));
+        $daftarMahasiswa = \App\Models\Mahasiswa::all(['nim', 'nama']);
+        return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik','modalTopik','semuaTopik','daftarMahasiswa'));
     }
 
     /**
@@ -285,5 +287,33 @@ class DosenController extends Controller
         $topik->status = $request->status;
         $topik->save();
         return back()->with('success', 'Status topik berhasil diubah!');
+    }
+
+    public function TambahMahasiswaKeTopik(Request $request, $id)
+    {
+        $request->validate([
+            'nim' => 'required|exists:mahasiswa,nim',
+        ]);
+        $topik = \App\Models\DaftarTopik::findOrFail($id);
+        $mahasiswa = \App\Models\Mahasiswa::where('nim', $request->nim)->first();
+        // Cek kuota
+        $jumlah_anggota = \App\Models\Kelompok::where('judul', $topik->judul)->count();
+        if ($jumlah_anggota >= $topik->kuota) {
+            return back()->with('error', 'Kuota topik sudah penuh!');
+        }
+        // Cek sudah ada di kelompok
+        $sudah_ada = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $request->nim)->exists();
+        if ($sudah_ada) {
+            return back()->with('error', 'Mahasiswa sudah ada di kelompok!');
+        }
+        // Tambahkan ke kelompok
+        \App\Models\Kelompok::create([
+            'judul' => $topik->judul,
+            'nim' => $mahasiswa->nim,
+            'nama_anggota' => $mahasiswa->nama,
+        ]);
+        // Kirim notifikasi ke mahasiswa
+        $mahasiswa->notify(new PenambahanKelompokNotification($topik->judul));
+        return back()->with('success', 'Mahasiswa berhasil ditambahkan ke kelompok!');
     }
 }

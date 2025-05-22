@@ -215,6 +215,9 @@
                                                         <button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{$data->id}}">
                                                             <i class="fas fa-eye"></i>
                                                         </button>
+                                                        <button class="btn btn-success btn-sm ms-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalTambahMahasiswa{{$data->id}}">
+                                                            <i class="fas fa-user-plus"></i> Tambah Mahasiswa
+                                                        </button>
                                                     </p>
                                                 </td>
                                             </tr>
@@ -401,6 +404,33 @@
                                                         <div class="modal-footer">
                                                             <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal Tambah Mahasiswa -->
+                                            <div class="modal fade" id="ModalTambahMahasiswa{{$data->id}}" tabindex="-1" aria-labelledby="ModalTambahMahasiswaLabel{{$data->id}}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form action="{{ route('daftar_topik.tambah_mahasiswa', $data->id) }}" method="POST">
+                                                            @csrf
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="ModalTambahMahasiswaLabel{{$data->id}}">Tambah Mahasiswa ke Topik</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <label class="form-label">Nama atau NIM</label>
+                                                                <select name="nim" class="form-select select2-mahasiswa" required>
+                                                                    <option value="">-- Pilih Mahasiswa --</option>
+                                                                    @foreach($daftarMahasiswa as $mhs)
+                                                                        <option value="{{ $mhs->nim }}">{{ $mhs->nama }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                                <button type="submit" class="btn btn-success">Tambah</button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -751,6 +781,35 @@ $(document).ready(function() {
     @foreach($modalTopik as $data)
         initSelect2ForModal('#ModalEditDaftarTopik{{ $data->id }}');
     @endforeach
+});
+
+$(document).ready(function() {
+    // Inisialisasi select2 pada setiap kali modal tambah mahasiswa dibuka
+    $('body').on('shown.bs.modal', '.modal', function () {
+        var $select = $(this).find('.select2-mahasiswa');
+        if ($select.length && !$select.hasClass('select2-hidden-accessible')) {
+            $select.select2({
+                dropdownParent: $(this),
+                placeholder: '-- Pilih Mahasiswa --',
+                width: '100%',
+                matcher: function(params, data) {
+                    if ($.trim(params.term) === '') {
+                        return data;
+                    }
+                    if (typeof data.text === 'undefined') {
+                        return null;
+                    }
+                    var term = params.term.toLowerCase();
+                    var text = data.text.toLowerCase();
+                    var nim = $(data.element).val().toLowerCase();
+                    if (text.indexOf(term) > -1 || nim.indexOf(term) > -1) {
+                        return data;
+                    }
+                    return null;
+                }
+            });
+        }
+    });
 });
     </script>
     <!-- Modal Tambah Topik -->

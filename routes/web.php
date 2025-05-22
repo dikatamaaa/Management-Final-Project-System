@@ -95,6 +95,7 @@ Route::get('/dosen/daftar_topik', [DosenController::class, 'MenampilkanDataDafta
 Route::get('/dosen/daftar_topik/hapus/{id}', [DosenController::class, 'HapusDataDaftarTopik'])->name('daftar_topik.hapus')->middleware('auth:dosen');
 Route::post('/dosen/daftar_topik/edit/{id}', [DosenController::class, 'EditDataDaftarTopik'])->name('daftar_topik.edit')->middleware('auth:dosen');
 Route::post('/dosen/daftar_topik/ubah_status/{id}', [DosenController::class, 'UbahStatusTopik'])->name('daftar_topik.ubah_status')->middleware('auth:dosen');
+Route::post('/dosen/daftar_topik/tambah_mahasiswa/{id}', [DosenController::class, 'TambahMahasiswaKeTopik'])->name('daftar_topik.tambah_mahasiswa')->middleware('auth:dosen');
 
 Route::post('/dosen/profil/editFoto/{id}', [DosenController::class, 'EditFotoDosen'])->name('dosen.editFoto')->middleware('auth:dosen');
 Route::post('/dosen/profil/editBiodata/{id}', [DosenController::class, 'EditBiodataDosen'])->name('dosen.editBiodata')->middleware('auth:dosen');
