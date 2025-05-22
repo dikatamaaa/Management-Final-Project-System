@@ -107,6 +107,7 @@ Route::post('/dosen/profil/gantiKataSandi/{id}', [DosenController::class, 'Ganti
 Route::get('/mahasiswa/beranda', [PageController::class, 'berandaMahasiswa'])->middleware('auth:mahasiswa');
 Route::get('/mahasiswa/daftar_topik', [PageController::class, 'daftarTopikMahasiswa'])->middleware('auth:mahasiswa');
 Route::get('/mahasiswa/kelompok', [PageController::class, 'kelompokMahasiswa'])->middleware('auth:mahasiswa');
+Route::get('/mahasiswa/template_laporan', [MahasiswaController::class, 'TemplateLaporan'])->name('mahasiswa.template_laporan')->middleware('auth:mahasiswa');
 
 
 // CRUD Pada Role Mahasiwa

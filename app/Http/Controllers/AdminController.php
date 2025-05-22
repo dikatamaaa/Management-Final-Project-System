@@ -32,30 +32,48 @@ class AdminController extends Controller
     public function TambahDataDokumenTemplate(Request $request) : RedirectResponse {
         // Validasi Form
         $validasi = Validator::make($request->all(), [
-            'template_dokumen' => 'required|mimes:docx|max:16384',
+            'nama_dokumen' => ['required', 'string', 'max:255'],
+            'template_dokumen' => [
+                'required',
+                'url',
+                function ($attribute, $value, $fail) {
+                    $allowed = [
+                        'drive.google.com',
+                        'onedrive.live.com',
+                        'dropbox.com',
+                        'telkomuniversityofficial-my.sharepoint.com'
+                    ];
+                    $found = false;
+                    foreach ($allowed as $domain) {
+                        if (strpos($value, $domain) !== false) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        $fail('Link hanya boleh dari Google Drive, OneDrive, Dropbox, atau SharePoint Telkom University!');
+                    }
+                }
+            ],
         ],[
-            'template_dokumen.required' => 'File Template Dokumen Wajib Diisi!',
-            'template_dokumen.mimes' => 'Jenis File Template Dokumen Harus DOCX',
-            'template_dokumen.max' => 'Ukuran File Template Dokumen Maksimal 16MB',
+            'nama_dokumen.required' => 'Nama Dokumen Wajib Diisi!',
+            'template_dokumen.required' => 'Link Template Dokumen Wajib Diisi!',
+            'template_dokumen.url' => 'Link harus berupa URL yang valid!',
         ]);
 
         if ($validasi->fails()) {
             return redirect()->back()->withErrors($validasi)->with(['error' => 'Gagal Menambahkan Data!']);
         }
 
-        // Upload File
-        $file = $request->file('template_dokumen');
-        $namaAsli = $file->getClientOriginalName();
-        $file->storeAs('dokumen_template', $namaAsli);
-
-    // Cek apakah nama file sudah ada di database
-    if (Template::where('template_dokumen', $namaAsli)->exists()) {
-        return back()->withErrors(['template_dokumen' => 'Nama File Tidak Boleh Sama Dengan Yang Sudah Diunggah.'])->with(['error' => 'Gagal Menambahkan Data!']);
-    }
+        // Cek apakah link sudah ada di database
+        if (Template::where('template_dokumen', $request->template_dokumen)->exists()) {
+            return back()->withErrors(['template_dokumen' => 'Link sudah pernah diinput.'])->with(['error' => 'Gagal Menambahkan Data!']);
+        }
 
         // Create Data Template Dokumen
         $template = Template::create([
-            'template_dokumen' => $namaAsli,
+            'nama_dokumen' => $request->nama_dokumen,
+            'template_dokumen' => $request->template_dokumen,
         ]);
 
         $admin = auth()->guard('admin')->user();
@@ -93,37 +111,52 @@ class AdminController extends Controller
      */
     public function EditDataDokumenTemplate(Request $request, $id) : RedirectResponse {
         // Validasi Form
-        $validasi = Validator::make($request->all(), [
-            'template_dokumen_'.$id => 'required|mimes:docx|max:16384',
-        ],[
-            'template_dokumen_'.$id.'.required' => 'File Template Dokumen Wajib Diisi!',
-            'template_dokumen_'.$id.'.mimes' => 'Jenis File Template Dokumen Harus DOCX',
-            'template_dokumen_'.$id.'.max' => 'Ukuran File Template Dokumen Maksimal 16MB',
-        ]);
-
-        if ($validasi->fails()) {
-            return redirect()->back()->withErrors($validasi)->with(['error' => 'Gagal Diperbarui!']);
+        try {
+            $request->validateWithBag('edit'.$id, [
+                'nama_dokumen_'.$id => ['required', 'string', 'max:255'],
+                'template_dokumen_'.$id => [
+                    'required',
+                    'url',
+                    function ($attribute, $value, $fail) {
+                        $allowed = [
+                            'drive.google.com',
+                            'onedrive.live.com',
+                            'dropbox.com',
+                            'telkomuniversityofficial-my.sharepoint.com'
+                        ];
+                        $found = false;
+                        foreach ($allowed as $domain) {
+                            if (strpos($value, $domain) !== false) {
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if (!$found) {
+                            $fail('Link hanya boleh dari Google Drive, OneDrive, Dropbox, atau SharePoint Telkom University!');
+                        }
+                    }
+                ],
+            ],[
+                'nama_dokumen_'.$id.'.required' => 'Nama Dokumen Wajib Diisi!',
+                'template_dokumen_'.$id.'.required' => 'Link Template Dokumen Wajib Diisi!',
+                'template_dokumen_'.$id.'.url' => 'Link harus berupa URL yang valid!',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors(), 'edit'.$id)->with(['error' => 'Gagal Diperbarui!']);
         }
 
         // Get Template by ID
         $template = Template::findOrFail($id);
 
-        // Hapus File Jika File Perbarui
-        Storage::delete('dokumen_template/' . $template->template_dokumen);
-
-        // Upload File
-        $file = $request->file('template_dokumen_'.$id);
-        $namaAsli = $file->getClientOriginalName();
-        $file->storeAs('dokumen_template', $namaAsli);
-        
-        // Cek apakah nama file sudah ada di database
-        if (Template::where('template_dokumen', $namaAsli)->exists()) {
-            return back()->withErrors(['template_dokumen_'.$id => 'Nama File Tidak Boleh Sama Dengan Yang Sudah Diunggah.'])->with(['error' => 'Gagal Diperbarui!']);
+        // Cek apakah link sudah ada di database (kecuali data ini sendiri)
+        if (Template::where('template_dokumen', $request->{'template_dokumen_'.$id})->where('id', '!=', $id)->exists()) {
+            return back()->withErrors(['template_dokumen_'.$id => 'Link sudah pernah diinput.'])->with(['error' => 'Gagal Diperbarui!']);
         }
 
-        // Perbarui File
+        // Perbarui link dan nama dokumen
         $template->update([
-            'template_dokumen' => $namaAsli,
+            'nama_dokumen' => $request->{'nama_dokumen_'.$id},
+            'template_dokumen' => $request->{'template_dokumen_'.$id},
         ]);
 
         // Redirect ke Template Dokumen

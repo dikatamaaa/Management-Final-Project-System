@@ -9,5 +9,5 @@ class Template extends Model
 {
     use HasFactory;
     protected $table = 'template';
-    protected $fillable = ['template_dokumen'];
+    protected $fillable = ['template_dokumen', 'nama_dokumen'];
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelompok;
 use App\Models\Mahasiswa;
+use App\Models\Template;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -18,5 +19,11 @@ class MahasiswaController extends Controller
         $prodi = auth()->guard('mahasiswa')->user()->program_studi;
         $dataMahasiswa = Mahasiswa::where('program_studi', $prodi)->get();
         return view('mahasiswa.kelompok', compact('dataMahasiswa'));
+    }
+
+    public function TemplateLaporan()
+    {
+        $templates = Template::all();
+        return view('mahasiswa.template_laporan', compact('templates'));
     }
 }

@@ -196,10 +196,13 @@
                                                 <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <label class="form-label text-dark" style="font-weight: bold;">File Template Dokumen :</label>
-                                                <input class="form-control form-control-sm @error('template_dokumen') is-invalid @enderror" type="file" name="template_dokumen" accept=".docx">
-
-                                                {{-- Pesan Error Untuk Template Dokumen --}}
+                                                <label class="form-label text-dark" style="font-weight: bold;">Nama Dokumen :</label>
+                                                <input class="form-control form-control-sm @error('nama_dokumen') is-invalid @enderror" type="text" name="nama_dokumen" placeholder="Contoh: Template Laporan Akhir">
+                                                @if ($errors->has('nama_dokumen') && !$errors->getBag('default')->hasAny(array_filter(array_keys($errors->toArray()), fn($k)=>str_starts_with($k,'nama_dokumen_'))))
+                                                    <small class="fw-bold" style="color: #881d1d;">{{ $errors->first('nama_dokumen') }}</small>
+                                                @endif
+                                                <label class="form-label text-dark mt-2" style="font-weight: bold;">Link Template Dokumen :</label>
+                                                <input class="form-control form-control-sm @error('template_dokumen') is-invalid @enderror" type="url" name="template_dokumen" placeholder="https://contoh.com/template.docx">
                                                 @error('template_dokumen')
                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                 @enderror
@@ -223,6 +226,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">No</th>
+                                            <th class="text-center">Nama Dokumen</th>
                                             <th class="text-center">File</th>
                                             <th class="text-center">Aksi</th>
                                         </tr>
@@ -231,7 +235,10 @@
                                         @foreach ($menampilkanDataTemplateDokumen as $data)
                                             <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $data->template_dokumen }}</td>
+                                            <td class="text-center">{{ $data->nama_dokumen }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ $data->template_dokumen }}" target="_blank">{{ $data->template_dokumen }}</a>
+                                            </td>
                                             <td>
                                                 <p class="text-center">
                                                 <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalEditTemplate{{ $data->id }}">
@@ -255,12 +262,16 @@
                                                                     <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <label class="form-label" style="font-weight: bold;">File Template Dokumen :</label>
-                                                                    <input class="form-control form-control-sm form-control @error('template_dokumen_'.$data->id) is-invalid @enderror" type="file" name="template_dokumen_{{ $data->id }}">
-                                                                    {{-- Pesan Error Untuk Template Dokumen --}}
-                                                                    @error('template_dokumen_'.$data->id)
-                                                                        <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                                                                    @enderror
+                                                                    <label class="form-label text-dark" style="font-weight: bold;">Nama Dokumen :</label>
+                                                                    <input class="form-control form-control-sm {{ $errors->hasBag('edit'.$data->id) && $errors->getBag('edit'.$data->id)->has('nama_dokumen_'.$data->id) ? 'is-invalid' : '' }}" type="text" name="nama_dokumen_{{ $data->id }}" value="{{ $data->nama_dokumen }}">
+                                                                    @if ($errors->hasBag('edit'.$data->id) && $errors->getBag('edit'.$data->id)->has('nama_dokumen_'.$data->id))
+                                                                        <small class="fw-bold" style="color: #881d1d;">{{ $errors->getBag('edit'.$data->id)->first('nama_dokumen_'.$data->id) }}</small>
+                                                                    @endif
+                                                                    <label class="form-label text-dark mt-2" style="font-weight: bold;">Link Template Dokumen :</label>
+                                                                    <input class="form-control form-control-sm {{ $errors->hasBag('edit'.$data->id) && $errors->getBag('edit'.$data->id)->has('template_dokumen_'.$data->id) ? 'is-invalid' : '' }}" type="url" name="template_dokumen_{{ $data->id }}" value="{{ $data->template_dokumen }}">
+                                                                    @if ($errors->hasBag('edit'.$data->id) && $errors->getBag('edit'.$data->id)->has('template_dokumen_'.$data->id))
+                                                                        <small class="fw-bold" style="color: #881d1d;">{{ $errors->getBag('edit'.$data->id)->first('template_dokumen_'.$data->id) }}</small>
+                                                                    @endif
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button class="btn btn-secondary btn-sm" type="reset">
@@ -301,6 +312,7 @@
                                     <tfoot>
                                         <tr>
                                             <td class="text-center"><strong>No</strong></td>
+                                            <td class="text-center"><strong>Nama Dokumen</strong></td>
                                             <td class="text-center"><strong>File</strong></td>
                                             <td class="text-center"><strong>Aksi</strong></td>
                                         </tr>
