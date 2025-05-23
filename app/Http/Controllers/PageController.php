@@ -115,7 +115,7 @@ class PageController extends Controller
         return back()->with(['success' => 'Topik berhasil di-booking! Silakan tambahkan anggota kelompok.']);
     }
     public function kelompokMahasiswa() {
-        return view('mahasiswa.kelompok');
+        return view('mahasiswa.pembimbing-dua');
     }
 ######################### Halaman MAHASIWA ########################################
 }

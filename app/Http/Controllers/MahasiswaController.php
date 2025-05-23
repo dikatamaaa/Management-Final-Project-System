@@ -28,7 +28,7 @@ class MahasiswaController extends Controller
         // (Opsional) Data mahasiswa satu prodi, jika masih dibutuhkan
         $dataMahasiswa = Mahasiswa::where('program_studi', $prodi)->get();
 
-        return view('mahasiswa.kelompok', compact('dataMahasiswa', 'kelompokSaya', 'dosenList'));
+        return view('mahasiswa.pembimbing-dua', compact('dataMahasiswa', 'kelompokSaya', 'dosenList'));
     }
 
     public function TemplateLaporan()
