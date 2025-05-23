@@ -42,9 +42,14 @@ class MahasiswaController extends Controller
         $nim = auth()->guard('mahasiswa')->user()->nim;
         $kelompok = \App\Models\Kelompok::where('nim', $nim)->first();
         if ($kelompok) {
-            $kelompok->pembimbing_dua = $request->pembimbing_dua;
-            $kelompok->save();
-            return back()->with('success', 'Pembimbing 2 berhasil dipilih!');
+            // Update semua anggota kelompok dengan judul yang sama
+            \App\Models\Kelompok::where('judul', $kelompok->judul)
+                ->update([
+                    'pembimbing_dua' => $request->pembimbing_dua,
+                    'status_pembimbing_dua' => 'pending',
+                    'alasan_tolak_pembimbing_dua' => null
+                ]);
+            return back()->with('success', 'Pembimbing 2 berhasil dipilih untuk seluruh anggota kelompok!');
         }
         return back()->with('error', 'Anda belum memiliki kelompok!');
     }

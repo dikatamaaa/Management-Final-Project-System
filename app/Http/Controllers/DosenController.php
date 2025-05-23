@@ -329,4 +329,72 @@ class DosenController extends Controller
         $mahasiswa->notify(new PenambahanKelompokNotification($topik->judul));
         return back()->with('success', 'Mahasiswa berhasil ditambahkan ke kelompok!');
     }
+
+    /**
+     * Menampilkan permintaan pembimbing dua yang masuk ke dosen ini
+     */
+    public function permintaanPembimbingDua() {
+        $nama_dosen = auth()->guard('dosen')->user()->nama;
+        // Ambil semua judul kelompok yang meminta dosen ini sebagai pembimbing dua dan status pending
+        $judulList = \App\Models\Kelompok::where('pembimbing_dua', $nama_dosen)
+            ->where('status_pembimbing_dua', 'pending')
+            ->pluck('judul')
+            ->unique();
+        $permintaan = [];
+        foreach ($judulList as $judul) {
+            $anggota = \App\Models\Kelompok::where('judul', $judul)->get();
+            $row = [
+                'judul' => $judul,
+                'anggota' => $anggota,
+                'pembimbing_satu' => $anggota->first()->pembimbing_satu ?? '-',
+                'id' => $anggota->first()->id ?? null,
+            ];
+            $permintaan[] = $row;
+        }
+        return view('dosen.pembimbing-dua', compact('permintaan'));
+    }
+
+    /**
+     * Menerima permintaan pembimbing dua
+     */
+    public function acceptPembimbingDua($id) {
+        $kelompok = \App\Models\Kelompok::findOrFail($id);
+        // Update semua anggota kelompok dengan judul yang sama
+        \App\Models\Kelompok::where('judul', $kelompok->judul)
+            ->update([
+                'status_pembimbing_dua' => 'accepted',
+                'alasan_tolak_pembimbing_dua' => null
+            ]);
+        // Kirim notifikasi ke semua anggota kelompok
+        $anggota = \App\Models\Kelompok::where('judul', $kelompok->judul)->get();
+        foreach ($anggota as $item) {
+            $mahasiswa = \App\Models\Mahasiswa::where('nim', $item->nim)->first();
+            if ($mahasiswa) {
+                $mahasiswa->notify(new \App\Notifications\PembimbingDuaNotification('accepted', $kelompok->pembimbing_dua));
+            }
+        }
+        return back()->with('success', 'Permintaan pembimbing dua diterima.');
+    }
+
+    /**
+     * Menolak permintaan pembimbing dua
+     */
+    public function rejectPembimbingDua(Request $request, $id) {
+        $kelompok = \App\Models\Kelompok::findOrFail($id);
+        // Update semua anggota kelompok dengan judul yang sama
+        \App\Models\Kelompok::where('judul', $kelompok->judul)
+            ->update([
+                'status_pembimbing_dua' => 'rejected',
+                'alasan_tolak_pembimbing_dua' => $request->alasan
+            ]);
+        // Kirim notifikasi ke semua anggota kelompok
+        $anggota = \App\Models\Kelompok::where('judul', $kelompok->judul)->get();
+        foreach ($anggota as $item) {
+            $mahasiswa = \App\Models\Mahasiswa::where('nim', $item->nim)->first();
+            if ($mahasiswa) {
+                $mahasiswa->notify(new \App\Notifications\PembimbingDuaNotification('rejected', $kelompok->pembimbing_dua, $request->alasan));
+            }
+        }
+        return back()->with('success', 'Permintaan pembimbing dua ditolak.');
+    }
 }

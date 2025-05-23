@@ -115,9 +115,12 @@
                                         <div class="col">
                                             <label class="form-label">Pembimbing 2</label>
                                             @if(isset($kelompokSaya) && $kelompokSaya)
+                                                @php
+                                                    $disablePembimbing2 = ($kelompokSaya->status_pembimbing_dua === 'pending' || $kelompokSaya->status_pembimbing_dua === 'accepted');
+                                                @endphp
                                                 <form action="{{ route('mahasiswa.pilih_pembimbing_dua') }}" method="POST">
                                                     @csrf
-                                                    <select class="form-select form-select-sm" name="pembimbing_dua" id="pembimbing_2" required>
+                                                    <select class="form-select form-select-sm" name="pembimbing_dua" id="pembimbing_2" required @if($disablePembimbing2) disabled @endif>
                                                         <option value="">-- Pilih Pembimbing 2 --</option>
                                                         @foreach($dosenList as $dosen)
                                                             @if(!isset($kelompokSaya) || $kelompokSaya->pembimbing_satu != $dosen->nama)
@@ -126,11 +129,18 @@
                                                         @endforeach
                                                     </select>
                                                     <div class="d-grid gap-2 mt-2">
-                                                        <button class="btn btn-sm" type="submit" style="background: #881d1d;color: rgb(255,255,255);">
+                                                        <button class="btn btn-sm" type="submit" style="background: #881d1d;color: rgb(255,255,255);" @if($disablePembimbing2) disabled @endif>
                                                             <i class="fas fa-save"></i>&nbsp;Pilih Pembimbing 2
                                                         </button>
                                                     </div>
                                                 </form>
+                                                @if($kelompokSaya->status_pembimbing_dua === 'pending')
+                                                    <div class="alert alert-info mt-2">Menunggu konfirmasi dosen pembimbing dua.</div>
+                                                @elseif($kelompokSaya->status_pembimbing_dua === 'accepted')
+                                                    <div class="alert alert-success mt-2">Pembimbing dua sudah diterima oleh dosen.</div>
+                                                @elseif($kelompokSaya->status_pembimbing_dua === 'rejected')
+                                                    <div class="alert alert-danger mt-2">Permintaan pembimbing dua ditolak. Silakan pilih ulang pembimbing dua.</div>
+                                                @endif
                                             @else
                                                 <select class="form-select form-select-sm" disabled>
                                                     <option>-- Pilih Pembimbing 2 --</option>

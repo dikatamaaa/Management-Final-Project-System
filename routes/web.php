@@ -101,6 +101,11 @@ Route::post('/dosen/profil/editFoto/{id}', [DosenController::class, 'EditFotoDos
 Route::post('/dosen/profil/editBiodata/{id}', [DosenController::class, 'EditBiodataDosen'])->name('dosen.editBiodata')->middleware('auth:dosen');
 Route::post('/dosen/profil/gantiKataSandi/{id}', [DosenController::class, 'GantiKataSandiDosen'])->name('dosen.gantiKataSandi')->middleware('auth:dosen');
 
+// Permintaan pembimbing dua (dosen)
+Route::get('/dosen/pembimbing-dua', [\App\Http\Controllers\DosenController::class, 'permintaanPembimbingDua'])->middleware('auth:dosen')->name('dosen.permintaan_pembimbing_dua');
+Route::post('/dosen/pembimbing-dua/accept/{id}', [\App\Http\Controllers\DosenController::class, 'acceptPembimbingDua'])->middleware('auth:dosen')->name('dosen.accept_pembimbing_dua');
+Route::post('/dosen/pembimbing-dua/reject/{id}', [\App\Http\Controllers\DosenController::class, 'rejectPembimbingDua'])->middleware('auth:dosen')->name('dosen.reject_pembimbing_dua');
+
 #########################################################################################################################################################################################
 
 // Mahasiswa
