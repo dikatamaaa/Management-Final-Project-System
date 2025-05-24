@@ -94,4 +94,83 @@ class MahasiswaController extends Controller
         }
         return back()->with('success', 'Anggota berhasil ditambahkan ke kelompok!');
     }
+
+    /**
+     * Halaman dokumen & bimbingan mahasiswa
+     */
+    public function dokumenBimbinganPage() {
+        $nim = auth()->guard('mahasiswa')->user()->nim;
+        $dokumenList = \App\Models\DokumenMahasiswa::where('nim', $nim)->orderByDesc('created_at')->get();
+        $bimbinganList = \App\Models\Bimbingan::where('nim', $nim)->orderByDesc('created_at')->get();
+        $pembimbingSatu = \App\Models\Kelompok::where('nim', $nim)->first()->pembimbing_satu ?? null;
+        $pembimbingDua = \App\Models\Kelompok::where('nim', $nim)->first()->pembimbing_dua ?? null;
+        $statusPembimbingDua = \App\Models\Kelompok::where('nim', $nim)->first()->status_pembimbing_dua ?? null;
+        return view('mahasiswa.dokumen_bimbingan', compact('dokumenList', 'bimbinganList', 'pembimbingSatu', 'pembimbingDua', 'statusPembimbingDua'));
+    }
+
+    /**
+     * Simpan dokumen mahasiswa
+     */
+    public function storeDokumen(Request $request) {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'link' => [
+                'required',
+                'url',
+                function ($attribute, $value, $fail) {
+                    $allowed = [
+                        'drive.google.com',
+                        'onedrive.live.com',
+                        'dropbox.com',
+                        'sharepoint.com',
+                        'telkomuniversityofficial-my.sharepoint.com'
+                    ];
+                    $found = false;
+                    foreach ($allowed as $domain) {
+                        if (strpos($value, $domain) !== false) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        $fail('Link hanya boleh dari Google Drive, OneDrive, Dropbox, atau SharePoint!');
+                    }
+                }
+            ],
+        ]);
+        \App\Models\DokumenMahasiswa::create([
+            'nim' => auth()->guard('mahasiswa')->user()->nim,
+            'judul' => $request->judul,
+            'link' => $request->link,
+            'status' => 'pending',
+        ]);
+        return back()->with('success', 'Dokumen berhasil dikumpulkan!');
+    }
+
+    /**
+     * Simpan pengajuan bimbingan
+     */
+    public function storeBimbingan(Request $request) {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'pembimbing' => 'required|in:1,2',
+            'jadwal' => 'required|date_format:Y-m-d H:i',
+            'catatan' => 'nullable|string',
+        ]);
+        $nim = auth()->guard('mahasiswa')->user()->nim;
+        $pembimbingDua = \App\Models\Kelompok::where('nim', $nim)->first()->pembimbing_dua ?? null;
+        $statusPembimbingDua = \App\Models\Kelompok::where('nim', $nim)->first()->status_pembimbing_dua ?? null;
+        if ($request->pembimbing == '2' && (!$pembimbingDua || $statusPembimbingDua !== 'accepted')) {
+            return back()->with('error', 'Anda belum memiliki pembimbing dua yang sudah diterima!');
+        }
+        \App\Models\Bimbingan::create([
+            'nim' => $nim,
+            'judul' => $request->judul,
+            'pembimbing' => $request->pembimbing,
+            'jadwal' => $request->jadwal,
+            'status' => 'pending',
+            'catatan' => $request->catatan,
+        ]);
+        return back()->with('success', 'Pengajuan bimbingan berhasil dikirim!');
+    }
 }

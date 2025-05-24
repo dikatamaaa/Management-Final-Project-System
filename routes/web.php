@@ -88,6 +88,7 @@ Route::get('/dosen/template_laporan', [PageController::class, 'templateLaporanDo
 Route::get('/dosen/dokumen_cd', [PageController::class, 'dokumenCdDosen'])->middleware('auth:dosen');
 Route::get('/dosen/progres_ta', [PageController::class, 'progresTaDosen'])->middleware('auth:dosen');
 Route::get('/dosen/profil', [PageController::class, 'profilDosen'])->middleware('auth:dosen');
+Route::get('/dosen/bimbingan', [DosenController::class, 'halamanBimbingan'])->middleware('auth:dosen')->name('dosen.bimbingan');
 
 // CRUD Pada Role Dosen
 Route::post('/dosen/daftar_topik', [DosenController::class, 'TambahDataDaftarTopik'])->name('daftar_topik.tambah')->middleware('auth:dosen');
@@ -105,6 +106,17 @@ Route::post('/dosen/profil/gantiKataSandi/{id}', [DosenController::class, 'Ganti
 Route::get('/dosen/pembimbing-dua', [\App\Http\Controllers\DosenController::class, 'permintaanPembimbingDua'])->middleware('auth:dosen')->name('dosen.permintaan_pembimbing_dua');
 Route::post('/dosen/pembimbing-dua/accept/{id}', [\App\Http\Controllers\DosenController::class, 'acceptPembimbingDua'])->middleware('auth:dosen')->name('dosen.accept_pembimbing_dua');
 Route::post('/dosen/pembimbing-dua/reject/{id}', [\App\Http\Controllers\DosenController::class, 'rejectPembimbingDua'])->middleware('auth:dosen')->name('dosen.reject_pembimbing_dua');
+
+// Bimbingan (dosen)
+Route::get('/dosen/bimbingan', [App\Http\Controllers\DosenController::class, 'halamanBimbingan'])->middleware('auth:dosen')->name('dosen.bimbingan');
+Route::post('/dosen/bimbingan/acc/{id}', [App\Http\Controllers\DosenController::class, 'accBimbingan'])->middleware('auth:dosen')->name('dosen.bimbingan.acc');
+Route::post('/dosen/bimbingan/reject/{id}', [App\Http\Controllers\DosenController::class, 'rejectBimbingan'])->middleware('auth:dosen')->name('dosen.bimbingan.reject');
+Route::post('/dosen/bimbingan/kritik-saran/{id}', [App\Http\Controllers\DosenController::class, 'kritikSaranBimbingan'])->middleware('auth:dosen')->name('dosen.bimbingan.kritik_saran');
+
+// Penilaian Kelompok Dosen
+Route::get('/dosen/penilaian-kelompok', [App\Http\Controllers\DosenController::class, 'halamanPenilaianKelompok'])->name('dosen.penilaian_kelompok');
+Route::post('/dosen/penilaian-kelompok/simpan', [App\Http\Controllers\DosenController::class, 'storePenilaianMahasiswa'])->name('dosen.penilaian_kelompok.simpan');
+Route::get('/dosen/penilaian-kelompok/export', [App\Http\Controllers\DosenController::class, 'exportPenilaianCsv'])->name('dosen.penilaian_kelompok.export_csv');
 
 #########################################################################################################################################################################################
 
@@ -129,3 +141,8 @@ Route::post('/mahasiswa/notifications/read-all', function () {
 
 Route::post('/mahasiswa/pilih-pembimbing-dua', [MahasiswaController::class, 'pilihPembimbingDua'])->name('mahasiswa.pilih_pembimbing_dua');
 Route::post('/mahasiswa/daftar_topik/tambah_anggota/{id}', [MahasiswaController::class, 'tambahAnggotaKelompok'])->name('mahasiswa.tambah_anggota_kelompok');
+
+// Dokumen & Bimbingan Mahasiswa
+Route::get('/mahasiswa/dokumen-bimbingan', [App\Http\Controllers\MahasiswaController::class, 'dokumenBimbinganPage'])->middleware('auth:mahasiswa')->name('mahasiswa.dokumen_bimbingan');
+Route::post('/mahasiswa/dokumen-bimbingan/dokumen', [App\Http\Controllers\MahasiswaController::class, 'storeDokumen'])->middleware('auth:mahasiswa')->name('mahasiswa.store_dokumen');
+Route::post('/mahasiswa/dokumen-bimbingan/bimbingan', [App\Http\Controllers\MahasiswaController::class, 'storeBimbingan'])->middleware('auth:mahasiswa')->name('mahasiswa.store_bimbingan');

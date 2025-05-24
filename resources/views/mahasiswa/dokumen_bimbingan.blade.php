@@ -1,0 +1,167 @@
+@extends('mahasiswa.layout')
+@section('content')
+@php
+    $kelompokSaya = \App\Models\Kelompok::where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
+    $bolehKumpul = false;
+    $dokumenKelompok = collect();
+    $dokumenKelompokList = collect();
+    $bimbinganKelompok = collect();
+    if ($kelompokSaya) {
+        $judul = $kelompokSaya->judul;
+        $kuota = \App\Models\DaftarTopik::where('judul', $judul)->first()->kuota ?? 99;
+        $statusTopik = \App\Models\DaftarTopik::where('judul', $judul)->first()->status ?? null;
+        $jumlahAnggota = \App\Models\Kelompok::where('judul', $judul)->count();
+        if ($jumlahAnggota >= $kuota && ($statusTopik === 'Penuh' || $statusTopik === 'Full' || $statusTopik === 'Fix')) {
+            $bolehKumpul = true;
+        }
+        $nims = \App\Models\Kelompok::where('judul', $judul)->pluck('nim');
+        $dokumenKelompok = \App\Models\DokumenMahasiswa::whereIn('nim', $nims)->orderByDesc('created_at')->get();
+        $anggotaNama = \App\Models\Kelompok::where('judul', $judul)->pluck('nama_anggota','nim');
+        $dokumenKelompokList = \App\Models\DokumenMahasiswa::whereIn('nim', $nims)->orderBy('judul')->get();
+        $bimbinganKelompok = \App\Models\Bimbingan::whereIn('nim', $nims)->orderByDesc('created_at')->get();
+    }
+@endphp
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3"><h5 class="m-0">Kumpulkan Dokumen</h5></div>
+                <div class="card-body">
+                    @if(!$kelompokSaya)
+                        <div class="alert alert-warning">Anda belum memiliki kelompok. Tidak dapat mengumpulkan dokumen.</div>
+                    @elseif(!$bolehKumpul)
+                        <div class="alert alert-warning">Dokumen hanya dapat dikumpulkan jika kelompok Anda sudah <b>penuh</b> dan status topik <b>Full</b> atau <b>Fix</b>.</div>
+                    @endif
+                    <form action="{{ route('mahasiswa.store_dokumen') }}" method="POST" @if(!$bolehKumpul) style="pointer-events:none;opacity:0.6;" @endif>
+                        @csrf
+                        <div class="mb-2">
+                            <label class="form-label">Judul Dokumen</label>
+                            <input type="text" name="judul" class="form-control" required maxlength="255" @if(!$bolehKumpul) disabled @endif>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Link Dokumen (Google Drive, OneDrive, Dropbox, SharePoint)</label>
+                            <input type="url" name="link" class="form-control" required @if(!$bolehKumpul) disabled @endif>
+                        </div>
+                        <button class="btn btn-primary" type="submit" @if(!$bolehKumpul) disabled @endif>Kumpulkan</button>
+                    </form>
+                    <hr>
+                    <h6>Riwayat Dokumen</h6>
+                    <table class="table table-sm table-bordered">
+                        <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Link</th><th>Status</th><th>Tanggal</th></tr></thead>
+                        <tbody>
+                        @forelse($dokumenKelompok as $i => $d)
+                            <tr>
+                                <td>{{ $i+1 }}</td>
+                                <td>{{ $anggotaNama[$d->nim] ?? '-' }}</td>
+                                <td>{{ $d->judul }}</td>
+                                <td><a href="{{ $d->link }}" target="_blank">Lihat</a></td>
+                                <td>
+                                    @if($d->status=='pending')<span class="badge bg-warning text-dark">Pending</span>@endif
+                                    @if($d->status=='accepted')<span class="badge bg-success">Accepted</span>@endif
+                                    @if($d->status=='rejected')<span class="badge bg-danger">Rejected</span>@endif
+                                </td>
+                                <td>{{ $d->created_at->format('d-m-Y H:i') }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="6" class="text-center">Belum ada dokumen</td></tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3"><h5 class="m-0">Pengajuan Bimbingan</h5></div>
+                <div class="card-body">
+                    @if(!$kelompokSaya)
+                        <div class="alert alert-warning">Anda belum memiliki kelompok. Tidak dapat mengajukan bimbingan.</div>
+                    @endif
+                    <form action="{{ route('mahasiswa.store_bimbingan') }}" method="POST" @if(!$kelompokSaya) style="pointer-events:none;opacity:0.6;" @endif>
+                        @csrf
+                        <div class="mb-2">
+                            <label class="form-label">Pilih Dokumen</label>
+                            <select id="selectDokumen" class="form-select">
+                                <option value="">-- Pilih Dokumen --</option>
+                                @foreach($dokumenKelompokList as $dok)
+                                    <option value="{{ $dok->judul }}">{{ $dok->judul }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Judul Bimbingan</label>
+                            <input type="text" name="judul" id="judulBimbingan" class="form-control" required maxlength="255">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Pilih Pembimbing</label>
+                            <select name="pembimbing" class="form-select" required @if(!$kelompokSaya) disabled @endif>
+                                <option value="1">Pembimbing 1{{ $pembimbingSatu ? ' ('.$pembimbingSatu.')' : '' }}</option>
+                                <option value="2" @if(!$pembimbingDua || $statusPembimbingDua!=='accepted') disabled @endif>
+                                    Pembimbing 2{{ $pembimbingDua ? ' ('.$pembimbingDua.')' : '' }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Jadwal Bimbingan</label>
+                            <input type="text" id="jadwalBimbingan" name="jadwal" class="form-control" required @if(!$kelompokSaya) disabled @endif>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Catatan (opsional)</label>
+                            <textarea name="catatan" class="form-control" @if(!$kelompokSaya) disabled @endif></textarea>
+                        </div>
+                        <button class="btn btn-primary" type="submit" @if(!$kelompokSaya) disabled @endif>Ajukan Bimbingan</button>
+                    </form>
+                    <hr>
+                    <h6>Riwayat Pengajuan Bimbingan</h6>
+                    <table class="table table-sm table-bordered">
+                        <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Pembimbing</th><th>Jadwal</th><th>Status</th><th>Catatan</th><th>Kritik & Saran</th></tr></thead>
+                        <tbody>
+                        @forelse($bimbinganKelompok as $i => $b)
+                            <tr>
+                                <td>{{ $i+1 }}</td>
+                                <td>{{ $anggotaNama[$b->nim] ?? '-' }}</td>
+                                <td>{{ $b->judul }}</td>
+                                <td>{{ $b->pembimbing == '1' ? 'Pembimbing 1' : 'Pembimbing 2' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($b->jadwal)->format('d-m-Y H:i') }}</td>
+                                <td>
+                                    @if($b->status=='pending')<span class="badge bg-warning text-dark">Pending</span>@endif
+                                    @if($b->status=='accepted')<span class="badge bg-success">Accepted</span>@endif
+                                    @if($b->status=='rejected')<span class="badge bg-danger">Rejected</span>@endif
+                                    @if($b->status=='selesai')<span class="badge bg-info text-dark">Selesai</span>@endif
+                                </td>
+                                <td>{{ $b->catatan }}</td>
+                                <td>
+                                    @if($b->status=='rejected')
+                                        <span class="text-danger">{{ $b->alasan_tolak }}</span>
+                                    @endif
+                                    @if($b->kritik_saran && $b->status!='rejected')
+                                        {{ $b->kritik_saran }}
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="7" class="text-center">Belum ada pengajuan bimbingan</td></tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if(session('success'))
+<script>Swal.fire({icon:'success',title:'Berhasil',text:'{{ session('success') }}',showConfirmButton:false,timer:2000});</script>
+@endif
+@if(session('error'))
+<script>Swal.fire({icon:'error',title:'Gagal',text:'{{ session('error') }}',showConfirmButton:false,timer:2000});</script>
+@endif
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+flatpickr("#jadwalBimbingan", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    time_24hr: true
+});
+</script>
+@endsection 

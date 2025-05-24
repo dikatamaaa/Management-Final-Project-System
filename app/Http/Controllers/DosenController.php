@@ -12,6 +12,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\PenambahanKelompokNotification;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Collection;
 
 class DosenController extends Controller
 {
@@ -313,6 +315,9 @@ class DosenController extends Controller
             'nim' => $mahasiswa->nim,
             'nama_anggota' => $mahasiswa->nama,
             'pembimbing_satu' => $topik->dosen,
+            'pembimbing_dua' => null,
+            'status_pembimbing_dua' => null,
+            'alasan_tolak_pembimbing_dua' => null,
         ]);
         // Jika status topik sebelumnya 'Tersedia', ubah ke 'Booked'
         if ($topik->status == 'Tersedia') {
@@ -397,4 +402,164 @@ class DosenController extends Controller
         }
         return back()->with('success', 'Permintaan pembimbing dua ditolak.');
     }
+
+    /**
+     * Halaman daftar pengajuan bimbingan ke dosen ini
+     */
+    public function halamanBimbingan() {
+        $nama_dosen = auth()->guard('dosen')->user()->nama;
+        // Ambil semua kelompok yang dosen ini jadi pembimbing satu atau dua
+        $kelompokPemb1 = \App\Models\Kelompok::where('pembimbing_satu', $nama_dosen)->pluck('nim') ?? collect();
+        $kelompokPemb2 = \App\Models\Kelompok::where('pembimbing_dua', $nama_dosen)->where('status_pembimbing_dua', 'accepted')->pluck('nim') ?? collect();
+        if (!$kelompokPemb1) $kelompokPemb1 = collect();
+        if (!$kelompokPemb2) $kelompokPemb2 = collect();
+        $bimbinganList = \App\Models\Bimbingan::where(function($q) use ($kelompokPemb1, $kelompokPemb2) {
+            $q->where(function($q2) use ($kelompokPemb1) {
+                $q2->where('pembimbing', '1')->whereIn('nim', $kelompokPemb1);
+            })->orWhere(function($q2) use ($kelompokPemb2) {
+                $q2->where('pembimbing', '2')->whereIn('nim', $kelompokPemb2);
+            });
+        })->orderByDesc('created_at')->get();
+        $mahasiswaNama = \App\Models\Mahasiswa::pluck('nama','nim');
+        return view('dosen.bimbingan', compact('bimbinganList', 'mahasiswaNama', 'nama_dosen'));
+    }
+
+    /**
+     * ACC bimbingan
+     */
+    public function accBimbingan($id) {
+        $bimbingan = \App\Models\Bimbingan::findOrFail($id);
+        $bimbingan->status = 'accepted';
+        $bimbingan->save();
+        // (opsional) notifikasi ke mahasiswa
+        return back()->with('success', 'Bimbingan diterima!');
+    }
+
+    /**
+     * Reject bimbingan
+     */
+    public function rejectBimbingan(Request $request, $id) {
+        $bimbingan = \App\Models\Bimbingan::findOrFail($id);
+        $bimbingan->status = 'rejected';
+        $bimbingan->alasan_tolak = $request->alasan_tolak;
+        $bimbingan->save();
+        // (opsional) notifikasi ke mahasiswa
+        return back()->with('success', 'Bimbingan ditolak!');
+    }
+
+    /**
+     * Kritik & Saran setelah bimbingan selesai
+     */
+    public function kritikSaranBimbingan(Request $request, $id) {
+        $bimbingan = \App\Models\Bimbingan::findOrFail($id);
+        $bimbingan->kritik_saran = $request->kritik_saran;
+        $bimbingan->status = 'selesai';
+        $bimbingan->save();
+        // (opsional) notifikasi ke mahasiswa
+        return back()->with('success', 'Kritik & saran berhasil diberikan!');
+    }
+
+    /**
+     * Halaman penilaian kelompok dan anggota (pembimbing 1 & 2)
+     */
+    public function halamanPenilaianKelompok() {
+        $nama_dosen = auth()->guard('dosen')->user()->nama;
+        // Kelompok di mana dosen ini sebagai pembimbing satu
+        $kelompokPemb1 = \App\Models\Kelompok::where('pembimbing_satu', $nama_dosen)->get()->groupBy('judul');
+        // Kelompok di mana dosen ini sebagai pembimbing dua (dan sudah accepted)
+        $kelompokPemb2 = \App\Models\Kelompok::where('pembimbing_dua', $nama_dosen)
+            ->where('status_pembimbing_dua', 'accepted')
+            ->get()->groupBy('judul');
+        // Ambil penilaian per anggota dan kelompok
+        $penilaian = \App\Models\PenilaianMahasiswa::whereIn('kelompok_judul', array_merge($kelompokPemb1->keys()->toArray(), $kelompokPemb2->keys()->toArray()))->get();
+        return view('dosen.penilaian_kelompok', compact('kelompokPemb1', 'kelompokPemb2', 'nama_dosen', 'penilaian'));
+    }
+
+    /**
+     * Simpan penilaian mahasiswa oleh dosen (per kelompok)
+     */
+    public function storePenilaianMahasiswa(Request $request) {
+        $request->validate([
+            'kelompok_judul' => 'required|string',
+            'pembimbing' => 'required|in:1,2',
+            'anggota' => 'required|array',
+            'anggota.*.nim' => 'required|string',
+            'anggota.*.nilai' => 'required|integer|min:0|max:100',
+            'anggota.*.catatan' => 'nullable|string',
+            'nilai_kelompok' => 'required|integer|min:0|max:100',
+            'catatan_kelompok' => 'nullable|string',
+        ]);
+        $dosen_nama = auth()->guard('dosen')->user()->nama;
+        // Simpan penilaian anggota
+        foreach ($request->anggota as $anggota) {
+            \App\Models\PenilaianMahasiswa::updateOrCreate(
+                [
+                    'nim' => $anggota['nim'],
+                    'kelompok_judul' => $request->kelompok_judul,
+                    'pembimbing' => $request->pembimbing,
+                    'dosen_nama' => $dosen_nama,
+                ],
+                [
+                    'nilai' => $anggota['nilai'],
+                    'catatan' => $anggota['catatan'] ?? null,
+                ]
+            );
+        }
+        // Simpan penilaian kelompok (nim = null)
+        \App\Models\PenilaianMahasiswa::updateOrCreate(
+            [
+                'nim' => null,
+                'kelompok_judul' => $request->kelompok_judul,
+                'pembimbing' => $request->pembimbing,
+                'dosen_nama' => $dosen_nama,
+            ],
+            [
+                'nilai' => $request->nilai_kelompok,
+                'catatan' => $request->catatan_kelompok,
+            ]
+        );
+        return back()->with('success', 'Penilaian kelompok dan anggota berhasil disimpan!');
+    }
+
+    /**
+     * Export rekap penilaian ke .csv
+     */
+    public function exportPenilaianCsv(Request $request) {
+        $nama_dosen = auth()->guard('dosen')->user()->nama;
+        $pembimbing = $request->query('pembimbing');
+        $penilaianQuery = \App\Models\PenilaianMahasiswa::where('dosen_nama', $nama_dosen);
+        if ($pembimbing == '1' || $pembimbing == '2') {
+            $penilaianQuery = $penilaianQuery->where('pembimbing', $pembimbing);
+        }
+        $penilaian = $penilaianQuery->get();
+        $data = [];
+        foreach ($penilaian->whereNotNull('nim') as $row) {
+            $kelompok = $penilaian->whereNull('nim')->where('kelompok_judul', $row->kelompok_judul)->where('pembimbing', $row->pembimbing)->first();
+            $data[] = [
+                $row->kelompok_judul,
+                $row->pembimbing,
+                $row->pembimbing . ' - ' . $row->dosen_nama,
+                $row->nim,
+                \App\Models\Kelompok::where('nim', $row->nim)->where('judul', $row->kelompok_judul)->value('nama_anggota'),
+                $row->nilai,
+                $row->catatan,
+                $kelompok ? $kelompok->nilai : '',
+                $kelompok ? $kelompok->catatan : '',
+            ];
+        }
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="rekap_penilaian.csv"',
+        ];
+        $callback = function() use ($data) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['Judul','Sebagai Pembimbing','Pembimbing','NIM','Nama','Nilai Anggota','Catatan Anggota','Nilai Kelompok','Catatan Kelompok']);
+            foreach ($data as $row) {
+                fputcsv($handle, $row);
+            }
+            fclose($handle);
+        };
+        return response()->streamDownload($callback, 'rekap_penilaian.csv', $headers);
+    }
 }
+
