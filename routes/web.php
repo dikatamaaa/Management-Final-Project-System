@@ -75,6 +75,7 @@ Route::get('/admin/mahasiswa', [AdminController::class, 'MenampilkanDataMahasisw
 Route::post('/admin/mahasiswa/edit/{id}', [AdminController::class, 'EditDataMahasiswa'])->name('mahasiswa.edit')->middleware('auth:admin');
 Route::get('/admin/mahasiswa/hapus/{id}', [AdminController::class, 'HapusDataMahasiswa'])->name('mahasiswa.hapus')->middleware('auth:admin');
 Route::post('/admin/mahasiswa/GantiKataSandi/{id}', [AdminController::class, 'GantiKataSandiMahasiswa'])->name('mahasiswa.GantiKataSandi')->middleware('auth:admin');
+Route::post('/admin/mahasiswa/import-csv', [\App\Http\Controllers\MahasiswaController::class, 'importCsv'])->name('mahasiswa.import_csv')->middleware('auth:admin');
 
 Route::post('/admin/profil/editFoto/{id}', [AdminController::class, 'EditFotoAdmin'])->name('admin.editFoto')->middleware('auth:admin');
 Route::post('/admin/profil/gantiKataSandi/{id}', [AdminController::class, 'GantiKataSandiAdmin'])->name('admin.gantiKataSandi')->middleware('auth:admin');
@@ -146,3 +147,6 @@ Route::post('/mahasiswa/daftar_topik/tambah_anggota/{id}', [MahasiswaController:
 Route::get('/mahasiswa/dokumen-bimbingan', [App\Http\Controllers\MahasiswaController::class, 'dokumenBimbinganPage'])->middleware('auth:mahasiswa')->name('mahasiswa.dokumen_bimbingan');
 Route::post('/mahasiswa/dokumen-bimbingan/dokumen', [App\Http\Controllers\MahasiswaController::class, 'storeDokumen'])->middleware('auth:mahasiswa')->name('mahasiswa.store_dokumen');
 Route::post('/mahasiswa/dokumen-bimbingan/bimbingan', [App\Http\Controllers\MahasiswaController::class, 'storeBimbingan'])->middleware('auth:mahasiswa')->name('mahasiswa.store_bimbingan');
+
+Route::get('/mahasiswa/ganti-password-awal', [MahasiswaController::class, 'formGantiPasswordAwal'])->middleware('auth:mahasiswa');
+Route::post('/mahasiswa/ganti-password-awal', [MahasiswaController::class, 'gantiPasswordAwal'])->middleware('auth:mahasiswa');

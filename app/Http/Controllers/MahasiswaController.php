@@ -173,4 +173,83 @@ class MahasiswaController extends Controller
         ]);
         return back()->with('success', 'Pengajuan bimbingan berhasil dikirim!');
     }
+
+    /**
+     * Import Mahasiswa dari CSV (NIM, Nama Mahasiswa)
+     */
+    public function importCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+        $file = $request->file('csv_file');
+        $handle = fopen($file->getRealPath(), 'r');
+        $header = fgetcsv($handle);
+        // Cek jika header bukan NIM/Nama, asumsikan data langsung
+        if ($header && (stripos($header[0], 'nim') !== false || stripos($header[1], 'nama') !== false)) {
+            // header valid, lanjut
+        } else {
+            // header bukan header, treat as data
+            rewind($handle);
+        }
+        $count = 0;
+        while (($row = fgetcsv($handle)) !== false) {
+            $nim = trim($row[0] ?? '');
+            $nama = trim($row[1] ?? '');
+            if ($nim && $nama) {
+                // Cek jika sudah ada, skip
+                if (!\App\Models\Mahasiswa::where('nim', $nim)->exists()) {
+                    \App\Models\Mahasiswa::create([
+                        'nim' => $nim,
+                        'nama' => $nama,
+                        'kelas' => '-',
+                        'program_studi' => '-',
+                        'fakultas' => '-',
+                        'angkatan' => date('Y'),
+                        'email' => $nim . '@dummy.local',
+                        'no_hp' => null,
+                        'nama_pengguna' => $nim,
+                        'kata_sandi' => bcrypt($nim), // password default = nim
+                        'foto' => null,
+                        'role' => 'mahasiswa',
+                        'wajib_ganti_password' => true,
+                    ]);
+                    $count++;
+                }
+            }
+        }
+        fclose($handle);
+        return redirect('/admin/mahasiswa')->with('success', "Berhasil import $count mahasiswa dari CSV.");
+    }
+
+    /**
+     * Form ganti password awal (wajib)
+     */
+    public function formGantiPasswordAwal() {
+        return view('mahasiswa.ganti_password_awal');
+    }
+
+    /**
+     * Proses ganti password awal
+     */
+    public function gantiPasswordAwal(Request $request) {
+        $request->validate([
+            'kata_sandi_baru' => 'required|min:8',
+            'konfirmasi_kata_sandi' => 'required|same:kata_sandi_baru',
+        ], [
+            'kata_sandi_baru.required' => 'Kata Sandi Baru Wajib Diisi!',
+            'kata_sandi_baru.min' => 'Kata Sandi Baru Minimal 8 Karakter',
+            'konfirmasi_kata_sandi.required' => 'Konfirmasi Kata Sandi Wajib Diisi!',
+            'konfirmasi_kata_sandi.same' => 'Konfirmasi Kata Sandi Tidak Sama',
+        ]);
+        $mahasiswa = auth()->guard('mahasiswa')->user();
+        // Cek apakah password baru sama dengan lama
+        if (\Hash::check($request->kata_sandi_baru, $mahasiswa->kata_sandi)) {
+            return back()->withErrors(['kata_sandi_baru' => 'Kata Sandi Baru Harus Berbeda Dengan Kata Sandi Saat Ini!']);
+        }
+        $mahasiswa->kata_sandi = bcrypt($request->kata_sandi_baru);
+        $mahasiswa->wajib_ganti_password = false;
+        $mahasiswa->save();
+        return redirect('/mahasiswa/beranda')->with('success', 'Kata sandi berhasil diubah!');
+    }
 }

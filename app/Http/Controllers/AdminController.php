@@ -451,7 +451,7 @@ class AdminController extends Controller
       * Menampilkan Data Mahasiswa
       */
       public function MenampilkanDataMahasiswa() : View {
-        $menampilkanDataMahasiswa = Mahasiswa::all();
+        $menampilkanDataMahasiswa = Mahasiswa::orderBy('id', 'desc')->paginate(25);
         return view('admin.mahasiswa', compact('menampilkanDataMahasiswa'));
       }
 

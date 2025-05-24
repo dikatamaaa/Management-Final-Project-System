@@ -35,6 +35,9 @@ class LoginController extends Controller
         $mahasiswa = Mahasiswa::where('nama_pengguna', $nama_pengguna)->first();
         if ($mahasiswa && Hash::check($kata_sandi, $mahasiswa->kata_sandi)) {
             Auth::guard('mahasiswa')->login($mahasiswa);
+            if ($mahasiswa->wajib_ganti_password) {
+                return redirect('/mahasiswa/ganti-password-awal');
+            }
             return redirect()->intended('/mahasiswa/beranda');
         }
 
