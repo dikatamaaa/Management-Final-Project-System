@@ -11,7 +11,7 @@
         $kuota = \App\Models\DaftarTopik::where('judul', $judul)->first()->kuota ?? 99;
         $statusTopik = \App\Models\DaftarTopik::where('judul', $judul)->first()->status ?? null;
         $jumlahAnggota = \App\Models\Kelompok::where('judul', $judul)->count();
-        if ($jumlahAnggota >= $kuota && ($statusTopik === 'Penuh' || $statusTopik === 'Full' || $statusTopik === 'Fix')) {
+        if ($jumlahAnggota >= $kuota && ($statusTopik === 'Full' || $statusTopik === 'Proposal' || $statusTopik === 'TA')) {
             $bolehKumpul = true;
         }
         $nims = \App\Models\Kelompok::where('judul', $judul)->pluck('nim');
@@ -30,7 +30,7 @@
                     @if(!$kelompokSaya)
                         <div class="alert alert-warning">Anda belum memiliki kelompok. Tidak dapat mengumpulkan dokumen.</div>
                     @elseif(!$bolehKumpul)
-                        <div class="alert alert-warning">Dokumen hanya dapat dikumpulkan jika kelompok Anda sudah <b>penuh</b> dan status topik <b>Full</b> atau <b>Fix</b>.</div>
+                        <div class="alert alert-warning">Dokumen hanya dapat dikumpulkan jika kelompok Anda sudah <b>penuh</b> dan status topik <b>Full</b> atau <b>Proposal</b> atau <b>TA</b>.</div>
                     @endif
                     <form action="{{ route('mahasiswa.store_dokumen') }}" method="POST" @if(!$bolehKumpul) style="pointer-events:none;opacity:0.6;" @endif>
                         @csrf

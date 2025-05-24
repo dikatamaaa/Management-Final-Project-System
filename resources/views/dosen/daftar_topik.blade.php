@@ -159,8 +159,10 @@
                                                     @php
                                                         $jumlah_anggota = isset($data->anggota_kelompok) ? count($data->anggota_kelompok) : \App\Models\Kelompok::where('judul', $data->judul)->count();
                                                     @endphp
-                                                    @if($data->status == 'Fix')
-                                                        <span class="badge rounded-pill bg-primary">Fix</span>
+                                                    @if($data->status == 'Proposal')
+                                                        <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                    @elseif($data->status == 'TA')
+                                                        <span class="badge rounded-pill bg-info text-dark">TA</span>
                                                     @elseif($jumlah_anggota >= $data->kuota)
                                                         <span class="badge rounded-pill bg-danger">Full</span>
                                                         <div class="mt-2">
@@ -368,17 +370,21 @@
                                                             <div class="row">
                                                                 <div class="col-4"><span style="font-weight: bold;">Status</span></div>
                                                                 <div class="col-8">
-                                                                    @if($data->status == 'Fix')
-                                                                        <span class="badge rounded-pill bg-primary">Fix</span>
+                                                                    @if($data->status == 'Proposal')
+                                                                        <span class="badge rounded-pill bg-primary">Proposal</span>
                                                                         <form action="{{ route('daftar_topik.ubah_status', $data->id) }}" method="POST" class="mt-2">
                                                                             @csrf
                                                                             <select name="status" class="form-select form-select-sm d-inline w-auto" style="display:inline-block;">
-                                                                                <option value="Tersedia">Available</option>
+                                                                                <option value="Available">Available</option>
                                                                                 <option value="Booked">Booked</option>
-                                                                                <option value="Penuh">Full</option>
+                                                                                <option value="Full">Full</option>
+                                                                                <option value="Proposal">Proposal</option>
+                                                                                <option value="TA">TA</option>
                                                                             </select>
                                                                             <button type="submit" class="btn btn-primary btn-sm ms-1">Ubah Status</button>
                                                                         </form>
+                                                                    @elseif($data->status == 'TA')
+                                                                        <span class="badge rounded-pill bg-info text-dark">TA</span>
                                                                     @else
                                                                         <span class="badge rounded-pill {{ $data->status == 'Available' ? 'bg-success' : ($data->status == 'Full' ? 'bg-danger' : ($data->status == 'Booked' ? 'bg-warning text-dark' : 'bg-warning text-dark')) }}">{{ $data->status == 'Tersedia' ? 'Available' : ($data->status == 'Penuh' ? 'Full' : $data->status) }}</span>
                                                                     @endif
@@ -495,8 +501,10 @@
                                                         @php
                                                             $jumlah_anggota = isset($data->anggota_kelompok) ? count($data->anggota_kelompok) : \App\Models\Kelompok::where('judul', $data->judul)->count();
                                                         @endphp
-                                                        @if($data->status == 'Fix')
-                                                            <span class="badge rounded-pill bg-primary">Fix</span>
+                                                        @if($data->status == 'Proposal')
+                                                            <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                        @elseif($data->status == 'TA')
+                                                            <span class="badge rounded-pill bg-info text-dark">TA</span>
                                                         @elseif($jumlah_anggota >= $data->kuota)
                                                             <span class="badge rounded-pill bg-danger">Full</span>
                                                         @elseif($data->status == 'Tersedia')

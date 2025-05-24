@@ -327,7 +327,7 @@ class DosenController extends Controller
         // Cek apakah setelah penambahan, kelompok sudah penuh
         $jumlah_anggota_baru = \App\Models\Kelompok::where('judul', $topik->judul)->count();
         if ($jumlah_anggota_baru >= $topik->kuota) {
-            $topik->status = 'Penuh';
+            $topik->status = 'Full';
             $topik->save();
         }
         // Kirim notifikasi ke mahasiswa

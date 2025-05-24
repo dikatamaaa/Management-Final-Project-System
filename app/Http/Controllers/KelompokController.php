@@ -12,11 +12,11 @@ class KelompokController extends Controller
 {
     public function terima(Request $request)
     {
-        // Update status topik menjadi 'Fix'
+        // Update status topik menjadi 'Proposal'
         $judul = $request->judul;
         $topik = DaftarTopik::where('judul', $judul)->first();
         if ($topik) {
-            $topik->status = 'Fix';
+            $topik->status = 'Proposal';
             $topik->save();
             return back()->with('success', 'Kelompok sudah fix dengan topik ini!');
         }
