@@ -76,6 +76,7 @@ Route::post('/admin/mahasiswa/edit/{id}', [AdminController::class, 'EditDataMaha
 Route::get('/admin/mahasiswa/hapus/{id}', [AdminController::class, 'HapusDataMahasiswa'])->name('mahasiswa.hapus')->middleware('auth:admin');
 Route::post('/admin/mahasiswa/GantiKataSandi/{id}', [AdminController::class, 'GantiKataSandiMahasiswa'])->name('mahasiswa.GantiKataSandi')->middleware('auth:admin');
 Route::post('/admin/mahasiswa/import-csv', [\App\Http\Controllers\MahasiswaController::class, 'importCsv'])->name('mahasiswa.import_csv')->middleware('auth:admin');
+Route::post('/admin/mahasiswa/import-wajib-ganti', [\App\Http\Controllers\MahasiswaController::class, 'importCsvWajibGanti'])->name('mahasiswa.import_csv_wajib_ganti')->middleware('auth:admin');
 
 Route::post('/admin/profil/editFoto/{id}', [AdminController::class, 'EditFotoAdmin'])->name('admin.editFoto')->middleware('auth:admin');
 Route::post('/admin/profil/gantiKataSandi/{id}', [AdminController::class, 'GantiKataSandiAdmin'])->name('admin.gantiKataSandi')->middleware('auth:admin');
