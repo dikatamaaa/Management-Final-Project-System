@@ -15,9 +15,13 @@ class MahasiswaController extends Controller
     /**
      * Menampilkan Form Data Kelompok Yang Sudah Ada
      */
-    public function dataMahasiswa() : View {
-        $nim = auth()->guard('mahasiswa')->user()->nim;
-        $prodi = auth()->guard('mahasiswa')->user()->program_studi;
+    public function dataMahasiswa() {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        $nim = $user->nim;
+        $prodi = $user->program_studi;
 
         // Data kelompok milik mahasiswa login
         $kelompokSaya = \App\Models\Kelompok::where('nim', $nim)->first();
@@ -31,14 +35,21 @@ class MahasiswaController extends Controller
         return view('mahasiswa.pembimbing-dua', compact('dataMahasiswa', 'kelompokSaya', 'dosenList'));
     }
 
-    public function TemplateLaporan()
-    {
+    public function TemplateLaporan() {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $templates = Template::all();
         return view('mahasiswa.template_laporan', compact('templates'));
     }
 
     public function pilihPembimbingDua(Request $request)
     {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $nim = auth()->guard('mahasiswa')->user()->nim;
         $kelompok = \App\Models\Kelompok::where('nim', $nim)->first();
         if ($kelompok) {
@@ -56,6 +67,10 @@ class MahasiswaController extends Controller
 
     public function tambahAnggotaKelompok(Request $request, $id)
     {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $topik = \App\Models\DaftarTopik::findOrFail($id);
         $nim_login = auth()->guard('mahasiswa')->user()->nim;
         // Pastikan mahasiswa login sudah booking topik ini
@@ -99,6 +114,10 @@ class MahasiswaController extends Controller
      * Halaman dokumen & bimbingan mahasiswa
      */
     public function dokumenBimbinganPage() {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $nim = auth()->guard('mahasiswa')->user()->nim;
         $dokumenList = \App\Models\DokumenMahasiswa::where('nim', $nim)->orderByDesc('created_at')->get();
         $bimbinganList = \App\Models\Bimbingan::where('nim', $nim)->orderByDesc('created_at')->get();
@@ -112,6 +131,10 @@ class MahasiswaController extends Controller
      * Simpan dokumen mahasiswa
      */
     public function storeDokumen(Request $request) {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $request->validate([
             'judul' => 'required|string|max:255',
             'link' => [
@@ -151,6 +174,10 @@ class MahasiswaController extends Controller
      * Simpan pengajuan bimbingan
      */
     public function storeBimbingan(Request $request) {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $request->validate([
             'judul' => 'required|string|max:255',
             'pembimbing' => 'required|in:1,2',
@@ -179,6 +206,10 @@ class MahasiswaController extends Controller
      */
     public function importCsv(Request $request)
     {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $request->validate([
             'csv_file' => 'required|file|mimes:csv,txt',
         ]);
@@ -227,6 +258,10 @@ class MahasiswaController extends Controller
      */
     public function importCsvWajibGanti(Request $request)
     {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $request->validate([
             'csv_file' => 'required|file|mimes:csv,txt',
         ]);

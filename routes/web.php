@@ -141,8 +141,8 @@ Route::post('/mahasiswa/notifications/read-all', function () {
     return response()->json(['success' => true]);
 })->name('mahasiswa.notifications.read')->middleware('auth:mahasiswa');
 
-Route::post('/mahasiswa/pilih-pembimbing-dua', [MahasiswaController::class, 'pilihPembimbingDua'])->name('mahasiswa.pilih_pembimbing_dua');
-Route::post('/mahasiswa/daftar_topik/tambah_anggota/{id}', [MahasiswaController::class, 'tambahAnggotaKelompok'])->name('mahasiswa.tambah_anggota_kelompok');
+Route::post('/mahasiswa/pilih-pembimbing-dua', [MahasiswaController::class, 'pilihPembimbingDua'])->name('mahasiswa.pilih_pembimbing_dua')->middleware('auth:mahasiswa');
+Route::post('/mahasiswa/daftar_topik/tambah_anggota/{id}', [MahasiswaController::class, 'tambahAnggotaKelompok'])->name('mahasiswa.tambah_anggota_kelompok')->middleware('auth:mahasiswa');
 
 // Dokumen & Bimbingan Mahasiswa
 Route::get('/mahasiswa/dokumen-bimbingan', [App\Http\Controllers\MahasiswaController::class, 'dokumenBimbinganPage'])->middleware('auth:mahasiswa')->name('mahasiswa.dokumen_bimbingan');

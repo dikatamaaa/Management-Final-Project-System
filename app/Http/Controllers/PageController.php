@@ -73,9 +73,17 @@ class PageController extends Controller
 ######################### Halaman DOSEN ########################################
 ######################### Halaman MAHASIWA ########################################
     public function berandaMahasiswa() {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         return view('mahasiswa.beranda');
     }
     public function daftarTopikMahasiswa() {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
         $daftarTopik = \App\Models\DaftarTopik::all();
         return view('mahasiswa.daftar_topik', compact('daftarTopik'));
     }
