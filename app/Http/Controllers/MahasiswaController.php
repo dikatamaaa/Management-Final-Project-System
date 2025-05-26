@@ -319,11 +319,24 @@ class MahasiswaController extends Controller
         $request->validate([
             'kata_sandi_baru' => 'required|min:8',
             'konfirmasi_kata_sandi' => 'required|same:kata_sandi_baru',
+            // Tambahan validasi profil
+            'fakultas' => 'required|string|max:255',
+            'program_studi' => 'required|string|max:255',
+            'angkatan' => 'required|string|max:10',
+            'kelas' => 'required|string|max:50',
+            'email' => 'required|email|max:255',
+            'no_hp' => 'nullable|string|max:20',
         ], [
             'kata_sandi_baru.required' => 'Kata Sandi Baru Wajib Diisi!',
             'kata_sandi_baru.min' => 'Kata Sandi Baru Minimal 8 Karakter',
             'konfirmasi_kata_sandi.required' => 'Konfirmasi Kata Sandi Wajib Diisi!',
             'konfirmasi_kata_sandi.same' => 'Konfirmasi Kata Sandi Tidak Sama',
+            'fakultas.required' => 'Fakultas wajib diisi!',
+            'program_studi.required' => 'Program Studi wajib diisi!',
+            'angkatan.required' => 'Angkatan wajib diisi!',
+            'kelas.required' => 'Kelas wajib diisi!',
+            'email.required' => 'Email wajib diisi!',
+            'email.email' => 'Format email tidak valid!',
         ]);
         $mahasiswa = auth()->guard('mahasiswa')->user();
         // Cek apakah password baru sama dengan lama
@@ -332,7 +345,14 @@ class MahasiswaController extends Controller
         }
         $mahasiswa->kata_sandi = bcrypt($request->kata_sandi_baru);
         $mahasiswa->wajib_ganti_password = false;
+        // Update profil tambahan
+        $mahasiswa->fakultas = $request->fakultas;
+        $mahasiswa->program_studi = $request->program_studi;
+        $mahasiswa->angkatan = $request->angkatan;
+        $mahasiswa->kelas = $request->kelas;
+        $mahasiswa->email = $request->email;
+        $mahasiswa->no_hp = $request->no_hp;
         $mahasiswa->save();
-        return redirect('/mahasiswa/beranda')->with('success', 'Kata sandi berhasil diubah!');
+        return redirect('/mahasiswa/beranda')->with('success', 'Kata sandi & profil berhasil diubah!');
     }
 }
