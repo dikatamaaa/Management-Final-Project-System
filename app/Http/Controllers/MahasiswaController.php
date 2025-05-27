@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kelompok;
 use App\Models\Mahasiswa;
 use App\Models\Template;
+use App\Models\PengaturanTopik;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -32,7 +33,14 @@ class MahasiswaController extends Controller
         // (Opsional) Data mahasiswa satu prodi, jika masih dibutuhkan
         $dataMahasiswa = Mahasiswa::where('program_studi', $prodi)->get();
 
-        return view('mahasiswa.pembimbing-dua', compact('dataMahasiswa', 'kelompokSaya', 'dosenList'));
+        // Ambil nama pembimbing satu dari tabel DaftarTopik (berdasarkan judul kelompok)
+        $pembimbingSatu = null;
+        if ($kelompokSaya) {
+            $topik = \App\Models\DaftarTopik::where('judul', $kelompokSaya->judul)->first();
+            $pembimbingSatu = $topik ? $topik->dosen : null;
+        }
+
+        return view('mahasiswa.pembimbing-dua', compact('dataMahasiswa', 'kelompokSaya', 'dosenList', 'pembimbingSatu'));
     }
 
     public function TemplateLaporan() {
@@ -165,7 +173,6 @@ class MahasiswaController extends Controller
             'nim' => auth()->guard('mahasiswa')->user()->nim,
             'judul' => $request->judul,
             'link' => $request->link,
-            'status' => 'pending',
         ]);
         return back()->with('success', 'Dokumen berhasil dikumpulkan!');
     }
@@ -354,5 +361,107 @@ class MahasiswaController extends Controller
         $mahasiswa->no_hp = $request->no_hp;
         $mahasiswa->save();
         return redirect('/mahasiswa/beranda')->with('success', 'Kata sandi & profil berhasil diubah!');
+    }
+
+    // Form Mahasiswa Membuat Topik Sendiri
+    public function formBuatTopik() {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        // Cek apakah mahasiswa sudah punya topik/kelompok
+        $sudah_punya = \App\Models\Kelompok::where('nim', $user->nim)->exists();
+        if ($sudah_punya) {
+            return redirect('/mahasiswa/daftar_topik')->with('error', 'Anda sudah memiliki topik/kelompok, tidak bisa membuat topik baru.');
+        }
+        $fakultas = $user->fakultas;
+        $program_studi = $user->program_studi;
+        // Ambil pengaturan admin dengan Eloquent Model
+        $pengaturan = \App\Models\PengaturanTopik::first(); // pastikan pakai model, bukan query builder
+        $bidangList = $pengaturan->list_bidang ?? [];
+        $kuotaMin = $pengaturan->kuota_min ?? 2;
+        $kuotaMax = $pengaturan->kuota_max ?? 5;
+        // Daftar mahasiswa yang belum punya kelompok (selain user login)
+        $daftarMahasiswa = \App\Models\Mahasiswa::whereNotIn('nim', \App\Models\Kelompok::pluck('nim'))
+            ->where('nim', '!=', $user->nim)
+            ->get();
+        return view('mahasiswa.buat_topik', compact('fakultas', 'program_studi', 'bidangList', 'daftarMahasiswa', 'kuotaMin', 'kuotaMax'));
+    }
+
+    // Proses Mahasiswa Membuat Topik Sendiri
+    public function buatTopik(Request $request) {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        // Cek apakah mahasiswa sudah punya topik/kelompok
+        $sudah_punya = \App\Models\Kelompok::where('nim', $user->nim)->exists();
+        if ($sudah_punya) {
+            return redirect('/mahasiswa/daftar_topik')->with('error', 'Anda sudah memiliki topik/kelompok, tidak bisa membuat topik baru.');
+        }
+        $pengaturan = PengaturanTopik::first();
+        $kuotaMin = $pengaturan->kuota_min ?? 2;
+        $kuotaMax = $pengaturan->kuota_max ?? 5;
+        $request->validate([
+            'judul' => 'required|unique:daftar_topik,judul',
+            'program_studi' => 'required',
+            'fakultas' => 'required',
+            'bidang' => 'required|array',
+            'kuota' => 'required|numeric|min:'.$kuotaMin.'|max:'.$kuotaMax,
+            'deskripsi' => 'required',
+        ], [
+            'judul.required' => 'Judul wajib diisi!',
+            'judul.unique' => 'Judul sudah dipakai!',
+            'program_studi.required' => 'Program Studi wajib diisi!',
+            'fakultas.required' => 'Fakultas wajib diisi!',
+            'bidang.required' => 'Bidang wajib diisi!',
+            'kuota.required' => 'Kuota wajib diisi!',
+            'kuota.min' => 'Kuota minimal '.$kuotaMin.' orang',
+            'kuota.max' => 'Kuota maksimal '.$kuotaMax.' orang',
+            'kuota.numeric' => 'Kuota harus angka',
+            'deskripsi.required' => 'Deskripsi wajib diisi!',
+        ]);
+        \App\Models\DaftarTopik::create([
+            'judul' => $request->judul,
+            'program_studi' => $request->program_studi,
+            'fakultas' => $request->fakultas,
+            'bidang' => $request->bidang,
+            'kuota' => $request->kuota,
+            'dosen' => null,
+            'kode_dosen' => null,
+            'status' => 'Menunggu Pembimbing',
+            'nim' => $user->nim,
+            'kelompok' => $user->nim,
+            'deskripsi' => $request->deskripsi,
+        ]);
+        // Tambahkan ke tabel kelompok untuk user login
+        \App\Models\Kelompok::create([
+            'judul' => $request->judul,
+            'nim' => $user->nim,
+            'nama_anggota' => $user->nama,
+            'pembimbing_satu' => null,
+        ]);
+        // Tambahkan anggota tambahan jika ada
+        if ($request->has('anggota_tambahan')) {
+            foreach ($request->anggota_tambahan as $nimAnggota) {
+                $mhs = \App\Models\Mahasiswa::where('nim', $nimAnggota)->first();
+                if ($mhs) {
+                    \App\Models\Kelompok::create([
+                        'judul' => $request->judul,
+                        'nim' => $mhs->nim,
+                        'nama_anggota' => $mhs->nama,
+                        'pembimbing_satu' => null,
+                    ]);
+                }
+            }
+        }
+        return redirect('/mahasiswa/daftar_topik')->with('success', 'Topik berhasil diajukan, menunggu dosen pembimbing!');
+    }
+
+    public function hapusDokumen($id) {
+        $user = auth()->guard('mahasiswa')->user();
+        $dokumen = \App\Models\DokumenMahasiswa::where('id', $id)->where('nim', $user->nim)->firstOrFail();
+        $dokumen->delete();
+        return back()->with('success', 'Dokumen berhasil dihapus!');
     }
 }

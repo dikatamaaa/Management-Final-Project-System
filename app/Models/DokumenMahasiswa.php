@@ -10,6 +10,6 @@ class DokumenMahasiswa extends Model
     use HasFactory;
     protected $table = 'dokumen_mahasiswa';
     protected $fillable = [
-        'nim', 'judul', 'link', 'status'
+        'nim', 'judul', 'link'
     ];
 } 

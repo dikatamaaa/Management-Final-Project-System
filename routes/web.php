@@ -81,6 +81,11 @@ Route::post('/admin/mahasiswa/import-wajib-ganti', [\App\Http\Controllers\Mahasi
 Route::post('/admin/profil/editFoto/{id}', [AdminController::class, 'EditFotoAdmin'])->name('admin.editFoto')->middleware('auth:admin');
 Route::post('/admin/profil/gantiKataSandi/{id}', [AdminController::class, 'GantiKataSandiAdmin'])->name('admin.gantiKataSandi')->middleware('auth:admin');
 
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/admin/pengaturan_topik', [App\Http\Controllers\AdminController::class, 'pengaturanTopik'])->name('admin.pengaturan_topik');
+    Route::post('/admin/pengaturan_topik', [App\Http\Controllers\AdminController::class, 'simpanPengaturanTopik'])->name('admin.simpan_pengaturan_topik');
+});
+
 #########################################################################################################################################################################################
 
 // Dosen
@@ -148,6 +153,14 @@ Route::post('/mahasiswa/daftar_topik/tambah_anggota/{id}', [MahasiswaController:
 Route::get('/mahasiswa/dokumen-bimbingan', [App\Http\Controllers\MahasiswaController::class, 'dokumenBimbinganPage'])->middleware('auth:mahasiswa')->name('mahasiswa.dokumen_bimbingan');
 Route::post('/mahasiswa/dokumen-bimbingan/dokumen', [App\Http\Controllers\MahasiswaController::class, 'storeDokumen'])->middleware('auth:mahasiswa')->name('mahasiswa.store_dokumen');
 Route::post('/mahasiswa/dokumen-bimbingan/bimbingan', [App\Http\Controllers\MahasiswaController::class, 'storeBimbingan'])->middleware('auth:mahasiswa')->name('mahasiswa.store_bimbingan');
+Route::delete('/mahasiswa/dokumen-bimbingan/dokumen/{id}', [App\Http\Controllers\MahasiswaController::class, 'hapusDokumen'])->name('mahasiswa.hapus_dokumen')->middleware('auth:mahasiswa');
 
 Route::get('/mahasiswa/ganti-password-awal', [MahasiswaController::class, 'formGantiPasswordAwal'])->middleware('auth:mahasiswa');
 Route::post('/mahasiswa/ganti-password-awal', [MahasiswaController::class, 'gantiPasswordAwal'])->middleware('auth:mahasiswa');
+
+// Mahasiswa membuat topik sendiri
+Route::get('/mahasiswa/daftar_topik/buat', [MahasiswaController::class, 'formBuatTopik'])->name('mahasiswa.form_buat_topik')->middleware('auth:mahasiswa');
+Route::post('/mahasiswa/daftar_topik/buat', [MahasiswaController::class, 'buatTopik'])->name('mahasiswa.buat_topik')->middleware('auth:mahasiswa');
+
+// Dosen mengambil topik mahasiswa
+Route::post('/dosen/daftar_topik/ambil/{id}', [DosenController::class, 'ambilTopikMahasiswa'])->name('dosen.ambil_topik_mahasiswa')->middleware('auth:dosen');

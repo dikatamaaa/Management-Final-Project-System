@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin', function (Blueprint $table) {
+        Schema::create('pengaturan_topik', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->nullable();
-            $table->string('nama_pengguna')->unique();
-            $table->string('kata_sandi');
-            $table->string('role')->default('admin');
+            $table->integer('kuota_min')->default(2);
+            $table->integer('kuota_max')->default(5);
+            $table->json('list_bidang')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admin');
+        Schema::dropIfExists('pengaturan_topik');
     }
 };

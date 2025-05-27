@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nim');
             $table->string('judul');
             $table->string('link');
-            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

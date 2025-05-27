@@ -16,14 +16,14 @@ return new class extends Migration
             $table->string('judul');
             $table->string('program_studi');
             $table->string('fakultas');
-            $table->string('bidang');
-            $table->integer('kuota');
-            $table->string('dosen');
-            $table->string('kode_dosen');
-            $table->string('status')->default('Tersedia');
+            $table->string('bidang')->nullable();
+            $table->integer('kuota')->nullable();
+            $table->string('dosen')->nullable();
+            $table->string('kode_dosen')->nullable();
+            $table->string('status')->nullable();
             $table->bigInteger('nim')->nullable()->unique();
             $table->string('kelompok')->nullable();
-            $table->string('deskripsi');
+            $table->string('deskripsi')->nullable();
             $table->timestamps();
 
             $table->foreign('kode_dosen')->references('kode_dosen')->on('dosen');

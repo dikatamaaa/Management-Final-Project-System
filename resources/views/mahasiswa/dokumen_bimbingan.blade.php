@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-lg-6 mb-4">
             <div class="card shadow">
-                <div class="card-header py-3"><h5 class="m-0">Kumpulkan Dokumen</h5></div>
+                <div class="card-header py-3"><h5 class="m-0">Pengumpulan Dokumen</h5></div>
                 <div class="card-body">
                     @if(!$kelompokSaya)
                         <div class="alert alert-warning">Anda belum memiliki kelompok. Tidak dapat mengumpulkan dokumen.</div>
@@ -45,9 +45,9 @@
                         <button class="btn btn-primary" type="submit" @if(!$bolehKumpul) disabled @endif>Kumpulkan</button>
                     </form>
                     <hr>
-                    <h6>Riwayat Dokumen</h6>
+                    <h6>Log Dokumen</h6>
                     <table class="table table-sm table-bordered">
-                        <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Link</th><th>Status</th><th>Tanggal</th></tr></thead>
+                        <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Link</th><th>Tanggal</th><th>Aksi</th></tr></thead>
                         <tbody>
                         @forelse($dokumenKelompok as $i => $d)
                             <tr>
@@ -55,12 +55,14 @@
                                 <td>{{ $anggotaNama[$d->nim] ?? '-' }}</td>
                                 <td>{{ $d->judul }}</td>
                                 <td><a href="{{ $d->link }}" target="_blank">Lihat</a></td>
-                                <td>
-                                    @if($d->status=='pending')<span class="badge bg-warning text-dark">Pending</span>@endif
-                                    @if($d->status=='accepted')<span class="badge bg-success">Accepted</span>@endif
-                                    @if($d->status=='rejected')<span class="badge bg-danger">Rejected</span>@endif
-                                </td>
                                 <td>{{ $d->created_at->format('d-m-Y H:i') }}</td>
+                                <td>
+                                    <form action="{{ route('mahasiswa.hapus_dokumen', $d->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin hapus dokumen ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Hapus</button>
+                                    </form>
+                                </td>
                             </tr>
                         @empty
                             <tr><td colspan="6" class="text-center">Belum ada dokumen</td></tr>
@@ -112,7 +114,7 @@
                         <button class="btn btn-primary" type="submit" @if(!$kelompokSaya) disabled @endif>Ajukan Bimbingan</button>
                     </form>
                     <hr>
-                    <h6>Riwayat Pengajuan Bimbingan</h6>
+                    <h6>Log Bimbingan</h6>
                     <table class="table table-sm table-bordered">
                         <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Pembimbing</th><th>Jadwal</th><th>Status</th><th>Catatan</th><th>Kritik & Saran</th></tr></thead>
                         <tbody>

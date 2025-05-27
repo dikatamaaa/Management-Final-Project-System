@@ -45,6 +45,60 @@
 .select2-selection__choice {
     font-size: 0.875rem;
 }
+
+/* Hilangkan spinner pada input number readonly */
+input[type=number][readonly]::-webkit-inner-spin-button,
+input[type=number][readonly]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number][readonly] {
+    -moz-appearance: textfield;
+}
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.custom-dropdown .dropdown-btn {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 12px 16px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.custom-dropdown .dropdown-content {
+    display: none;
+    position: absolute;
+    background: #fff;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    z-index: 10;
+    margin-top: 5px;
+    padding: 10px 0;
+    max-height: 250px;
+    overflow-y: auto;
+}
+.custom-dropdown.active .dropdown-content {
+    display: block;
+}
+.custom-dropdown .checkbox-label {
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 1.05rem;
+}
+.custom-dropdown .checkbox-label input[type=checkbox] {
+    margin-right: 10px;
+}
 </style>
 <body id="page-top">
     <div id="wrapper">
@@ -141,6 +195,88 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <!-- Modal Tambah Topik dipindahkan ke atas sebelum loop -->
+                                            <div class="modal fade" role="dialog" tabindex="-1" id="ModalTambahDaftarTopik">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <form action="{{ route('daftar_topik.tambah') }}" method="post" enctype="multipart/form-data">
+                                                            @csrf
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title text-dark" style="color: var(--bs-emphasis-color);font-weight: bold;">Tambah Topik</h5>
+                                                                <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <label class="form-label text-dark" style="font-weight: bold;">Judul :</label>
+                                                                <input class="form-control form-control-sm @error('judul') is-invalid @enderror" type="text" name="judul" placeholder="Judul Topik">
+                                                                @error('judul')
+                                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
+                                                                    <br>
+                                                                @enderror
+                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Program Studi :</label>
+                                                                <select class="form-select form-select-sm @error('program_studi') is-invalid @enderror" name="program_studi" id="program_studiP">
+                                                                    <option selected disabled>-- Pilih Program Studi --</option>
+                                                                </select>
+                                                                @error('program_studi')
+                                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
+                                                                    <br>
+                                                                @enderror
+                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Fakultas :</label>
+                                                                <select class="form-select form-select-sm @error('fakultas') is-invalid @enderror" name="fakultas" id="fakultasP" onchange="updateProgramStudiP()">
+                                                                    <option value="" selected>-- Pilih Fakultas --</option>
+                                                                    <option value="Fakultas Teknik Elektro (FTE)">Fakultas Teknik Elektro (FTE)</option>
+                                                                    <option value="Fakultas Rekayasa Industri (FRI)">Fakultas Rekayasa Industri (FRI)</option>
+                                                                    <option value="Fakultas Informatika (FIF)">Fakultas Informatika (FIF)</option>
+                                                                    <option value="Fakultas Ekonomi dan Bisnis (FEB)">Fakultas Ekonomi dan Bisnis (FEB)</option>
+                                                                    <option value="Fakultas Komunikasi dan Ilmu Sosial (FKI)">Fakultas Komunikasi dan Ilmu Sosial (FKI)</option>
+                                                                    <option value="Fakultas Industri Kreatif (FIK)">Fakultas Industri Kreatif (FIK)</option>
+                                                                    <option value="Fakultas Ilmu Terapan (FIT)">Fakultas Ilmu Terapan (FIT)</option>
+                                                                </select>
+                                                                @error('fakultas')
+                                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
+                                                                    <br>
+                                                                @enderror
+                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Bidang :</label>
+                                                                <div class="custom-dropdown" id="dropdownBidangDosen">
+                                                                    <div class="dropdown-btn" onclick="toggleDropdownBidangDosen()">
+                                                                        <span id="dropdownBidangLabelDosen">Pilih Bidang</span>
+                                                                        <span id="dropdownArrowDosen">&#9660;</span>
+                                                                    </div>
+                                                                    <div class="dropdown-content">
+                                                                        @foreach($bidangList as $bidang)
+                                                                            <label class="checkbox-label">
+                                                                                <input type="checkbox" name="bidang[]" value="{{ $bidang }}"
+                                                                                    {{ (collect(old('bidang'))->contains($bidang)) ? 'checked' : '' }} onchange="updateDropdownBidangLabelDosen()">
+                                                                                {{ $bidang }}
+                                                                            </label>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+                                                                @error('bidang')<div class="text-danger">{{ $message }}</div>@enderror
+                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Kuota (ditentukan admin):</label>
+                                                                <input class="form-control form-control-sm @error('kuota') is-invalid @enderror" type="number" name="kuota" value="{{ $kuotaMax }}" readonly>
+                                                                @error('kuota')
+                                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
+                                                                    <br>
+                                                                @enderror
+                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Deskripsi :</label>
+                                                                <textarea class="form-control form-control-sm @error('deskripsi') is-invalid @enderror" name="deskripsi" rows="5" placeholder="Deskripsi Tentang Topik..."></textarea>
+                                                                @error('deskripsi')
+                                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
+                                                                    <br>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-secondary btn-sm" type="reset">
+                                                                    <i class="fa fa-refresh"></i>&nbsp;Bersihkan
+                                                                </button>
+                                                                <button class="btn btn-sm link-light" type="submit" style="background: #881d1d;">
+                                                                    <i class="fa fa-save"></i>&nbsp;Simpan
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             @foreach ($menampilkanDataDaftarTopik as $data)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
@@ -148,9 +284,9 @@
                                                 <td class="text-center">{{$data->kode_dosen}}</td>
                                                 <td class="text-center">{{$data->kuota." Orang"}}</td>
                                                 <td class="text-center">
-                                                    @php $bidangList = $data->bidang; @endphp
-                                                    @if ($bidangList)
-                                                        @foreach ($bidangList as $bidang)
+                                                    @php $bidangItemList = $data->bidang; @endphp
+                                                    @if ($bidangItemList)
+                                                        @foreach ($bidangItemList as $bidang)
                                                             <span class="badge bg-dark me-1">{{$bidang}}</span>
                                                         @endforeach
                                                     @endif
@@ -261,14 +397,21 @@
                                                                 @enderror
                                                                 @php $selected = old('bidang', $data->bidang ?? []); @endphp
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Bidang :</label>
-                                                                <select class="form-select form-select-sm bidang-select @error('bidang_'.$data->id) is-invalid @enderror" name="bidang_{{$data->id}}[]" multiple>
-                                                                    <option value="Internet Of Things" {{ in_array('Internet Of Things', $selected) ? 'selected' : '' }}>Internet Of Things</option>
-                                                                    <option value="Artificial Intelligence" {{ in_array('Artificial Intelligence', $selected) ? 'selected' : '' }}>Artificial Intelligence</option>
-                                                                    <option value="Web Developer" {{ in_array('Web Developer', $selected) ? 'selected' : '' }}>Web Developer</option>
-                                                                    <option value="Data Managemen" {{ in_array('Data Managemen', $selected) ? 'selected' : '' }}>Data Managemen</option>
-                                                                    <option value="Data Analis" {{ in_array('Data Analis', $selected) ? 'selected' : '' }}>Data Analis</option>
-                                                                    <option value="Software Developer" {{ in_array('Software Developer', $selected) ? 'selected' : '' }}>Software Developer</option>
-                                                                </select>
+                                                                <div class="custom-dropdown" id="dropdownBidangDosen">
+                                                                    <div class="dropdown-btn" onclick="toggleDropdownBidangDosen()">
+                                                                        <span id="dropdownBidangLabelDosen">Pilih Bidang</span>
+                                                                        <span id="dropdownArrowDosen">&#9660;</span>
+                                                                    </div>
+                                                                    <div class="dropdown-content">
+                                                                        @foreach($bidangItemList as $bidang)
+                                                                            <label class="checkbox-label">
+                                                                                <input type="checkbox" name="bidang[]" value="{{ $bidang }}"
+                                                                                    {{ (collect(old('bidang'))->contains($bidang)) ? 'checked' : '' }} onchange="updateDropdownBidangLabelDosen()">
+                                                                                {{ $bidang }}
+                                                                            </label>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
                                                                 @error('bidang_'.$data->id)
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
@@ -442,6 +585,12 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            @if($data->status == 'Menunggu Pembimbing')
+                                                <form action="{{ route('dosen.ambil_topik_mahasiswa', $data->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button class="btn btn-success btn-sm" type="submit">Ambil Topik Ini</button>
+                                                </form>
+                                            @endif
                                             @endforeach
                                         </tbody>
                                         <tfoot>
@@ -460,8 +609,65 @@
                             </div>
                         </div>
                     </div>
+                    <!-- CARD: Topik dari Mahasiswa -->
+                    <div class="container-fluid mt-4">
+                        <div class="card shadow">
+                            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                <h5 class="text-dark m-0 fw-bold">Topik dari Mahasiswa</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive table mt-2">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th class="text-center">Judul</th>
+                                                <th class="text-center">Program Studi</th>
+                                                <th class="text-center">Fakultas</th>
+                                                <th class="text-center">Bidang</th>
+                                                <th class="text-center">Kuota</th>
+                                                <th class="text-center">Deskripsi</th>
+                                                <th class="text-center">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse ($topikMahasiswa as $data)
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-center">{{ $data->judul }}</td>
+                                                <td class="text-center">{{ $data->program_studi }}</td>
+                                                <td class="text-center">{{ $data->fakultas }}</td>
+                                                <td class="text-center">
+                                                    @if(is_array($data->bidang))
+                                                        @foreach($data->bidang as $bidang)
+                                                            <span class="badge bg-dark me-1">{{ $bidang }}</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="badge bg-dark me-1">{{ $data->bidang }}</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">{{ $data->kuota }}</td>
+                                                <td class="text-center">{{ $data->deskripsi }}</td>
+                                                <td class="text-center">
+                                                    <form action="{{ route('dosen.ambil_topik_mahasiswa', $data->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-success btn-sm">Ambil Topik</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="8" class="text-center">Tidak ada topik dari mahasiswa yang menunggu pembimbing.</td>
+                                            </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- CARD: Topik dari Dosen Lain -->
-                    <div class="container-fluid mt-5">
+                    <div class="container-fluid mt-4">
                         <div class="card shadow">
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                 <h5 class="text-dark m-0 fw-bold">Topik dari Dosen Lain</h5>
@@ -483,16 +689,16 @@
                                         <tbody>
                                             @php $no = 1; @endphp
                                             @foreach ($semuaTopik as $data)
-                                                @if($data->kode_dosen != Auth::guard('dosen')->user()->kode_dosen)
+                                                @if($data->kode_dosen != Auth::guard('dosen')->user()->kode_dosen && $data->kode_dosen != null)
                                                 <tr>
                                                     <td class="text-center">{{ $no++ }}</td>
                                                     <td class="text-center">{{$data->judul}}</td>
                                                     <td class="text-center">{{$data->kode_dosen}}</td>
                                                     <td class="text-center">{{$data->kuota." Orang"}}</td>
                                                     <td class="text-center">
-                                                        @php $bidangList = $data->bidang; @endphp
-                                                        @if ($bidangList)
-                                                            @foreach ($bidangList as $bidang)
+                                                        @php $bidangItemList = $data->bidang; @endphp
+                                                        @if ($bidangItemList)
+                                                            @foreach ($bidangItemList as $bidang)
                                                                 <span class="badge bg-dark me-1">{{$bidang}}</span>
                                                             @endforeach
                                                         @endif
@@ -525,7 +731,7 @@
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <h5 class="modal-title" style="font-weight: bold;">Lihat Daftar Topik dari Dosen Lain {{ $data->judul }}</h5>
-                                                                        <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <div class="row">
@@ -828,84 +1034,41 @@ $(document).ready(function() {
         }
     });
 });
+
+window.toggleDropdownBidangDosen = function() {
+    const dropdown = document.getElementById('dropdownBidangDosen');
+    dropdown.classList.toggle('active');
+    // Ganti arah panah
+    const arrow = document.getElementById('dropdownArrowDosen');
+    arrow.innerHTML = dropdown.classList.contains('active') ? '&#9650;' : '&#9660;';
+}
+window.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdownBidangDosen');
+    if (dropdown && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('active');
+        document.getElementById('dropdownArrowDosen').innerHTML = '&#9660;';
+    }
+});
+window.updateDropdownBidangLabelDosen = function() {
+    const checkboxes = document.querySelectorAll('#dropdownBidangDosen input[type=checkbox]');
+    let checked = 0;
+    let checkedLabels = [];
+    checkboxes.forEach(cb => {
+        if (cb.checked) {
+            checked++;
+            checkedLabels.push(cb.parentElement.textContent.trim());
+        }
+    });
+    const label = document.getElementById('dropdownBidangLabelDosen');
+    if (checked === 0) {
+        label.textContent = 'Pilih Bidang';
+    } else if (checked === 1) {
+        label.textContent = checkedLabels[0];
+    } else {
+        label.textContent = checked + ' bidang dipilih';
+    }
+}
+document.addEventListener('DOMContentLoaded', window.updateDropdownBidangLabelDosen);
     </script>
-    <!-- Modal Tambah Topik -->
-    <div class="modal fade" role="dialog" tabindex="-1" id="ModalTambahDaftarTopik">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form action="{{ route('daftar_topik.tambah') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title text-dark" style="color: var(--bs-emphasis-color);font-weight: bold;">Tambah Topik</h5>
-                        <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label class="form-label text-dark" style="font-weight: bold;">Judul :</label>
-                        <input class="form-control form-control-sm @error('judul') is-invalid @enderror" type="text" name="judul" placeholder="Judul Topik">
-                        @error('judul')
-                            <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                            <br>
-                        @enderror
-                        <label class="form-label text-dark mt-3" style="font-weight: bold;">Program Studi :</label>
-                        <select class="form-select form-select-sm @error('program_studi') is-invalid @enderror" name="program_studi" id="program_studiP">
-                            <option selected disabled>-- Pilih Program Studi --</option>
-                        </select>
-                        @error('program_studi')
-                            <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                            <br>
-                        @enderror
-                        <label class="form-label text-dark mt-3" style="font-weight: bold;">Fakultas :</label>
-                        <select class="form-select form-select-sm @error('fakultas') is-invalid @enderror" name="fakultas" id="fakultasP" onchange="updateProgramStudiP()">
-                            <option value="" selected>-- Pilih Fakultas --</option>
-                            <option value="Fakultas Teknik Elektro (FTE)">Fakultas Teknik Elektro (FTE)</option>
-                            <option value="Fakultas Rekayasa Industri (FRI)">Fakultas Rekayasa Industri (FRI)</option>
-                            <option value="Fakultas Informatika (FIF)">Fakultas Informatika (FIF)</option>
-                            <option value="Fakultas Ekonomi dan Bisnis (FEB)">Fakultas Ekonomi dan Bisnis (FEB)</option>
-                            <option value="Fakultas Komunikasi dan Ilmu Sosial (FKI)">Fakultas Komunikasi dan Ilmu Sosial (FKI)</option>
-                            <option value="Fakultas Industri Kreatif (FIK)">Fakultas Industri Kreatif (FIK)</option>
-                            <option value="Fakultas Ilmu Terapan (FIT)">Fakultas Ilmu Terapan (FIT)</option>
-                        </select>
-                        @error('fakultas')
-                            <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                            <br>
-                        @enderror
-                        <label class="form-label text-dark mt-3" style="font-weight: bold;">Bidang :</label>
-                        <select class="form-select form-select-sm @error('bidang') is-invalid @enderror" name="bidang[]" id="bidang" multiple>
-                            <option value="Internet Of Things">Internet Of Things</option>
-                            <option value="Artificial Intelligence">Artificial Intelligence</option>
-                            <option value="Web Developer">Web Developer</option>
-                            <option value="Data Managemen">Data Managemen</option>
-                            <option value="Data Analis">Data Analis</option>
-                            <option value="Software Developer">Software Developer</option>
-                        </select>
-                        @error('bidang')
-                            <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                            <br>
-                        @enderror
-                        <label class="form-label text-dark mt-3" style="font-weight: bold;">Kuota :</label>
-                        <input class="form-control form-control-sm @error('kuota') is-invalid @enderror" type="number" name="kuota" placeholder="Kuota">
-                        @error('kuota')
-                            <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                            <br>
-                        @enderror
-                        <label class="form-label text-dark mt-3" style="font-weight: bold;">Deskripsi :</label>
-                        <textarea class="form-control form-control-sm @error('deskripsi') is-invalid @enderror" name="deskripsi" rows="5" placeholder="Deskripsi Tentang Topik..."></textarea>
-                        @error('deskripsi')
-                            <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                            <br>
-                        @enderror
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary btn-sm" type="reset">
-                            <i class="fa fa-refresh"></i>&nbsp;Bersihkan
-                        </button>
-                        <button class="btn btn-sm link-light" type="submit" style="background: #881d1d;">
-                            <i class="fa fa-save"></i>&nbsp;Simpan
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </body>
 </html>

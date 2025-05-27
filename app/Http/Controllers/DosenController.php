@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Notifications\PenambahanKelompokNotification;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Collection;
+use App\Models\PengaturanTopik;
 
 class DosenController extends Controller
 {
@@ -152,30 +153,28 @@ class DosenController extends Controller
      * Menambahkan Data Daftar Topik
      */
     public function TambahDataDaftarTopik(Request $request) : RedirectResponse {
-        // Validasi Form
-        $validasi = Validator::make($request->all(), [
+        $pengaturan = PengaturanTopik::first();
+        $kuotaMin = $pengaturan->kuota_min ?? 2;
+        $kuotaMax = $pengaturan->kuota_max ?? 5;
+        $request->validate([
             'judul' => 'required|unique:daftar_topik,judul',
             'program_studi' => 'required',
             'fakultas' => 'required',
             'bidang' => 'required|array',
-            'kuota' => 'required|numeric|min:2|max:5',
+            'kuota' => 'required|numeric|min:'.$kuotaMin.'|max:'.$kuotaMax,
             'deskripsi' => 'required',
-        ],[
-            'judul.required' => 'Judul Wajib Diisi!',
-            'judul.unique' => 'Judul Sudah Dipakai, Silahkan Coba Lagi!',
-            'program_studi.required' => 'Program Studi Wajib Diisi!',
-            'fakultas.required' => 'Fakultas Wajib Diisi!',
-            'bidang.required' => 'Bidang Wajib Diisi!',
-            'kuota.required' => 'Kuota Wajib Diisi!',
-            'kuota.min' => 'Kuota Minimal 2 Orang',
-            'kuota.max' => 'Kuota Maksimal 5 Orang',
-            'kuota.numeric' => 'Kuota Harus Berjenis Angka',
-            'deskripsi.required' => 'Deskripsi Wajib Diisi!',
+        ], [
+            'judul.required' => 'Judul wajib diisi!',
+            'judul.unique' => 'Judul sudah dipakai!',
+            'program_studi.required' => 'Program Studi wajib diisi!',
+            'fakultas.required' => 'Fakultas wajib diisi!',
+            'bidang.required' => 'Bidang wajib diisi!',
+            'kuota.required' => 'Kuota wajib diisi!',
+            'kuota.min' => 'Kuota minimal '.$kuotaMin.' orang',
+            'kuota.max' => 'Kuota maksimal '.$kuotaMax.' orang',
+            'kuota.numeric' => 'Kuota harus angka',
+            'deskripsi.required' => 'Deskripsi wajib diisi!',
         ]);
-
-        if ($validasi->fails()) {
-            return redirect()->back()->withErrors($validasi)->with(['error' => 'Gagal Menambahkan Data!']);
-        }
 
         // Ambil Data Dosen
         $nama_dosen = auth()->guard('dosen')->user()->nama;
@@ -207,6 +206,15 @@ class DosenController extends Controller
         $menampilkanDataDaftarTopik = DaftarTopik::where('kode_dosen', $kode_dosen)->get();
         $modalTopik = DaftarTopik::all();
         $semuaTopik = DaftarTopik::all();
+        // Topik dari mahasiswa (belum ada pembimbing)
+        $topikMahasiswa = DaftarTopik::whereNull('kode_dosen')->where('status', 'Menunggu Pembimbing')->get();
+        // Pengaturan admin
+        $pengaturan = \App\Models\PengaturanTopik::first();
+        $bidangList = $pengaturan->list_bidang ?? [];
+        $kuotaMin = $pengaturan->kuota_min ?? 2;
+        $kuotaMax = $pengaturan->kuota_max ?? 5;
+        // Daftar mahasiswa yang belum punya kelompok/topik
+        $daftarMahasiswa = \App\Models\Mahasiswa::whereNotIn('nim', Kelompok::pluck('nim'))->get(['nim', 'nama']);
         // Attach anggota kelompok for each topik
         foreach ($menampilkanDataDaftarTopik as $topik) {
             $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
@@ -214,12 +222,7 @@ class DosenController extends Controller
         foreach ($modalTopik as $topik) {
             $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
         }
-        foreach ($semuaTopik as $topik) {
-            $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
-        }
-        // Filter mahasiswa yang belum punya kelompok/topik
-        $daftarMahasiswa = \App\Models\Mahasiswa::whereNotIn('nim', Kelompok::pluck('nim'))->get(['nim', 'nama']);
-        return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik','modalTopik','semuaTopik','daftarMahasiswa'));
+        return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik', 'modalTopik', 'semuaTopik', 'topikMahasiswa', 'bidangList', 'kuotaMin', 'kuotaMax', 'daftarMahasiswa'));
     }
 
     /**
@@ -228,10 +231,10 @@ class DosenController extends Controller
     public function HapusDataDaftarTopik($id) : RedirectResponse {
         // Get Daftar Topik ID
         $daftar_topik = DaftarTopik::findOrFail($id);
-
+        // Hapus semua anggota kelompok yang terkait topik ini
+        \App\Models\Kelompok::where('judul', $daftar_topik->judul)->delete();
         // Hapus Data Daftar Topik
         $daftar_topik->delete();
-
         // Kembali ke Halaman Daftar Topik
         return redirect('/dosen/daftar_topik')->with(['success' => 'Data Berhasil Dihapus!']);
     }
@@ -560,6 +563,22 @@ class DosenController extends Controller
             fclose($handle);
         };
         return response()->streamDownload($callback, 'rekap_penilaian.csv', $headers);
+    }
+
+    // Dosen mengambil topik mahasiswa (jadi pembimbing satu)
+    public function ambilTopikMahasiswa($id) {
+        $topik = \App\Models\DaftarTopik::findOrFail($id);
+        if ($topik->status !== 'Menunggu Pembimbing') {
+            return back()->with('error', 'Topik ini sudah diambil dosen lain atau sudah ada pembimbing!');
+        }
+        $dosen = auth()->guard('dosen')->user();
+        $topik->dosen = $dosen->nama;
+        $topik->kode_dosen = $dosen->kode_dosen;
+        $topik->status = 'Sudah Ada Pembimbing';
+        $topik->save();
+        // Update pembimbing_satu di semua anggota kelompok dengan judul yang sama
+        \App\Models\Kelompok::where('judul', $topik->judul)->update(['pembimbing_satu' => $dosen->nama]);
+        return back()->with('success', 'Anda berhasil mengambil topik ini sebagai pembimbing!');
     }
 }
 

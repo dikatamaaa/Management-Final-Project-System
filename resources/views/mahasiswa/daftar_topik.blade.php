@@ -86,6 +86,7 @@
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
                         <h3 class="text-dark mb-0">Daftar Topik</h3>
+                        <a href="{{ route('mahasiswa.form_buat_topik') }}" class="btn btn-primary">Buat Topik Sendiri</a>
                     </div>
                     <div class="card shadow">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">

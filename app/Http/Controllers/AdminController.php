@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Dosen;
 use App\Models\Template;
 use App\Models\Mahasiswa;
+use App\Models\PengaturanTopik;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -652,5 +653,35 @@ class AdminController extends Controller
         ]);
 
         return redirect('/admin/profil')->with(['success' => 'Kata Sandi Berhasil Diperbarui']);
+    }
+
+    /**
+     * Menampilkan dan mengedit pengaturan topik (kuota & bidang)
+     */
+    public function pengaturanTopik() : View {
+        $pengaturan = PengaturanTopik::first();
+        return view('admin.pengaturan_topik', compact('pengaturan'));
+    }
+
+    public function simpanPengaturanTopik(Request $request) : RedirectResponse {
+        $request->validate([
+            'kuota_min' => 'required|integer|min:2|max:10',
+            'kuota_max' => 'required|integer|min:2|max:10|gte:kuota_min',
+            'list_bidang' => 'required|array|min:1',
+            'list_bidang.*' => 'required|string|max:100',
+        ], [
+            'kuota_min.required' => 'Kuota minimal wajib diisi',
+            'kuota_max.required' => 'Kuota maksimal wajib diisi',
+            'list_bidang.required' => 'Minimal satu bidang',
+        ]);
+        $pengaturan = PengaturanTopik::first();
+        if (!$pengaturan) {
+            $pengaturan = new PengaturanTopik();
+        }
+        $pengaturan->kuota_min = $request->kuota_min;
+        $pengaturan->kuota_max = $request->kuota_max;
+        $pengaturan->list_bidang = $request->list_bidang;
+        $pengaturan->save();
+        return back()->with('success', 'Pengaturan topik berhasil disimpan!');
     }
 }
