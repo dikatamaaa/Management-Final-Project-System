@@ -138,7 +138,6 @@
                                             <th>Kuota</th>
                                             <th>Bidang</th>
                                             <th>Status</th>
-                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -150,7 +149,7 @@
                                                 $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
                                                 $sudah_punya_kelompok = \App\Models\Kelompok::where('nim', $nim)->exists();
                                             @endphp
-                                            <tr>
+                                            <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{ $topik->id }}">
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $topik->judul }}</td>
                                                 <td>{{ $topik->kode_dosen }}</td>
@@ -173,20 +172,6 @@
                                                         <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    @if($topik->status == 'Tersedia' && !$sudah_punya_kelompok)
-                                                        <form action="{{ route('mahasiswa.pilih_topik', $topik->id) }}" method="POST" style="display:inline;">
-                                                            @csrf
-                                                            <button class="btn btn-success btn-sm link-light ms-1 me-1" type="submit"><i class="fas fa-plus"></i></button>
-                                                        </form>
-                                                    @endif
-                                                    @if($sudah_booking && \App\Models\Kelompok::where('judul', $topik->judul)->count() < $topik->kuota)
-                                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}">
-                                                            <i class="fas fa-user-plus"></i> Tambah Anggota
-                                                        </button>
-                                                    @endif
-                                                    <button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{ $topik->id }}"><i class="fas fa-eye"></i></button>
-                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -198,7 +183,6 @@
                                             <td><strong>Kuota</strong></td>
                                             <td><strong>Bidang</strong></td>
                                             <td><strong>Status</strong></td>
-                                            <td><strong>Aksi</strong></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -251,7 +235,7 @@
             $('#tableData').DataTable({
                 language: {
                     lengthMenu: "Tampilkan _MENU_ entri per halaman",
-                    search: "Cari:",
+                    search: "",
                     info: "Menampilkan _START_ Sampai _END_ Dari _TOTAL_ Entri",
                     infoEmpty: "Menampilkan 0 Sampai 0 Dari 0 Entri",
                     emptyTable: "Tidak Ada Data Tersedia",
@@ -259,10 +243,6 @@
                 },
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
                 columnDefs: [{
-                    targets: 6,
-                    searchable: false,
-                    orderable: false,
-                },{
                     targets: 0,
                     searchable: false,
                 }],
@@ -421,5 +401,14 @@
         </div>
     </div>
     @endforeach
+    <style>
+    .clickable-row {
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .clickable-row:hover {
+        background: #f5f5f5;
+    }
+    </style>
 </body>
 </html>

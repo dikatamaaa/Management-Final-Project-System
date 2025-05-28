@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('bimbingan', function (Blueprint $table) {
             $table->id();
             $table->string('nim');
-            $table->string('judul');
+            $table->string('judul');            
+            $table->string('dokumen')->nullable();
             $table->enum('pembimbing', ['1', '2']);
             $table->dateTime('jadwal');
             $table->enum('status', ['pending', 'accepted', 'rejected', 'selesai'])->default('pending');

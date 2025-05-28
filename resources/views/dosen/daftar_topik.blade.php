@@ -99,6 +99,56 @@ input[type=number][readonly] {
 .custom-dropdown .checkbox-label input[type=checkbox] {
     margin-right: 10px;
 }
+.clickable-row {
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.clickable-row:hover {
+    background: #f5f5f5;
+}
+/* Samakan tampilan search DataTables dengan input custom */
+.dataTables_filter input[type="search"].form-control.form-control-sm {
+    min-width: 220px !important;
+    max-width: 300px !important;
+    float: right !important;
+    display: inline-block !important;
+    margin-left: 8px !important;
+    border-radius: 4px !important;
+    font-size: 0.875rem !important;
+    height: 32px !important;
+    padding: 4px 10px !important;
+    box-sizing: border-box !important;
+}
+.dataTables_filter label {
+    font-weight: normal !important;
+    color: #333 !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+.dt-search input.dt-input[type="search"] {
+    min-width: 220px !important;
+    max-width: 300px !important;
+    float: right !important;
+    display: inline-block !important;
+    margin-left: 8px !important;
+    border-radius: 4px !important;
+    font-size: 0.875rem !important;
+    height: 32px !important;
+    padding: 4px 10px !important;
+    box-sizing: border-box !important;
+    background: #fff !important;
+    border: 1px solid #ced4da !important;
+}
+.dt-search label {
+    font-weight: normal !important;
+    color: #333 !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
 </style>
 <body id="page-top">
     <div id="wrapper">
@@ -278,7 +328,7 @@ input[type=number][readonly] {
                                                 </div>
                                             </div>
                                             @foreach ($menampilkanDataDaftarTopik as $data)
-                                            <tr>
+                                            <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{$data->id}}">
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{$data->judul}}</td>
                                                 <td class="text-center">{{$data->kode_dosen}}</td>
@@ -302,34 +352,12 @@ input[type=number][readonly] {
                                                     @elseif($jumlah_anggota >= $data->kuota)
                                                         <span class="badge rounded-pill bg-danger">Full</span>
                                                         <div class="mt-2">
-                                                            <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;">
+                                                            <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;" onclick="event.stopPropagation();">
                                                                 @csrf
                                                                 <input type="hidden" name="judul" value="{{ $data->judul }}">
                                                                 <button type="submit" class="btn btn-success btn-sm ms-1">Diterima</button>
                                                             </form>
-                                                            <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}">Ditolak</button>
-                                                        </div>
-                                                        <!-- Modal Alasan Ditolak -->
-                                                        <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <form action="{{ route('kelompok.tolak') }}" method="POST">
-                                                                        @csrf
-                                                                        <input type="hidden" name="judul" value="{{ $data->judul }}">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title" id="modalTolakLabel{{ $data->id }}">Alasan Penolakan</h5>
-                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            <textarea name="alasan" class="form-control" rows="3" placeholder="Tulis alasan penolakan..." required></textarea>
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                                            <button type="submit" class="btn btn-danger">Kirim Penolakan</button>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
+                                                            <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();">Ditolak</button>
                                                         </div>
                                                     @elseif($data->status == 'Tersedia')
                                                         <span class="badge rounded-pill bg-success">Available</span>
@@ -341,16 +369,13 @@ input[type=number][readonly] {
                                                 </td>
                                                 <td>
                                                     <p class="text-center">
-                                                        <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalEditDaftarTopik{{$data->id}}">
+                                                        <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalEditDaftarTopik{{$data->id}}" onclick="event.stopPropagation();">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        <button class="btn btn-danger btn-sm ms-1 me-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalHapusDaftarTopik{{$data->id}}">
+                                                        <button class="btn btn-danger btn-sm ms-1 me-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalHapusDaftarTopik{{$data->id}}" onclick="event.stopPropagation();">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </button>
-                                                        <button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{$data->id}}">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button>
-                                                        <button class="btn btn-success btn-sm ms-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalTambahMahasiswa{{$data->id}}">
+                                                        <button class="btn btn-success btn-sm ms-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalTambahMahasiswa{{$data->id}}" onclick="event.stopPropagation();">
                                                             <i class="fas fa-user-plus"></i> Tambah Mahasiswa
                                                         </button>
                                                     </p>
@@ -395,18 +420,17 @@ input[type=number][readonly] {
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
                                                                 @enderror
-                                                                @php $selected = old('bidang', $data->bidang ?? []); @endphp
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Bidang :</label>
-                                                                <div class="custom-dropdown" id="dropdownBidangDosen">
-                                                                    <div class="dropdown-btn" onclick="toggleDropdownBidangDosen()">
-                                                                        <span id="dropdownBidangLabelDosen">Pilih Bidang</span>
-                                                                        <span id="dropdownArrowDosen">&#9660;</span>
+                                                                <div class="custom-dropdown" id="dropdownBidangDosen{{$data->id}}">
+                                                                    <div class="dropdown-btn" onclick="toggleDropdownBidangDosen({{$data->id}})">
+                                                                        <span id="dropdownBidangLabelDosen{{$data->id}}">Pilih Bidang</span>
+                                                                        <span id="dropdownArrowDosen{{$data->id}}">&#9660;</span>
                                                                     </div>
                                                                     <div class="dropdown-content">
-                                                                        @foreach($bidangItemList as $bidang)
+                                                                        @foreach($bidangList as $bidang)
                                                                             <label class="checkbox-label">
                                                                                 <input type="checkbox" name="bidang[]" value="{{ $bidang }}"
-                                                                                    {{ (collect(old('bidang'))->contains($bidang)) ? 'checked' : '' }} onchange="updateDropdownBidangLabelDosen()">
+                                                                                    {{ (collect(old('bidang', $data->bidang ?? []))->contains($bidang)) ? 'checked' : '' }} onchange="updateDropdownBidangLabelDosen({{$data->id}})">
                                                                                 {{ $bidang }}
                                                                             </label>
                                                                         @endforeach
@@ -632,7 +656,7 @@ input[type=number][readonly] {
                                         </thead>
                                         <tbody>
                                             @forelse ($topikMahasiswa as $data)
-                                            <tr>
+                                            <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#ModalDetailTopikMahasiswa{{ $data->id }}">
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{ $data->judul }}</td>
                                                 <td class="text-center">{{ $data->program_studi }}</td>
@@ -649,15 +673,79 @@ input[type=number][readonly] {
                                                 <td class="text-center">{{ $data->kuota }}</td>
                                                 <td class="text-center">{{ $data->deskripsi }}</td>
                                                 <td class="text-center">
-                                                    <form action="{{ route('dosen.ambil_topik_mahasiswa', $data->id) }}" method="POST" style="display:inline;">
+                                                    <form action="{{ route('dosen.ambil_topik_mahasiswa', $data->id) }}" method="POST" style="display:inline;" onclick="event.stopPropagation();">
                                                         @csrf
                                                         <button type="submit" class="btn btn-success btn-sm">Ambil Topik</button>
                                                     </form>
                                                 </td>
                                             </tr>
+                                            <!-- Modal Detail Topik Mahasiswa -->
+                                            <div class="modal fade" id="ModalDetailTopikMahasiswa{{ $data->id }}" tabindex="-1" aria-labelledby="ModalDetailTopikMahasiswaLabel{{ $data->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="ModalDetailTopikMahasiswaLabel{{ $data->id }}">Detail Topik Mahasiswa</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
+                                                                <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->judul }}</p></div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-4"><span style="font-weight: bold;">Program Studi</span></div>
+                                                                <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->program_studi ?? '-' }}</p></div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
+                                                                <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->fakultas ?? '-' }}</p></div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
+                                                                <div class="col-8">
+                                                                    <p><span class="fw-bold">:&nbsp;</span>
+                                                                        @if(is_array($data->bidang))
+                                                                            @foreach($data->bidang as $bidang)
+                                                                                <span class="badge bg-dark me-1">{{ $bidang }}</span>
+                                                                            @endforeach
+                                                                        @else
+                                                                            <span class="badge bg-dark me-1">{{ $data->bidang }}</span>
+                                                                        @endif
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
+                                                                <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->kuota }} Orang</p></div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-4"><span style="font-weight: bold;">Anggota</span></div>
+                                                                <div class="col-8">
+                                                                    <span class="fw-bold">:&nbsp;</span>
+                                                                    @php $anggota = \App\Models\Kelompok::where('judul', $data->judul)->get(); @endphp
+                                                                    @if($anggota->count() > 0)
+                                                                        @foreach($anggota as $m)
+                                                                            <span class="badge rounded-pill bg-dark m-1">{{ $m->nama_anggota }} ({{ $m->nim }})</span>
+                                                                        @endforeach
+                                                                    @else
+                                                                        -
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
+                                                                <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->deskripsi ?? '-' }}</p></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             @empty
                                             <tr>
-                                                <td colspan="8" class="text-center">Tidak ada topik dari mahasiswa yang menunggu pembimbing.</td>
+                                                <td colspan="8" class="text-center">Tidak ada pengajuan topik dari mahasiswa</td>
                                             </tr>
                                             @endforelse
                                         </tbody>
@@ -671,6 +759,9 @@ input[type=number][readonly] {
                         <div class="card shadow">
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                 <h5 class="text-dark m-0 fw-bold">Topik dari Dosen Lain</h5>
+                                <div style="min-width:220px;">
+                                    <input type="text" id="searchJudulDosenLain" class="form-control form-control-sm" placeholder="Cari Judul Topik dari Dosen Lain">
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive table mt-2">
@@ -869,7 +960,7 @@ input[type=number][readonly] {
             $('#tableData').DataTable({
                 language: {
                     lengthMenu: "Tampilkan _MENU_ entri per halaman",
-                    search: "Cari:",
+                    search: "",
                     info: "Menampilkan _START_ Sampai _END_ Dari _TOTAL_ Entri",
                     infoEmpty: "Menampilkan 0 Sampai 0 Dari 0 Entri",
                     emptyTable: "Tidak Ada Data Tersedia",
@@ -1035,22 +1126,27 @@ $(document).ready(function() {
     });
 });
 
-window.toggleDropdownBidangDosen = function() {
-    const dropdown = document.getElementById('dropdownBidangDosen');
+window.toggleDropdownBidangDosen = function(id = null) {
+    let dropdown, arrow;
+    if (id) {
+        dropdown = document.getElementById('dropdownBidangDosen' + id);
+        arrow = document.getElementById('dropdownArrowDosen' + id);
+    } else {
+        dropdown = document.getElementById('dropdownBidangDosen');
+        arrow = document.getElementById('dropdownArrowDosen');
+    }
     dropdown.classList.toggle('active');
-    // Ganti arah panah
-    const arrow = document.getElementById('dropdownArrowDosen');
     arrow.innerHTML = dropdown.classList.contains('active') ? '&#9650;' : '&#9660;';
 }
-window.addEventListener('click', function(event) {
-    const dropdown = document.getElementById('dropdownBidangDosen');
-    if (dropdown && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('active');
-        document.getElementById('dropdownArrowDosen').innerHTML = '&#9660;';
+window.updateDropdownBidangLabelDosen = function(id = null) {
+    let checkboxes, label;
+    if (id) {
+        checkboxes = document.querySelectorAll('#dropdownBidangDosen' + id + ' input[type=checkbox]');
+        label = document.getElementById('dropdownBidangLabelDosen' + id);
+    } else {
+        checkboxes = document.querySelectorAll('#dropdownBidangDosen input[type=checkbox]');
+        label = document.getElementById('dropdownBidangLabelDosen');
     }
-});
-window.updateDropdownBidangLabelDosen = function() {
-    const checkboxes = document.querySelectorAll('#dropdownBidangDosen input[type=checkbox]');
     let checked = 0;
     let checkedLabels = [];
     checkboxes.forEach(cb => {
@@ -1059,7 +1155,6 @@ window.updateDropdownBidangLabelDosen = function() {
             checkedLabels.push(cb.parentElement.textContent.trim());
         }
     });
-    const label = document.getElementById('dropdownBidangLabelDosen');
     if (checked === 0) {
         label.textContent = 'Pilih Bidang';
     } else if (checked === 1) {
@@ -1068,7 +1163,50 @@ window.updateDropdownBidangLabelDosen = function() {
         label.textContent = checked + ' bidang dipilih';
     }
 }
-document.addEventListener('DOMContentLoaded', window.updateDropdownBidangLabelDosen);
+document.addEventListener('DOMContentLoaded', function() {
+    updateDropdownBidangLabelDosen(); // Untuk modal tambah
+    @if(isset($menampilkanDataDaftarTopik))
+        @foreach($menampilkanDataDaftarTopik as $data)
+            updateDropdownBidangLabelDosen({{ $data->id }});
+        @endforeach
+    @endif
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('searchJudulDosenLain');
+    if (input) {
+        input.addEventListener('keyup', function() {
+            const filter = input.value.toLowerCase();
+            // Cari table terdekat di dalam card-body
+            const table = input.closest('.card-body').querySelector('table');
+            const trs = table.querySelectorAll('tbody tr');
+            trs.forEach(function(row) {
+                // Kolom judul ada di kolom ke-2 (index 1)
+                const judul = row.children[1]?.textContent.toLowerCase() || '';
+                if (judul.indexOf(filter) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+
+$(document).ready(function() {
+    $('#tableData').on('init.dt', function() {
+        $('.dataTables_filter input[type="search"]').addClass('form-control form-control-sm').attr('placeholder', 'Cari Data Anda...');
+    });
+    // Untuk jaga-jaga jika event di atas tidak terpanggil
+    setTimeout(function() {
+        $('.dataTables_filter input[type="search"]').addClass('form-control form-control-sm').attr('placeholder', 'Cari Data Anda...');
+    }, 500);
+});
+
+$(document).ready(function() {
+    // DataTables v2 search input
+    $('.dt-search input.dt-input[type="search"]').addClass('form-control form-control-sm');
+});
     </script>
 </body>
 </html>

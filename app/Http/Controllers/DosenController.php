@@ -231,6 +231,8 @@ class DosenController extends Controller
     public function HapusDataDaftarTopik($id) : RedirectResponse {
         // Get Daftar Topik ID
         $daftar_topik = DaftarTopik::findOrFail($id);
+        // Hapus semua bimbingan yang terkait topik ini
+        \App\Models\Bimbingan::where('judul_topik', $daftar_topik->judul)->delete();
         // Hapus semua anggota kelompok yang terkait topik ini
         \App\Models\Kelompok::where('judul', $daftar_topik->judul)->delete();
         // Hapus Data Daftar Topik
@@ -424,7 +426,9 @@ class DosenController extends Controller
             });
         })->orderByDesc('created_at')->get();
         $mahasiswaNama = \App\Models\Mahasiswa::pluck('nama','nim');
-        return view('dosen.bimbingan', compact('bimbinganList', 'mahasiswaNama', 'nama_dosen'));
+        // Ambil judul kelompok untuk setiap nim
+        $kelompokJudulList = \App\Models\Kelompok::pluck('judul','nim');
+        return view('dosen.bimbingan', compact('bimbinganList', 'mahasiswaNama', 'nama_dosen', 'kelompokJudulList'));
     }
 
     /**

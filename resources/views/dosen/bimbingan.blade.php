@@ -95,12 +95,13 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nama Mahasiswa</th>
-                                    <th>Judul</th>
+                                    <th>Judul Topik</th>
+                                    <th>Topik Bimbingan</th>
                                     <th>Pembimbing</th>
                                     <th>Jadwal</th>
                                     <th>Status</th>
-                                    <th>Catatan</th>
-                                    <th>Kritik & Saran</th>
+                                    <th>Materi Bimbingan</th>
+                                    <th>Catatan Dosen</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -109,6 +110,7 @@
                                 <tr>
                                     <td>{{ $i+1 }}</td>
                                     <td>{{ $mahasiswaNama[$b->nim] ?? $b->nim }}</td>
+                                    <td>{{ $kelompokJudulList[$b->nim] ?? '-' }}</td>
                                     <td>{{ $b->judul }}</td>
                                     <td>{{ $b->pembimbing == '1' ? 'Pembimbing 1' : 'Pembimbing 2' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($b->jadwal)->format('d-m-Y H:i') }}</td>
@@ -118,14 +120,53 @@
                                         @if($b->status=='rejected')<span class="badge bg-danger">Rejected</span>@endif
                                         @if($b->status=='selesai')<span class="badge bg-info text-dark">Selesai</span>@endif
                                     </td>
-                                    <td>{{ $b->catatan }}</td>
+                                    <td>
+                                        {{ \Illuminate\Support\Str::limit($b->catatan, 30) }}
+                                        @if(strlen($b->catatan) > 30)
+                                            <button class="btn btn-link btn-sm p-0" data-bs-toggle="modal" data-bs-target="#modalCatatan{{ $b->id }}">Lihat</button>
+                                            <!-- Modal Catatan Lengkap -->
+                                            <div class="modal fade" id="modalCatatan{{ $b->id }}" tabindex="-1" aria-labelledby="modalCatatanLabel{{ $b->id }}" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalCatatanLabel{{ $b->id }}">Catatan Lengkap</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    {{ $b->catatan }}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                        @endif
+                                    </td>
                                     <td>
                                         @if($b->status=='accepted' || $b->status=='selesai')
-                                            <form action="{{ route('dosen.bimbingan.kritik_saran', $b->id) }}" method="POST" class="d-flex">
-                                                @csrf
-                                                <input type="text" name="kritik_saran" class="form-control form-control-sm me-1" value="{{ $b->kritik_saran }}" placeholder="Kritik & Saran" required>
-                                                <button class="btn btn-info btn-sm" type="submit">Kirim</button>
-                                            </form>
+                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMasukan{{ $b->id }}">Masukan</button>
+                                            <!-- Modal Masukan -->
+                                            <div class="modal fade" id="modalMasukan{{ $b->id }}" tabindex="-1" aria-labelledby="modalMasukanLabel{{ $b->id }}" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <form action="{{ route('dosen.bimbingan.kritik_saran', $b->id) }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="modalMasukanLabel{{ $b->id }}">Masukan</h5>
+                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      <textarea name="kritik_saran" class="form-control" rows="5" required>{{ $b->kritik_saran }}</textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                      <button class="btn btn-info" type="submit">Kirim</button>
+                                                    </div>
+                                                  </form>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            @if($b->kritik_saran)
+                                                <div class="mt-1 small text-muted">{{ \Illuminate\Support\Str::limit($b->kritik_saran, 30) }}</div>
+                                            @endif
                                         @elseif($b->status=='rejected')
                                             <span class="text-danger">{{ $b->alasan_tolak }}</span>
                                         @endif

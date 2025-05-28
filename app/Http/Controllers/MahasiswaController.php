@@ -199,6 +199,7 @@ class MahasiswaController extends Controller
         }
         \App\Models\Bimbingan::create([
             'nim' => $nim,
+            'judul_topik' => $request->judul,
             'judul' => $request->judul,
             'pembimbing' => $request->pembimbing,
             'jadwal' => $request->jadwal,
