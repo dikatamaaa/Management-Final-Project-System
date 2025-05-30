@@ -41,6 +41,18 @@
                             <span>Template Dokumen</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/pengaturan_topik">
+                            <i class="fas fa-cogs"></i>
+                            <span>Pengaturan Topik</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/jadwal_sidang">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Jadwal Sidang</span>
+                        </a>
+                    </li>
 
                     <li class="nav-item dropdown">
                         <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">

@@ -37,13 +37,9 @@ class KelompokController extends Controller
         }
         // Hapus semua anggota kelompok pada topik ini
         Kelompok::where('judul', $judul)->delete();
-        // Update status topik ke 'Tersedia'
-        $topik = DaftarTopik::where('judul', $judul)->first();
-        if ($topik) {
-            $topik->status = 'Tersedia';
-            $topik->save();
-        }
+        // Hapus data topik di daftar_topik
+        DaftarTopik::where('judul', $judul)->delete();
         // Simpan alasan penolakan (sementara: flash session)
-        return back()->with('success', 'Kelompok ditolak. Alasan: ' . $alasan);
+        return back()->with('success', 'Kelompok dan topik dihapus. Alasan: ' . $alasan);
     }
 } 

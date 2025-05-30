@@ -17,138 +17,265 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <style>
-/* Samakan tampilan select2 dengan Bootstrap form-control */
-.select2-container--default .select2-selection--single,
-.select2-container--default .select2-selection--multiple {
-    border: 1px solid #ced4da; /* Bootstrap default border */
-    border-radius: 0.375rem;    /* Bootstrap border radius */
-    height: auto;               /* Untuk menyesuaikan tinggi dinamis */
-    font-size: 0.8475rem;       /* Ukuran font opsional */
-}
+    body, table, th, td {
+        font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+    }
+    .card {
+        border-radius: 16px;
+        box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07);
+        border: none;
+        margin-bottom: 2rem;
+    }
+    .card-header {
+        background: #f8fafc;
+        border-radius: 16px 16px 0 0;
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: #1e293b;
+        border-bottom: 1.5px solid #e5e7eb;
+    }
+    .table th, .table td {
+        padding: 0.55rem 0.7rem;
+        vertical-align: middle;
+        border-top: none;
+        border-bottom: 1.5px solid #e5e7eb;
+        background: transparent;
+    }
+    .table thead th {
+        background: #f1f5f9;
+        font-weight: 600;
+        border-bottom: 2px solid #d1d5db;
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        --bs-table-accent-bg: #f8fafc;
+    }
+    .badge {
+        border-radius: 8px;
+        font-size: 0.85em;
+        padding: 0.35em 0.7em;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+    }
+    .badge.bg-success {
+        background: #4ade80 !important;
+        color: #065f46 !important;
+    }
+    .badge.bg-danger {
+        background: #f87171 !important;
+        color: #7f1d1d !important;
+    }
+    .badge.bg-warning {
+        background: #facc15 !important;
+        color: #92400e !important;
+    }
+    .badge.bg-dark {
+        background: #334155 !important;
+        color: #fff !important;
+    }
+    .badge.bg-primary {
+        background: #60a5fa !important;
+        color: #1e3a8a !important;
+    }
+    .badge.bg-info {
+        background: #38bdf8 !important;
+        color: #0369a1 !important;
+    }
+    .btn {
+        border-radius: 7px !important;
+        font-size: 0.97em;
+        font-weight: 500;
+        transition: background 0.18s, box-shadow 0.18s;
+        box-shadow: 0 2px 8px 0 rgba(37,99,235,0.07);
+    }
+    .btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info {
+        border: none;
+    }
+    .btn-primary {
+        background: #2563eb;
+    }
+    .btn-primary:hover {
+        background: #1d4ed8;
+    }
+    .btn-success {
+        background: #22c55e;
+    }
+    .btn-success:hover {
+        background: #16a34a;
+    }
+    .btn-danger {
+        background: #ef4444;
+    }
+    .btn-danger:hover {
+        background: #b91c1c;
+    }
+    .btn-warning {
+        background: #facc15;
+        color: #92400e;
+    }
+    .btn-warning:hover {
+        background: #eab308;
+        color: #78350f;
+    }
+    .btn-info {
+        background: #38bdf8;
+        color: #0369a1;
+    }
+    .btn-info:hover {
+        background: #0ea5e9;
+        color: #075985;
+    }
+    .btn-sm {
+        padding: 0.32em 1.1em;
+        font-size: 0.93em;
+    }
+    .clickable-row {
+        cursor: pointer;
+        transition: background 0.18s;
+    }
+    .clickable-row:hover {
+        background: #f1f5f9 !important;
+    }
+    @media (max-width: 768px) {
+        .table th, .table td {
+            padding: 0.45rem 0.3rem;
+            font-size: 0.98em;
+        }
+        .btn-sm {
+            font-size: 0.91em;
+            padding: 0.28em 0.7em;
+        }
+        .card-header {
+            font-size: 1.01rem;
+        }
+    }
+    .table-responsive {
+        margin-bottom: 0.5rem;
+    }
+    /* Samakan tampilan select2 dengan Bootstrap form-control */
+    .select2-container--default .select2-selection--single,
+    .select2-container--default .select2-selection--multiple {
+        border: 1px solid #ced4da; /* Bootstrap default border */
+        border-radius: 0.375rem;    /* Bootstrap border radius */
+        height: auto;               /* Untuk menyesuaikan tinggi dinamis */
+        font-size: 0.8475rem;       /* Ukuran font opsional */
+    }
 
-/* Hover & focus state agar seperti input Bootstrap */
-.select2-container--default .select2-selection--single:focus,
-.select2-container--default .select2-selection--multiple:focus,
-.select2-container--default .select2-selection--single:hover,
-.select2-container--default .select2-selection--multiple:hover {
-    border-color: #afb2b8;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); /* Bootstrap's focus effect */
-}
+    /* Hover & focus state agar seperti input Bootstrap */
+    .select2-container--default .select2-selection--single:focus,
+    .select2-container--default .select2-selection--multiple:focus,
+    .select2-container--default .select2-selection--single:hover,
+    .select2-container--default .select2-selection--multiple:hover {
+        border-color: #afb2b8;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); /* Bootstrap's focus effect */
+    }
 
-/* Ukuran font dropdown list */
-.select2-results__option {
-    font-size: 0.9375rem;
-}
+    /* Ukuran font dropdown list */
+    .select2-results__option {
+        font-size: 0.9375rem;
+    }
 
-/* Ukuran font pada tag item yang dipilih (multiple mode) */
-.select2-selection__choice {
-    font-size: 0.875rem;
-}
+    /* Ukuran font pada tag item yang dipilih (multiple mode) */
+    .select2-selection__choice {
+        font-size: 0.875rem;
+    }
 
-/* Hilangkan spinner pada input number readonly */
-input[type=number][readonly]::-webkit-inner-spin-button,
-input[type=number][readonly]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-input[type=number][readonly] {
-    -moz-appearance: textfield;
-}
-.custom-dropdown {
-    position: relative;
-    width: 100%;
-    margin-bottom: 1rem;
-}
-.custom-dropdown .dropdown-btn {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 12px 16px;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    font-size: 1.1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.custom-dropdown .dropdown-content {
-    display: none;
-    position: absolute;
-    background: #fff;
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    z-index: 10;
-    margin-top: 5px;
-    padding: 10px 0;
-    max-height: 250px;
-    overflow-y: auto;
-}
-.custom-dropdown.active .dropdown-content {
-    display: block;
-}
-.custom-dropdown .checkbox-label {
-    display: flex;
-    align-items: center;
-    padding: 8px 20px;
-    cursor: pointer;
-    font-size: 1.05rem;
-}
-.custom-dropdown .checkbox-label input[type=checkbox] {
-    margin-right: 10px;
-}
-.clickable-row {
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.clickable-row:hover {
-    background: #f5f5f5;
-}
-/* Samakan tampilan search DataTables dengan input custom */
-.dataTables_filter input[type="search"].form-control.form-control-sm {
-    min-width: 220px !important;
-    max-width: 300px !important;
-    float: right !important;
-    display: inline-block !important;
-    margin-left: 8px !important;
-    border-radius: 4px !important;
-    font-size: 0.875rem !important;
-    height: 32px !important;
-    padding: 4px 10px !important;
-    box-sizing: border-box !important;
-}
-.dataTables_filter label {
-    font-weight: normal !important;
-    color: #333 !important;
-    margin-bottom: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-}
-.dt-search input.dt-input[type="search"] {
-    min-width: 220px !important;
-    max-width: 300px !important;
-    float: right !important;
-    display: inline-block !important;
-    margin-left: 8px !important;
-    border-radius: 4px !important;
-    font-size: 0.875rem !important;
-    height: 32px !important;
-    padding: 4px 10px !important;
-    box-sizing: border-box !important;
-    background: #fff !important;
-    border: 1px solid #ced4da !important;
-}
-.dt-search label {
-    font-weight: normal !important;
-    color: #333 !important;
-    margin-bottom: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-}
+    /* Hilangkan spinner pada input number readonly */
+    input[type=number][readonly]::-webkit-inner-spin-button,
+    input[type=number][readonly]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number][readonly] {
+        -moz-appearance: textfield;
+    }
+    .custom-dropdown {
+        position: relative;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    .custom-dropdown .dropdown-btn {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 12px 16px;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        font-size: 1.1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .custom-dropdown .dropdown-content {
+        display: none;
+        position: absolute;
+        background: #fff;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        z-index: 10;
+        margin-top: 5px;
+        padding: 10px 0;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+    .custom-dropdown.active .dropdown-content {
+        display: block;
+    }
+    .custom-dropdown .checkbox-label {
+        display: flex;
+        align-items: center;
+        padding: 8px 20px;
+        cursor: pointer;
+        font-size: 1.05rem;
+    }
+    .custom-dropdown .checkbox-label input[type=checkbox] {
+        margin-right: 10px;
+    }
+    /* Samakan tampilan search DataTables dengan input custom */
+    .dataTables_filter input[type="search"].form-control.form-control-sm {
+        min-width: 220px !important;
+        max-width: 300px !important;
+        float: right !important;
+        display: inline-block !important;
+        margin-left: 8px !important;
+        border-radius: 4px !important;
+        font-size: 0.875rem !important;
+        height: 32px !important;
+        padding: 4px 10px !important;
+        box-sizing: border-box !important;
+    }
+    .dataTables_filter label {
+        font-weight: normal !important;
+        color: #333 !important;
+        margin-bottom: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+    .dt-search input.dt-input[type="search"] {
+        min-width: 220px !important;
+        max-width: 300px !important;
+        float: right !important;
+        display: inline-block !important;
+        margin-left: 8px !important;
+        border-radius: 4px !important;
+        font-size: 0.875rem !important;
+        height: 32px !important;
+        padding: 4px 10px !important;
+        box-sizing: border-box !important;
+        background: #fff !important;
+        border: 1px solid #ced4da !important;
+    }
+    .dt-search label {
+        font-weight: normal !important;
+        color: #333 !important;
+        margin-bottom: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
 </style>
 <body id="page-top">
     <div id="wrapper">
@@ -328,7 +455,7 @@ input[type=number][readonly] {
                                                 </div>
                                             </div>
                                             @foreach ($menampilkanDataDaftarTopik as $data)
-                                            <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{$data->id}}">
+                                            <tr class="clickable-row" data-id="{{ $data->id }}">
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{$data->judul}}</td>
                                                 <td class="text-center">{{$data->kode_dosen}}</td>
@@ -358,6 +485,28 @@ input[type=number][readonly] {
                                                                 <button type="submit" class="btn btn-success btn-sm ms-1">Diterima</button>
                                                             </form>
                                                             <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();">Ditolak</button>
+                                                            <!-- Modal Tolak -->
+                                                            <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true" onclick="event.stopPropagation();">
+                                                              <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                  <form action="{{ route('kelompok.tolak') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="judul" value="{{ $data->judul }}">
+                                                                    <div class="modal-header">
+                                                                      <h5 class="modal-title" id="modalTolakLabel{{ $data->id }}">Alasan Penolakan</h5>
+                                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                      <textarea name="alasan" class="form-control" required placeholder="Tulis alasan penolakan..." onclick="event.stopPropagation();"></textarea>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                                      <button type="submit" class="btn btn-danger">Tolak</button>
+                                                                    </div>
+                                                                  </form>
+                                                                </div>
+                                                              </div>
+                                                            </div>
                                                         </div>
                                                     @elseif($data->status == 'Tersedia')
                                                         <span class="badge rounded-pill bg-success">Available</span>
@@ -422,6 +571,7 @@ input[type=number][readonly] {
                                                                 @enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Bidang :</label>
                                                                 <div class="custom-dropdown" id="dropdownBidangDosen{{$data->id}}">
+                                                                    <input type="hidden" name="bidang[]" value="">
                                                                     <div class="dropdown-btn" onclick="toggleDropdownBidangDosen({{$data->id}})">
                                                                         <span id="dropdownBidangLabelDosen{{$data->id}}">Pilih Bidang</span>
                                                                         <span id="dropdownArrowDosen{{$data->id}}">&#9660;</span>
@@ -452,6 +602,16 @@ input[type=number][readonly] {
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
                                                                 @enderror
+                                                                @if($data->status == 'Proposal')
+                                                                    <label class="form-label text-dark mt-3" style="font-weight: bold;">Status</label>
+                                                                    <select class="form-select form-select-sm" name="status_{{ $data->id }}">
+                                                                        <option value="Proposal" {{ $data->status == 'Proposal' ? 'selected' : '' }}>Proposal</option>
+                                                                        <option value="Available" {{ $data->status == 'Available' ? 'selected' : '' }}>Available</option>
+                                                                        <option value="Booked" {{ $data->status == 'Booked' ? 'selected' : '' }}>Booked</option>
+                                                                        <option value="Full" {{ $data->status == 'Full' ? 'selected' : '' }}>Full</option>
+                                                                        <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>TA</option>
+                                                                    </select>
+                                                                @endif
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-secondary btn-sm" type="reset">
@@ -610,9 +770,9 @@ input[type=number][readonly] {
                                                 </div>
                                             </div>
                                             @if($data->status == 'Menunggu Pembimbing')
-                                                <form action="{{ route('dosen.ambil_topik_mahasiswa', $data->id) }}" method="POST" style="display:inline;">
+                                                <form action="{{ route('dosen.ambil_topik_mahasiswa', $data->id) }}" method="POST" style="display:inline;" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
                                                     @csrf
-                                                    <button class="btn btn-success btn-sm" type="submit">Ambil Topik Ini</button>
+                                                    <button type="submit" class="btn btn-success btn-sm" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Ambil Topik</button>
                                                 </form>
                                             @endif
                                             @endforeach
@@ -675,8 +835,8 @@ input[type=number][readonly] {
                                                 <td class="text-center">
                                                     <form action="{{ route('dosen.ambil_topik_mahasiswa', $data->id) }}" method="POST" style="display:inline;" onclick="event.stopPropagation();">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-success btn-sm">Ambil Topik</button>
-                                                    </form>
+                                                        <button type="submit" class="btn btn-success btn-sm" onclick="event.stopPropagation();">Ambil Topik</button>
+                                                    </form onclick="event.stopPropagation();">
                                                 </td>
                                             </tr>
                                             <!-- Modal Detail Topik Mahasiswa -->
@@ -1206,6 +1366,37 @@ $(document).ready(function() {
 $(document).ready(function() {
     // DataTables v2 search input
     $('.dt-search input.dt-input[type="search"]').addClass('form-control form-control-sm');
+});
+
+document.querySelectorAll('.clickable-row').forEach(function(row) {
+  row.addEventListener('click', function(e) {
+    if (
+      e.target.closest('form') ||
+      e.target.closest('button') ||
+      e.target.tagName === 'BUTTON' ||
+      e.target.tagName === 'A' ||
+      e.target.classList.contains('btn')
+    ) {
+      return;
+    }
+    // Tutup semua modal yang masih terbuka sebelum buka modal baru
+    document.querySelectorAll('.modal.show').forEach(function(openModal) {
+      var modalInstance = bootstrap.Modal.getInstance(openModal);
+      if (modalInstance) modalInstance.hide();
+    });
+    // Hapus backdrop jika ada
+    document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
+      backdrop.parentNode.removeChild(backdrop);
+    });
+    var target = row.getAttribute('data-bs-target');
+    if (target) {
+      var modal = document.querySelector(target);
+      if (modal) {
+        var modalInstance = new bootstrap.Modal(modal);
+        modalInstance.show();
+      }
+    }
+  });
 });
     </script>
 </body>
