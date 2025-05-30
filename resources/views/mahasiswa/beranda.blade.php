@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('/storage/assets/fonts/fontawesome5-overrides.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/storage/assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body id="page-top">
@@ -139,6 +140,50 @@
                                         </div>
                                         <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <p class="text-dark m-0 fw-bold">Komposisi Status Topik</p>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="statusTopikChart" height="180"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <p class="text-dark m-0 fw-bold">Jumlah Topik per Bidang</p>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="bidangTopikChart" height="180"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <p class="text-dark m-0 fw-bold">Proporsi Topik per Dosen</p>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="pieDosenTopikChart" height="180"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <p class="text-dark m-0 fw-bold">Progress Bimbingan per Dosen</p>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="lineBimbinganChart" height="180"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -368,6 +413,186 @@
                 });
             });
         });
+
+        // Chart.js Pie Chart: Komposisi Status Topik
+        const ctxStatus = document.getElementById('statusTopikChart').getContext('2d');
+        new Chart(ctxStatus, {
+            type: 'doughnut',
+            data: {
+                labels: ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked'],
+                datasets: [{
+                    data: [12, 5, 3, 2, 4], // Dummy data, ganti dengan data dinamis jika perlu
+                    backgroundColor: [
+                        '#4ade80', '#f87171', '#60a5fa', '#facc15', '#a78bfa'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#334155',
+                            font: { family: 'Poppins', size: 14 }
+                        }
+                    }
+                },
+                cutout: '70%',
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        // Chart.js Bar Chart: Jumlah Topik per Bidang
+        const ctxBidang = document.getElementById('bidangTopikChart').getContext('2d');
+        new Chart(ctxBidang, {
+            type: 'bar',
+            data: {
+                labels: ['Web', 'AI', 'Jaringan', 'IoT', 'Data Science'],
+                datasets: [{
+                    label: 'Jumlah Topik',
+                    data: [7, 4, 6, 3, 5], // Dummy data
+                    backgroundColor: '#60a5fa',
+                    borderRadius: 8,
+                    maxBarThickness: 32
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ' ' + context.parsed.y + ' Topik';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e5e7eb' },
+                        ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 }, stepSize: 1 }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        // Pie Chart: Proporsi Topik per Dosen
+        const ctxPieDosen = document.getElementById('pieDosenTopikChart').getContext('2d');
+        new Chart(ctxPieDosen, {
+            type: 'pie',
+            data: {
+                labels: ['Dr. A', 'Dr. B', 'Dr. C', 'Dr. D', 'Dr. E'],
+                datasets: [{
+                    data: [8, 5, 7, 4, 6], // Dummy data
+                    backgroundColor: [
+                        '#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#334155',
+                            font: { family: 'Poppins', size: 14 }
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        // Line Chart: Progress Bimbingan per Dosen
+        const ctxLineBimbingan = document.getElementById('lineBimbinganChart').getContext('2d');
+        new Chart(ctxLineBimbingan, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                datasets: [
+                    {
+                        label: 'Dr. A',
+                        data: [2, 3, 4, 5, 6, 7],
+                        borderColor: '#60a5fa',
+                        backgroundColor: 'rgba(96,165,250,0.12)',
+                        tension: 0.4,
+                        fill: false,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#60a5fa',
+                    },
+                    {
+                        label: 'Dr. B',
+                        data: [1, 2, 2, 3, 4, 5],
+                        borderColor: '#4ade80',
+                        backgroundColor: 'rgba(74,222,128,0.12)',
+                        tension: 0.4,
+                        fill: false,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#4ade80',
+                    },
+                    {
+                        label: 'Dr. C',
+                        data: [0, 1, 2, 2, 3, 4],
+                        borderColor: '#facc15',
+                        backgroundColor: 'rgba(250,204,21,0.12)',
+                        tension: 0.4,
+                        fill: false,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#facc15',
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#334155',
+                            font: { family: 'Poppins', size: 14 }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e5e7eb' },
+                        ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 }, stepSize: 1 }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
     </script>
+    <style>
+    #statusTopikChart, #bidangTopikChart {
+        min-height: 180px;
+        max-height: 260px;
+    }
+    .card .card-body {
+        padding-bottom: 1.5rem;
+    }
+    </style>
 </body>
 </html>
