@@ -232,7 +232,7 @@ class DosenController extends Controller
         // Get Daftar Topik ID
         $daftar_topik = DaftarTopik::findOrFail($id);
         // Hapus semua bimbingan yang terkait topik ini
-        \App\Models\Bimbingan::where('judul_topik', $daftar_topik->judul)->delete();
+        \App\Models\Bimbingan::where('judul', $daftar_topik->judul)->delete();
         // Hapus semua anggota kelompok yang terkait topik ini
         \App\Models\Kelompok::where('judul', $daftar_topik->judul)->delete();
         // Hapus Data Daftar Topik
@@ -245,6 +245,21 @@ class DosenController extends Controller
      * Edit Data Daftar Topik
      */
     public function EditDataDaftarTopik(Request $request, $id) : RedirectResponse {
+        // Jika bidang tidak ada di request, isi dengan data lama dari database
+        if (!$request->has('bidang_'.$id)) {
+            $daftar_topik = DaftarTopik::findOrFail($id);
+            $request->merge(['bidang_'.$id => $daftar_topik->bidang ?? []]);
+        }
+        // Perbaiki bidang[] agar tidak error jika hanya hidden input yang terkirim
+        $bidang = $request->input('bidang_'.$id);
+        if (is_array($bidang)) {
+            $bidang = array_filter($bidang, function($v) { return $v !== null && $v !== ''; });
+            if (empty($bidang)) {
+                $request->request->remove('bidang_'.$id);
+            } else {
+                $request->merge(['bidang_'.$id => $bidang]);
+            }
+        }
         // Validasi Form
         $validasi = Validator::make($request->all(), [
             'judul_'.$id => 'required|unique:daftar_topik,judul,'.$id.',id',
@@ -253,6 +268,7 @@ class DosenController extends Controller
             'bidang_'.$id => 'required|array',
             'kuota_'.$id => 'required|numeric|min:2|max:5',
             'deskripsi_'.$id => 'required',
+            // status hanya divalidasi jika status sebelumnya Proposal
         ],[
             'judul_'.$id.'.required' => 'Judul Wajib Diisi!',
             'judul_'.$id.'.unique' => 'Judul Sudah Dipakai, Silahkan Coba Lagi!',
@@ -273,20 +289,24 @@ class DosenController extends Controller
         // Get Daftar Topik by ID
         $daftar_topik = DaftarTopik::findOrFail($id);
 
-        // Perbarui Data Dosen
-        $daftar_topik->update([
+        // Siapkan data update
+        $updateData = [
             'judul' => $request->input('judul_'.$id),
             'program_studi' => $request->input('program_studi_'.$id),
             'fakultas' => $request->input('fakultas_'.$id),
             'bidang' => $request->input('bidang_'.$id),
             'kuota' => $request->input('kuota_'.$id),
             'deskripsi' => $request->input('deskripsi_'.$id),
-        ]);
-
+        ];
+        // Jika status sebelumnya Proposal, izinkan edit status
+        if ($daftar_topik->status === 'Proposal' && $request->has('status_'.$id)) {
+            $updateData['status'] = $request->input('status_'.$id);
+        }
+        // Perbarui Data Dosen
+        $daftar_topik->update($updateData);
 
         // Redirect ke Halaman Daftar Topik
         return redirect('/dosen/daftar_topik')->with(['success' => 'Data Berhasil Diperbarui!']);
-      
     }
 
     public function UbahStatusTopik(Request $request, $id)

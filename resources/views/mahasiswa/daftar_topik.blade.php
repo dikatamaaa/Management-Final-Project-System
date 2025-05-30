@@ -166,6 +166,12 @@
                                                 <td>
                                                     @if($topik->status == 'Tersedia')
                                                         <span class="badge rounded-pill bg-success">Tersedia</span>
+                                                        @if(!$sudah_punya_kelompok)
+                                                            <form action="{{ route('mahasiswa.pilih_topik', $topik->id) }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-primary btn-sm ms-2" onclick="event.stopPropagation();">Pilih Topik</button>
+                                                            </form>
+                                                        @endif
                                                     @elseif($topik->status == 'Penuh')
                                                         <span class="badge rounded-pill bg-danger">Penuh</span>
                                                     @else
@@ -402,12 +408,79 @@
     </div>
     @endforeach
     <style>
+    body, table, th, td {
+        font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        --bs-table-accent-bg: #fafbfc;
+    }
+    .table th, .table td {
+        padding: 0.55rem 0.7rem;
+        vertical-align: middle;
+        border-top: none;
+        border-bottom: 1.5px solid #e5e7eb;
+    }
+    .table thead th {
+        background: #f8f9fa;
+        font-weight: 600;
+        border-bottom: 2px solid #d1d5db;
+    }
+    .badge {
+        border-radius: 8px;
+        font-size: 0.85em;
+        padding: 0.35em 0.7em;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+    }
+    .badge.bg-success {
+        background: #4ade80 !important;
+        color: #065f46 !important;
+    }
+    .badge.bg-danger {
+        background: #f87171 !important;
+        color: #7f1d1d !important;
+    }
+    .badge.bg-warning {
+        background: #facc15 !important;
+        color: #92400e !important;
+    }
+    .badge.bg-dark {
+        background: #334155 !important;
+        color: #fff !important;
+    }
+    .btn-primary.btn-sm {
+        background: #2563eb;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.95em;
+        padding: 0.35em 1.1em;
+        transition: background 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px 0 rgba(37,99,235,0.08);
+    }
+    .btn-primary.btn-sm:hover {
+        background: #1d4ed8;
+        box-shadow: 0 4px 16px 0 rgba(37,99,235,0.13);
+    }
     .clickable-row {
         cursor: pointer;
-        transition: background 0.2s;
+        transition: background 0.18s;
     }
     .clickable-row:hover {
-        background: #f5f5f5;
+        background: #f1f5f9 !important;
+    }
+    @media (max-width: 768px) {
+        .table th, .table td {
+            padding: 0.45rem 0.3rem;
+            font-size: 0.98em;
+        }
+        .btn-primary.btn-sm {
+            font-size: 0.93em;
+            padding: 0.32em 0.7em;
+        }
+    }
+    /* Hilangkan space kosong bawah tabel */
+    .table-responsive {
+        margin-bottom: 0.5rem;
     }
     </style>
 </body>

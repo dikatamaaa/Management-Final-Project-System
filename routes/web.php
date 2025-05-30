@@ -8,6 +8,7 @@ use App\Http\Controllers\DosenController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\KelompokController;
+use App\Http\Controllers\JadwalSidangController;
 
 // Landing Page
 Route::get('/', [PageController::class, 'index']);
@@ -84,6 +85,12 @@ Route::post('/admin/profil/gantiKataSandi/{id}', [AdminController::class, 'Ganti
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/pengaturan_topik', [App\Http\Controllers\AdminController::class, 'pengaturanTopik'])->name('admin.pengaturan_topik');
     Route::post('/admin/pengaturan_topik', [App\Http\Controllers\AdminController::class, 'simpanPengaturanTopik'])->name('admin.simpan_pengaturan_topik');
+    Route::get('/admin/jadwal_sidang', [JadwalSidangController::class, 'index'])->name('admin.jadwal_sidang');
+    Route::post('/admin/jadwal_sidang', [JadwalSidangController::class, 'store'])->name('admin.jadwal_sidang.store');
+    Route::get('/admin/jadwal_sidang/create', [JadwalSidangController::class, 'create'])->name('admin.jadwal_sidang.create');
+    Route::get('/admin/jadwal_sidang/{id}/edit', [JadwalSidangController::class, 'edit'])->name('admin.jadwal_sidang.edit');
+    Route::put('/admin/jadwal_sidang/{id}', [JadwalSidangController::class, 'update'])->name('admin.jadwal_sidang.update');
+    Route::delete('/admin/jadwal_sidang/{id}', [JadwalSidangController::class, 'destroy'])->name('admin.jadwal_sidang.destroy');
 });
 
 #########################################################################################################################################################################################
