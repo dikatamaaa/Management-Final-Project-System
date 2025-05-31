@@ -9,6 +9,6 @@ class PenilaianMahasiswa extends Model
     use HasFactory;
     protected $table = 'penilaian_mahasiswa';
     protected $fillable = [
-        'nim', 'kelompok_judul', 'pembimbing', 'nilai', 'catatan', 'dosen_nama'
+        'nim', 'kelompok_judul', 'pembimbing', 'nilai', 'dosen_nama', 'rubrik_id'
     ];
 } 

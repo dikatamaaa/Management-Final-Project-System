@@ -15,6 +15,7 @@ use App\Notifications\PenambahanKelompokNotification;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Collection;
 use App\Models\PengaturanTopik;
+use App\Models\RubrikPenilaian;
 
 class DosenController extends Controller
 {
@@ -491,6 +492,7 @@ class DosenController extends Controller
      */
     public function halamanPenilaianKelompok() {
         $nama_dosen = auth()->guard('dosen')->user()->nama;
+        $dosen_id = auth()->guard('dosen')->user()->id;
         // Kelompok di mana dosen ini sebagai pembimbing satu
         $kelompokPemb1 = \App\Models\Kelompok::where('pembimbing_satu', $nama_dosen)->get()->groupBy('judul');
         // Kelompok di mana dosen ini sebagai pembimbing dua (dan sudah accepted)
@@ -499,7 +501,9 @@ class DosenController extends Controller
             ->get()->groupBy('judul');
         // Ambil penilaian per anggota dan kelompok
         $penilaian = \App\Models\PenilaianMahasiswa::whereIn('kelompok_judul', array_merge($kelompokPemb1->keys()->toArray(), $kelompokPemb2->keys()->toArray()))->get();
-        return view('dosen.penilaian_kelompok', compact('kelompokPemb1', 'kelompokPemb2', 'nama_dosen', 'penilaian'));
+        // Ambil rubrik penilaian milik dosen
+        $rubrik = \App\Models\RubrikPenilaian::where('dosen_id', $dosen_id)->orderBy('cd')->orderBy('urutan')->get();
+        return view('dosen.penilaian_kelompok', compact('kelompokPemb1', 'kelompokPemb2', 'nama_dosen', 'penilaian', 'rubrik'));
     }
 
     /**
@@ -510,77 +514,121 @@ class DosenController extends Controller
             'kelompok_judul' => 'required|string',
             'pembimbing' => 'required|in:1,2',
             'anggota' => 'required|array',
-            'anggota.*.nim' => 'required|string',
-            'anggota.*.nilai' => 'required|integer|min:0|max:100',
-            'anggota.*.catatan' => 'nullable|string',
-            'nilai_kelompok' => 'required|integer|min:0|max:100',
-            'catatan_kelompok' => 'nullable|string',
         ]);
         $dosen_nama = auth()->guard('dosen')->user()->nama;
-        // Simpan penilaian anggota
-        foreach ($request->anggota as $anggota) {
-            \App\Models\PenilaianMahasiswa::updateOrCreate(
-                [
-                    'nim' => $anggota['nim'],
-                    'kelompok_judul' => $request->kelompok_judul,
-                    'pembimbing' => $request->pembimbing,
-                    'dosen_nama' => $dosen_nama,
-                ],
-                [
-                    'nilai' => $anggota['nilai'],
-                    'catatan' => $anggota['catatan'] ?? null,
-                ]
-            );
+
+        // Simpan penilaian kelompok (aspek tipe 'kelompok')
+        if ($request->has('kelompok_rubrik')) {
+            foreach ($request->kelompok_rubrik as $aspek_id => $nilai) {
+                \App\Models\PenilaianMahasiswa::updateOrCreate(
+                    [
+                        'nim' => null,
+                        'kelompok_judul' => $request->kelompok_judul,
+                        'pembimbing' => $request->pembimbing,
+                        'dosen_nama' => $dosen_nama,
+                        'rubrik_id' => $aspek_id,
+                    ],
+                    [
+                        'nilai' => $nilai,
+                    ]
+                );
+            }
         }
-        // Simpan penilaian kelompok (nim = null)
-        \App\Models\PenilaianMahasiswa::updateOrCreate(
-            [
-                'nim' => null,
-                'kelompok_judul' => $request->kelompok_judul,
-                'pembimbing' => $request->pembimbing,
-                'dosen_nama' => $dosen_nama,
-            ],
-            [
-                'nilai' => $request->nilai_kelompok,
-                'catatan' => $request->catatan_kelompok,
-            ]
-        );
+
+        // Simpan penilaian individu (aspek tipe 'individu')
+        foreach ($request->anggota as $anggota) {
+            $nim = $anggota['nim'];
+            if (isset($anggota['nilai_rubrik'])) {
+                foreach ($anggota['nilai_rubrik'] as $aspek_id => $nilai) {
+                    \App\Models\PenilaianMahasiswa::updateOrCreate(
+                        [
+                            'nim' => $nim,
+                            'kelompok_judul' => $request->kelompok_judul,
+                            'pembimbing' => $request->pembimbing,
+                            'dosen_nama' => $dosen_nama,
+                            'rubrik_id' => $aspek_id,
+                        ],
+                        [
+                            'nilai' => $nilai,
+                        ]
+                    );
+                }
+            }
+        }
+
         return back()->with('success', 'Penilaian kelompok dan anggota berhasil disimpan!');
     }
 
     /**
-     * Export rekap penilaian ke .csv
+     * Export rekap penilaian ke .csv (per rubrik, dinamis)
      */
     public function exportPenilaianCsv(Request $request) {
         $nama_dosen = auth()->guard('dosen')->user()->nama;
+        $dosen_id = auth()->guard('dosen')->user()->id;
         $pembimbing = $request->query('pembimbing');
         $penilaianQuery = \App\Models\PenilaianMahasiswa::where('dosen_nama', $nama_dosen);
         if ($pembimbing == '1' || $pembimbing == '2') {
             $penilaianQuery = $penilaianQuery->where('pembimbing', $pembimbing);
         }
         $penilaian = $penilaianQuery->get();
+        $rubrik = \App\Models\RubrikPenilaian::where('dosen_id', $dosen_id)->orderBy('cd')->orderBy('urutan')->get();
+
+        // Ambil semua kelompok yang dinilai dosen ini (berdasarkan penilaian)
+        $kelompokJudul = $penilaian->pluck('kelompok_judul')->unique();
         $data = [];
-        foreach ($penilaian->whereNotNull('nim') as $row) {
-            $kelompok = $penilaian->whereNull('nim')->where('kelompok_judul', $row->kelompok_judul)->where('pembimbing', $row->pembimbing)->first();
-            $data[] = [
-                $row->kelompok_judul,
-                $row->pembimbing,
-                $row->pembimbing . ' - ' . $row->dosen_nama,
-                $row->nim,
-                \App\Models\Kelompok::where('nim', $row->nim)->where('judul', $row->kelompok_judul)->value('nama_anggota'),
-                $row->nilai,
-                $row->catatan,
-                $kelompok ? $kelompok->nilai : '',
-                $kelompok ? $kelompok->catatan : '',
-            ];
+        $header = ['Judul','Sebagai Pembimbing','Pembimbing','NIM','Nama Anggota'];
+        // Tambahkan header per aspek (dinamis)
+        foreach ($rubrik as $aspek) {
+            $label = $aspek->aspek . ' (' . ucfirst($aspek->tipe) . ')';
+            $header[] = 'Nilai ' . $label;
         }
+
+        // Loop semua kelompok dan anggota
+        foreach ($kelompokJudul as $judul) {
+            // Cek pembimbing yang relevan
+            $pembimbingList = $penilaian->where('kelompok_judul', $judul)->pluck('pembimbing')->unique();
+            foreach ($pembimbingList as $pemb) {
+                // Ambil semua anggota kelompok
+                $anggota = \App\Models\Kelompok::where('judul', $judul)->get();
+                foreach ($anggota as $mhs) {
+                    $row = [
+                        $judul,
+                        $pemb,
+                        $pemb . ' - ' . $nama_dosen,
+                        $mhs->nim,
+                        $mhs->nama_anggota,
+                    ];
+                    foreach ($rubrik as $aspek) {
+                        if ($aspek->tipe == 'kelompok') {
+                            // Nilai kelompok (nim = null)
+                            $nilai = $penilaian->where('kelompok_judul', $judul)
+                                ->where('pembimbing', $pemb)
+                                ->where('nim', null)
+                                ->where('rubrik_id', $aspek->id)
+                                ->first();
+                            $row[] = $nilai ? $nilai->nilai : '';
+                        } else {
+                            // Nilai individu (nim = nim anggota)
+                            $nilai = $penilaian->where('kelompok_judul', $judul)
+                                ->where('pembimbing', $pemb)
+                                ->where('nim', $mhs->nim)
+                                ->where('rubrik_id', $aspek->id)
+                                ->first();
+                            $row[] = $nilai ? $nilai->nilai : '';
+                        }
+                    }
+                    $data[] = $row;
+                }
+            }
+        }
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="rekap_penilaian.csv"',
         ];
-        $callback = function() use ($data) {
+        $callback = function() use ($header, $data) {
             $handle = fopen('php://output', 'w');
-            fputcsv($handle, ['Judul','Sebagai Pembimbing','Pembimbing','NIM','Nama','Nilai Anggota','Catatan Anggota','Nilai Kelompok','Catatan Kelompok']);
+            fputcsv($handle, $header);
             foreach ($data as $row) {
                 fputcsv($handle, $row);
             }

@@ -9,6 +9,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\JadwalSidangController;
+use App\Http\Controllers\RubrikPenilaianController;
 
 // Landing Page
 Route::get('/', [PageController::class, 'index']);
@@ -131,6 +132,10 @@ Route::post('/dosen/bimbingan/kritik-saran/{id}', [App\Http\Controllers\DosenCon
 Route::get('/dosen/penilaian-kelompok', [App\Http\Controllers\DosenController::class, 'halamanPenilaianKelompok'])->name('dosen.penilaian_kelompok');
 Route::post('/dosen/penilaian-kelompok/simpan', [App\Http\Controllers\DosenController::class, 'storePenilaianMahasiswa'])->name('dosen.penilaian_kelompok.simpan');
 Route::get('/dosen/penilaian-kelompok/export', [App\Http\Controllers\DosenController::class, 'exportPenilaianCsv'])->name('dosen.penilaian_kelompok.export_csv');
+
+Route::middleware(['auth:dosen'])->prefix('dosen')->name('dosen.')->group(function() {
+    Route::resource('rubrik-penilaian', RubrikPenilaianController::class);
+});
 
 #########################################################################################################################################################################################
 

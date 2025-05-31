@@ -7,12 +7,12 @@ return new class extends Migration {
     public function up() {
         Schema::create('penilaian_mahasiswa', function (Blueprint $table) {
             $table->id();
-            $table->string('nim');
+            $table->string('nim')->nullable();
             $table->string('kelompok_judul');
             $table->enum('pembimbing', ['1','2']);
             $table->integer('nilai');
-            $table->string('catatan')->nullable();
             $table->string('dosen_nama');
+            $table->unsignedBigInteger('rubrik_id')->nullable();
             $table->timestamps();
         });
     }

@@ -148,7 +148,7 @@
                                               <div class="modal-dialog">
                                                 <div class="modal-content">
                                                   <form action="{{ route('dosen.bimbingan.kritik_saran', $b->id) }}" method="POST">
-                                                    @csrf
+                                                @csrf
                                                     <div class="modal-header">
                                                       <h5 class="modal-title" id="modalMasukanLabel{{ $b->id }}">Masukan</h5>
                                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -160,7 +160,7 @@
                                                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                       <button class="btn btn-info" type="submit">Kirim</button>
                                                     </div>
-                                                  </form>
+                                            </form>
                                                 </div>
                                               </div>
                                             </div>

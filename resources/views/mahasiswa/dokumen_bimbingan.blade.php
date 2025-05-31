@@ -92,7 +92,7 @@
                             <textarea name="catatan" class="form-control" @if(!$kelompokSaya) disabled @endif></textarea>
                         </div>
                         <div class="d-flex align-items-center gap-2 mb-2">
-                            <button class="btn btn-primary" type="submit" @if(!$kelompokSaya) disabled @endif>Ajukan Bimbingan</button>
+                        <button class="btn btn-primary" type="submit" @if(!$kelompokSaya) disabled @endif>Ajukan Bimbingan</button>
                             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#logBimbinganModal">
                                 Lihat Log Bimbingan
                             </button>
@@ -178,42 +178,42 @@ flatpickr("#jadwalBimbingan", {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <table class="table table-sm table-bordered">
+                    <table class="table table-sm table-bordered">
             <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Pembimbing</th><th>Jadwal</th><th>Status</th><th>Materi</th><th>Masukan</th></tr></thead>
-            <tbody>
-            @forelse($bimbinganKelompok as $i => $b)
-                <tr>
-                    <td>{{ $i+1 }}</td>
-                    <td>{{ $anggotaNama[$b->nim] ?? '-' }}</td>
-                    <td>{{ $b->judul }}</td>
-                    <td>{{ $b->pembimbing == '1' ? 'Pembimbing 1' : 'Pembimbing 2' }}</td>
-                    <td>{{ \Carbon\Carbon::parse($b->jadwal)->format('d-m-Y H:i') }}</td>
-                    <td>
-                        @if($b->status=='pending')<span class="badge bg-warning text-dark">Pending</span>@endif
-                        @if($b->status=='accepted')<span class="badge bg-success">Accepted</span>@endif
-                        @if($b->status=='rejected')<span class="badge bg-danger">Rejected</span>@endif
-                        @if($b->status=='selesai')<span class="badge bg-info text-dark">Selesai</span>@endif
-                    </td>
-                    <td>{{ $b->catatan }}</td>
-                    <td>
-                        @if($b->status=='rejected')
-                            <span class="text-danger">{{ $b->alasan_tolak }}</span>
-                        @endif
-                        @if($b->kritik_saran && $b->status!='rejected')
-                            {{ $b->kritik_saran }}
-                        @endif
-                    </td>
-                </tr>
-            @empty
+                        <tbody>
+                        @forelse($bimbinganKelompok as $i => $b)
+                            <tr>
+                                <td>{{ $i+1 }}</td>
+                                <td>{{ $anggotaNama[$b->nim] ?? '-' }}</td>
+                                <td>{{ $b->judul }}</td>
+                                <td>{{ $b->pembimbing == '1' ? 'Pembimbing 1' : 'Pembimbing 2' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($b->jadwal)->format('d-m-Y H:i') }}</td>
+                                <td>
+                                    @if($b->status=='pending')<span class="badge bg-warning text-dark">Pending</span>@endif
+                                    @if($b->status=='accepted')<span class="badge bg-success">Accepted</span>@endif
+                                    @if($b->status=='rejected')<span class="badge bg-danger">Rejected</span>@endif
+                                    @if($b->status=='selesai')<span class="badge bg-info text-dark">Selesai</span>@endif
+                                </td>
+                                <td>{{ $b->catatan }}</td>
+                                <td>
+                                    @if($b->status=='rejected')
+                                        <span class="text-danger">{{ $b->alasan_tolak }}</span>
+                                    @endif
+                                    @if($b->kritik_saran && $b->status!='rejected')
+                                        {{ $b->kritik_saran }}
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
                 <tr><td colspan="8" class="text-center">Belum ada pengajuan bimbingan</td></tr>
-            @endforelse
-            </tbody>
-        </table>
-      </div>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 @endsection 
