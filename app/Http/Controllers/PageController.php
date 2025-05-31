@@ -100,7 +100,7 @@ class PageController extends Controller
         }
 
         // Cek status topik
-        if ($topik->status != 'Tersedia') {
+        if ($topik->status != 'Available') {
             return back()->with(['error' => 'Topik ini tidak tersedia untuk dipilih!']);
         }
 

@@ -190,7 +190,7 @@ class DosenController extends Controller
             'kuota' => $request->kuota,
             'dosen' => $nama_dosen,
             'kode_dosen' => $kode_dosen,
-            'status' => 'Tersedia',
+            'status' => 'Available',
             'nim' => null,
             'kelompok' => null,
             'deskripsi' => $request->deskripsi,
@@ -346,7 +346,7 @@ class DosenController extends Controller
             'alasan_tolak_pembimbing_dua' => null,
         ]);
         // Jika status topik sebelumnya 'Tersedia', ubah ke 'Booked'
-        if ($topik->status == 'Tersedia') {
+        if ($topik->status == 'Available') {
             $topik->status = 'Booked';
             $topik->save();
         }

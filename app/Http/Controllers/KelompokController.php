@@ -23,7 +23,7 @@ class KelompokController extends Controller
         return back()->with('error', 'Topik tidak ditemukan!');
     }
 
-    public function tolak(Request $request)
+    public function tolakFull(Request $request)
     {
         $judul = $request->judul;
         $alasan = $request->alasan;
@@ -37,9 +37,13 @@ class KelompokController extends Controller
         }
         // Hapus semua anggota kelompok pada topik ini
         Kelompok::where('judul', $judul)->delete();
-        // Hapus data topik di daftar_topik
-        DaftarTopik::where('judul', $judul)->delete();
+        // Update status topik ke 'Tersedia'
+        $topik = DaftarTopik::where('judul', $judul)->first();
+        if ($topik) {
+            $topik->status = 'Available';
+            $topik->save();
+        }
         // Simpan alasan penolakan (sementara: flash session)
-        return back()->with('success', 'Kelompok dan topik dihapus. Alasan: ' . $alasan);
+        return back()->with('success', 'Kelompok ditolak. Alasan: ' . $alasan);
     }
 } 

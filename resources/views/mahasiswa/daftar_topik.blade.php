@@ -141,15 +141,28 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php $no = 1; @endphp
-                                        @foreach($daftarTopik as $topik)
+                                        @php
+                                            $nim = auth()->guard('mahasiswa')->user()->nim;
+                                            $topikSaya = [];
+                                            $topikLain = [];
+                                            foreach($daftarTopik as $topik) {
+                                                $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
+                                                if($sudah_booking) {
+                                                    $topikSaya[] = $topik;
+                                                } else {
+                                                    $topikLain[] = $topik;
+                                                }
+                                            }
+                                            $daftarTopikUrut = array_merge($topikSaya, $topikLain);
+                                            $no = 1;
+                                        @endphp
+                                        @foreach($daftarTopikUrut as $topik)
                                             @php
                                                 $anggota = \App\Models\Kelompok::where('judul', $topik->judul)->get();
-                                                $nim = auth()->guard('mahasiswa')->user()->nim;
                                                 $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
                                                 $sudah_punya_kelompok = \App\Models\Kelompok::where('nim', $nim)->exists();
                                             @endphp
-                                            <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{ $topik->id }}">
+                                            <tr class="clickable-row{{ $sudah_booking ? ' topik-saya' : '' }}" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopik{{ $topik->id }}">
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $topik->judul }}</td>
                                                 <td>{{ $topik->kode_dosen }}</td>
@@ -164,16 +177,20 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if($topik->status == 'Tersedia')
-                                                        <span class="badge rounded-pill bg-success">Tersedia</span>
+                                                    @if($topik->status == 'Tersedia' || $topik->status == 'Available')
+                                                        <span class="badge rounded-pill bg-success">Available</span>
                                                         @if(!$sudah_punya_kelompok)
                                                             <form action="{{ route('mahasiswa.pilih_topik', $topik->id) }}" method="POST" style="display:inline;">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-primary btn-sm ms-2" onclick="event.stopPropagation();">Pilih Topik</button>
                                                             </form>
                                                         @endif
-                                                    @elseif($topik->status == 'Penuh')
-                                                        <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                    @elseif($topik->status == 'Penuh' || $topik->status == 'Full')
+                                                        <span class="badge rounded-pill bg-danger">Full</span>
+                                                    @elseif($topik->status == 'Proposal')
+                                                        <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                    @elseif($topik->status == 'TA')
+                                                        <span class="badge rounded-pill bg-info text-dark">TA</span>
                                                     @else
                                                         <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                                     @endif
@@ -282,6 +299,26 @@
                 document.body.focus(); // Pindahkan fokus ke body
             });
         });
+
+        $(document).on('shown.bs.modal', '.modal', function () {
+            $(this).find('.select-mahasiswa').select2({
+                dropdownParent: $(this),
+                width: '100%',
+                placeholder: '-- Pilih Mahasiswa --',
+                matcher: function(params, data) {
+                    if ($.trim(params.term) === '') {
+                        return data;
+                    }
+                    var term = params.term.toLowerCase();
+                    var text = (data.text || '').toLowerCase();
+                    var nim = $(data.element).data('nim') ? $(data.element).data('nim').toString().toLowerCase() : '';
+                    if (text.indexOf(term) > -1 || nim.indexOf(term) > -1) {
+                        return data;
+                    }
+                    return null;
+                }
+            });
+        });
     </script>
     <!-- Setelah tabel, render semua modal tambah anggota di luar tabel -->
     @foreach($daftarTopik as $topik)
@@ -301,10 +338,10 @@
                         </div>
                         <div class="modal-body">
                             <label class="form-label">Pilih Mahasiswa</label>
-                            <select name="nim" class="form-select" required>
+                            <select name="nim" class="form-select select-mahasiswa" required>
                                 <option value="">-- Pilih Mahasiswa --</option>
                                 @foreach(\App\Models\Mahasiswa::whereNotIn('nim', \App\Models\Kelompok::pluck('nim'))->get() as $mhs)
-                                    <option value="{{ $mhs->nim }}">{{ $mhs->nama }} ({{ $mhs->nim }})</option>
+                                    <option value="{{ $mhs->nim }}" data-nim="{{ $mhs->nim }}">{{ $mhs->nama }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -324,7 +361,17 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLihatDaftarTopikLabel{{ $topik->id }}">Lihat Daftar Topik</h5>
+                    <h5 class="modal-title" id="ModalLihatDaftarTopikLabel{{ $topik->id }}">Lihat Topik {{ $topik->judul }}
+                        @php
+                            $nim = auth()->guard('mahasiswa')->user()->nim;
+                            $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
+                        @endphp
+                        @if($topik->status == 'Booked' && $sudah_booking)
+                            <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}" onclick="event.stopPropagation();">
+                                Tambah Anggota
+                            </button>
+                        @endif
+                    </h5>
                     <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -370,10 +417,14 @@
                         <div class="col-4"><span style="font-weight: bold;">Status</span></div>
                         <div class="col-8">
                             <p><span class="fw-bold">:&nbsp;</span>
-                                @if($topik->status == 'Tersedia')
-                                    <span class="badge rounded-pill bg-success">Tersedia</span>
-                                @elseif($topik->status == 'Penuh')
-                                    <span class="badge rounded-pill bg-danger">Penuh</span>
+                                @if($topik->status == 'Tersedia' || $topik->status == 'Available')
+                                    <span class="badge rounded-pill bg-success">Available</span>
+                                @elseif($topik->status == 'Penuh' || $topik->status == 'Full')
+                                    <span class="badge rounded-pill bg-danger">Full</span>
+                                @elseif($topik->status == 'Proposal')
+                                    <span class="badge rounded-pill bg-primary">Proposal</span>
+                                @elseif($topik->status == 'TA')
+                                    <span class="badge rounded-pill bg-info text-dark">TA</span>
                                 @else
                                     <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                 @endif
@@ -384,6 +435,7 @@
                         <div class="col-4"><span style="font-weight: bold;">Kelompok</span></div>
                         <div class="col-8">
                             <p><span class="fw-bold">:&nbsp;</span>
+                                <div class="kelompok-badge-list">
                                 @php $anggota = \App\Models\Kelompok::where('judul', $topik->judul)->get(); @endphp
                                 @if($anggota->count() > 0)
                                     @foreach($anggota as $a)
@@ -392,6 +444,7 @@
                                 @else
                                     -
                                 @endif
+                                </div>
                             </p>
                         </div>
                     </div>
@@ -415,21 +468,44 @@
         --bs-table-accent-bg: #fafbfc;
     }
     .table th, .table td {
-        padding: 0.55rem 0.7rem;
+        border: none;
+        padding: 0.7rem 1rem;
         vertical-align: middle;
-        border-top: none;
-        border-bottom: 1.5px solid #e5e7eb;
     }
     .table thead th {
-        background: #f8f9fa;
-        font-weight: 600;
+        background: #f3f4f6;
+        color: #881d1d;
+        font-weight: 700;
+        font-size: 1.08em;
+        letter-spacing: 0.02em;
         border-bottom: 2px solid #d1d5db;
     }
+    .table {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px 0 rgba(60,72,88,.08);
+    }
+    .table-responsive {
+        border-radius: 16px;
+        box-shadow: 0 2px 16px 0 rgba(60,72,88,.08);
+        margin-bottom: 0.5rem;
+    }
+    .topik-saya {
+        background: linear-gradient(90deg, #f3e8e8 80%, #fff 100%) !important;
+        border-left: 5px solid #881d1d;
+        font-weight: 600;
+        box-shadow: 0 2px 12px 0 rgba(136,29,29,0.07);
+        transition: background 0.2s, box-shadow 0.2s;
+    }
+    .topik-saya:hover {
+        background: linear-gradient(90deg, #fbeee7 80%, #fff 100%) !important;
+        box-shadow: 0 4px 24px 0 rgba(136,29,29,0.13);
+    }
     .badge {
-        border-radius: 8px;
-        font-size: 0.85em;
-        padding: 0.35em 0.7em;
-        font-weight: 500;
+        border-radius: 10px;
+        font-size: 0.97em;
+        padding: 0.38em 0.9em;
+        font-weight: 600;
         letter-spacing: 0.01em;
     }
     .badge.bg-success {
@@ -448,17 +524,16 @@
         background: #334155 !important;
         color: #fff !important;
     }
-    .btn-primary.btn-sm {
-        background: #2563eb;
-        border: none;
-        border-radius: 6px;
-        font-size: 0.95em;
-        padding: 0.35em 1.1em;
-        transition: background 0.2s, box-shadow 0.2s;
+    .btn-primary.btn-sm, .btn-success.btn-sm {
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 500;
+        padding: 0.38em 1.2em;
         box-shadow: 0 2px 8px 0 rgba(37,99,235,0.08);
+        transition: background 0.2s, box-shadow 0.2s;
     }
-    .btn-primary.btn-sm:hover {
-        background: #1d4ed8;
+    .btn-primary.btn-sm:hover, .btn-success.btn-sm:hover {
+        filter: brightness(0.95);
         box-shadow: 0 4px 16px 0 rgba(37,99,235,0.13);
     }
     .clickable-row {
@@ -473,7 +548,7 @@
             padding: 0.45rem 0.3rem;
             font-size: 0.98em;
         }
-        .btn-primary.btn-sm {
+        .btn-primary.btn-sm, .btn-success.btn-sm {
             font-size: 0.93em;
             padding: 0.32em 0.7em;
         }
@@ -481,6 +556,21 @@
     /* Hilangkan space kosong bawah tabel */
     .table-responsive {
         margin-bottom: 0.5rem;
+    }
+    .kelompok-badge-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3em 0.5em;
+        margin-bottom: 0.5em;
+    }
+    .kelompok-badge-list .badge {
+        display: inline-block;
+        margin-bottom: 0.2em;
+        word-break: break-word;
+        white-space: normal;
+        max-width: 100%;
+        font-size: 0.98em;
+        padding: 0.45em 1em;
     }
     </style>
 </body>
