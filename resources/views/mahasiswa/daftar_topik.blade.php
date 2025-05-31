@@ -190,7 +190,7 @@
                                                     @elseif($topik->status == 'Proposal')
                                                         <span class="badge rounded-pill bg-primary">Proposal</span>
                                                     @elseif($topik->status == 'TA')
-                                                        <span class="badge rounded-pill bg-info text-dark">TA</span>
+                                                        <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                     @else
                                                         <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                                     @endif
@@ -424,7 +424,7 @@
                                 @elseif($topik->status == 'Proposal')
                                     <span class="badge rounded-pill bg-primary">Proposal</span>
                                 @elseif($topik->status == 'TA')
-                                    <span class="badge rounded-pill bg-info text-dark">TA</span>
+                                    <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                 @else
                                     <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                 @endif

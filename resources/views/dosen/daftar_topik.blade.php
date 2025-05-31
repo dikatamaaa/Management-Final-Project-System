@@ -573,7 +573,7 @@
                                                     @if($data->status == 'Proposal')
                                                         <span class="badge rounded-pill bg-primary">Proposal</span>
                                                     @elseif($data->status == 'TA')
-                                                        <span class="badge rounded-pill bg-info text-dark">TA</span>
+                                                        <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                     @elseif($jumlah_anggota >= $data->kuota)
                                                         <span class="badge rounded-pill bg-danger">Full</span>
                                                         <div class="mt-2">
@@ -707,7 +707,7 @@
                                                                         <option value="Available" {{ $data->status == 'Available' ? 'selected' : '' }}>Available</option>
                                                                         <option value="Booked" {{ $data->status == 'Booked' ? 'selected' : '' }}>Booked</option>
                                                                         <option value="Full" {{ $data->status == 'Full' ? 'selected' : '' }}>Full</option>
-                                                                        <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>TA</option>
+                                                                        <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>Tugas Akhir</option>
                                                                     </select>
                                                                 @endif
                                                             </div>
@@ -804,7 +804,7 @@
                                                                                 <option value="Booked" {{ $data->status == 'Booked' ? 'selected' : '' }}>Booked</option>
                                                                                 <option value="Full" {{ $data->status == 'Full' ? 'selected' : '' }}>Full</option>
                                                                                 <option value="Proposal" {{ $data->status == 'Proposal' ? 'selected' : '' }}>Proposal</option>
-                                                                                <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>TA</option>
+                                                                                <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>Tugas Akhir</option>
                                                                             </select>
                                                                             <button type="submit" class="btn btn-primary btn-sm ms-1">Ubah Status</button>
                                                                         </form>
@@ -1000,7 +1000,7 @@
                                                         @if($data->status == 'Proposal')
                                                             <span class="badge rounded-pill bg-primary">Proposal</span>
                                                         @elseif($data->status == 'TA')
-                                                            <span class="badge rounded-pill bg-info text-dark">TA</span>
+                                                            <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                         @elseif($jumlah_anggota >= $data->kuota)
                                                             <span class="badge rounded-pill bg-danger">Full</span>
                                                         @elseif($data->status == 'Available')
