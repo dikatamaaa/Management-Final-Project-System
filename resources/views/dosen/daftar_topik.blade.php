@@ -745,12 +745,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Modal Lihat Topik -->
+                                            <!-- Modal Ditel Topik -->
                                             <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatDaftarTopik{{$data->id}}">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" style="font-weight: bold;">Lihat Topik {{ $data->judul }}</h5>
+                                                            <h5 class="modal-title" style="font-weight: bold;">Ditel Topik {{ $data->judul }}</h5>
                                                             <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                                         </div>
                                                         <div class="modal-body">
@@ -1015,12 +1015,12 @@
                                                                 <i class="fas fa-eye"></i>
                                                             </button>
                                                         </div>
-                                                        <!-- Modal Lihat Daftar Topik Dinamis -->
+                                                        <!-- Modal Ditel Topik Dosen Lain Dinamis -->
                                                         <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatDaftarTopikLain{{ $data->id }}">
                                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" style="font-weight: bold;">Lihat Daftar Topik dari Dosen Lain {{ $data->judul }}</h5>
+                                                                        <h5 class="modal-title" style="font-weight: bold;">Detil Topik Dosen Lain {{ $data->judul }}</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                     </div>
                                                                     <div class="modal-body">

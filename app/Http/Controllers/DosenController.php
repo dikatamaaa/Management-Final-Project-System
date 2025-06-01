@@ -223,6 +223,10 @@ class DosenController extends Controller
         foreach ($modalTopik as $topik) {
             $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
         }
+        // Tambahkan ini untuk semuaTopik (agar modal dosen lain juga dapat anggota kelompok)
+        foreach ($semuaTopik as $topik) {
+            $topik->anggota_kelompok = Kelompok::where('judul', $topik->judul)->get(['nama_anggota', 'nim']);
+        }
         return view('dosen.daftar_topik', compact('menampilkanDataDaftarTopik', 'modalTopik', 'semuaTopik', 'topikMahasiswa', 'bidangList', 'kuotaMin', 'kuotaMax', 'daftarMahasiswa'));
     }
 
