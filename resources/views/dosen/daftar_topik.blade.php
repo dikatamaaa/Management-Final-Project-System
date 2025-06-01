@@ -384,7 +384,7 @@
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/dosen/beranda"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/dosen/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/dosen/template_laporan"><i class="fas fa-file-word"></i><span>Template Laporan</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/dosen/pembimbing-dua"><i class="fas fa-user-friends"></i><span>Pembimbing Dua</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/dosen/bimbingan"><i class="fas fa-file-word"></i><span>Bimbingan</span></a></li>
@@ -820,7 +820,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-4"><span style="font-weight: bold;">Kelompok</span></div>
+                                                                <div class="col-4"><span style="font-weight: bold;">Anggota</span></div>
                                                                 <div class="col-8">
                                                                     <p><span class="fw-bold">:&nbsp;</span>
                                                                         <div class="kelompok-badge-list">
@@ -973,7 +973,7 @@
                                                 <th class="text-center">Kuota</th>
                                                 <th class="text-center">Bidang</th>
                                                 <th class="text-center">Status</th>
-                                                <th class="text-center">Aksi</th>
+                                                <!-- Hapus kolom Aksi -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1009,107 +1009,112 @@
                                                             <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
                                                         @endif
                                                     </td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-center align-items-center gap-2">
-                                                            <button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopikLain{{ $data->id }}" onclick="event.stopPropagation();">
-                                                                <i class="fas fa-eye"></i>
-                                                            </button>
-                                                        </div>
-                                                        <!-- Modal Ditel Topik Dosen Lain Dinamis -->
-                                                        <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatDaftarTopikLain{{ $data->id }}">
-                                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" style="font-weight: bold;">Ditel Topik Dosen Lain {{ $data->judul }}</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
-                                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->judul }}</p></div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Jurusan</span></div>
-                                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->program_studi ?? '-' }}</p></div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
-                                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->fakultas ?? '-' }}</p></div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
-                                                                            <div class="col-8">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>
-                                                                                    @if(is_array($data->bidang))
-                                                                                        @foreach($data->bidang as $bidang)
-                                                                                            <span class="badge bg-dark me-1">{{ $bidang }}</span>
-                                                                                        @endforeach
-                                                                                    @else
-                                                                                        <span class="badge bg-dark me-1">{{ $data->bidang }}</span>
-                                                                                    @endif
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
-                                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->kuota }} Orang</p></div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Dosen</span></div>
-                                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->dosen ?? '-' }}</p></div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Kode Dosen</span></div>
-                                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->kode_dosen ?? '-' }}</p></div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Status</span></div>
-                                                                            <div class="col-8">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>
-                                                                                    @if($data->status == 'Available')
-                                                                                        <span class="badge rounded-pill bg-success">Available</span>
-                                                                                    @elseif($data->status == 'Booked')
-                                                                                        <span class="badge rounded-pill bg-warning text-dark">Booked</span>
-                                                                                    @elseif($data->status == 'Full')
-                                                                                        <span class="badge rounded-pill bg-danger">Full</span>
-                                                                                    @else
-                                                                                        <span class="badge rounded-pill bg-primary">{{ $data->status }}</span>
-                                                                                    @endif
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Kelompok</span></div>
-                                                                            <div class="col-8">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>
-                                                                                    <div class="kelompok-badge-list">
-                                                                                    @if(isset($data->anggota_kelompok) && count($data->anggota_kelompok) > 0)
-                                                                                        @foreach($data->anggota_kelompok as $anggota)
-                                                                                            <span class="badge rounded-pill bg-dark m-1">{{ $anggota->nama_anggota }} ({{ $anggota->nim }})</span>
-                                                                                        @endforeach
-                                                                                    @else
-                                                                                        -
-                                                                                    @endif
-                                                                                    </div>
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
-                                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->deskripsi ?? '-' }}</p></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
+                                                    <!-- Hapus kolom aksi dan btn-eye di sini -->
+                                                </tr>
+                                                <!-- Modal Ditel Topik Dosen Lain Dinamis tetap dipertahankan di luar kolom aksi -->
+                                                <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatDaftarTopikLain{{ $data->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" style="font-weight: bold;">Ditel Topik Dosen Lain {{ $data->judul }}</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
+                                                                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->judul }}</p></div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Jurusan</span></div>
+                                                                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->program_studi ?? '-' }}</p></div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
+                                                                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->fakultas ?? '-' }}</p></div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
+                                                                    <div class="col-8">
+                                                                        <p><span class="fw-bold">:&nbsp;</span>
+                                                                            @if(is_array($data->bidang))
+                                                                                @foreach($data->bidang as $bidang)
+                                                                                    <span class="badge bg-dark me-1">{{ $bidang }}</span>
+                                                                                @endforeach
+                                                                            @else
+                                                                                <span class="badge bg-dark me-1">{{ $data->bidang }}</span>
+                                                                            @endif
+                                                                        </p>
                                                                     </div>
                                                                 </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
+                                                                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->kuota }} Orang</p></div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Dosen</span></div>
+                                                                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->dosen ?? '-' }}</p></div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Kode Dosen</span></div>
+                                                                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->kode_dosen ?? '-' }}</p></div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Status</span></div>
+                                                                    <div class="col-8">
+                                                                        <p><span class="fw-bold">:&nbsp;</span>
+                                                                            @if($data->status == 'Available')
+                                                                                <span class="badge rounded-pill bg-success">Available</span>
+                                                                            @elseif($data->status == 'Booked')
+                                                                                <span class="badge rounded-pill bg-warning text-dark">Booked</span>
+                                                                            @elseif($data->status == 'Full')
+                                                                                <span class="badge rounded-pill bg-danger">Full</span>
+                                                                            @else
+                                                                                <span class="badge rounded-pill bg-primary">{{ $data->status }}</span>
+                                                                            @endif
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Anggota</span></div>
+                                                                    <div class="col-8">
+                                                                        <p><span class="fw-bold">:&nbsp;</span>
+                                                                            <div class="kelompok-badge-list">
+                                                                            @if(isset($data->anggota_kelompok) && count($data->anggota_kelompok) > 0)
+                                                                                @foreach($data->anggota_kelompok as $anggota)
+                                                                                    <span class="badge rounded-pill bg-dark m-1">{{ $anggota->nama_anggota }} ({{ $anggota->nim }})</span>
+                                                                                @endforeach
+                                                                            @else
+                                                                                -
+                                                                            @endif
+                                                                            </div>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
+                                                                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->deskripsi ?? '-' }}</p></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
                                                             </div>
                                                         </div>
-                                                    </td>
-                                                </tr>
+                                                    </div>
+                                                </div>
                                                 @endif
                                             @endforeach
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td class="text-center"><strong>No</strong></td>
+                                                <td class="text-center"><strong>Judul</strong></td>
+                                                <td class="text-center"><strong>Kode Dosen</strong></td>
+                                                <td class="text-center"><strong>Kuota</strong></td>
+                                                <td class="text-center"><strong>Bidang</strong></td>
+                                                <td class="text-center"><strong>Status</strong></td>
+                                                <!-- Hapus kolom Aksi di tfoot -->
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
