@@ -980,7 +980,7 @@
                                             @php $no = 1; @endphp
                                             @foreach ($semuaTopik as $data)
                                                 @if($data->kode_dosen != Auth::guard('dosen')->user()->kode_dosen && $data->kode_dosen != null)
-                                                <tr>
+                                                <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopikLain{{ $data->id }}" data-id="{{ $data->id }}">
                                                     <td class="text-center">{{ $no++ }}</td>
                                                     <td class="text-center">{{$data->judul}}</td>
                                                     <td class="text-center">{{$data->kode_dosen}}</td>
@@ -1011,7 +1011,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="d-flex justify-content-center align-items-center gap-2">
-                                                            <button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopikLain{{ $data->id }}">
+                                                            <button class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDaftarTopikLain{{ $data->id }}" onclick="event.stopPropagation();">
                                                                 <i class="fas fa-eye"></i>
                                                             </button>
                                                         </div>
@@ -1020,7 +1020,7 @@
                                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" style="font-weight: bold;">Detil Topik Dosen Lain {{ $data->judul }}</h5>
+                                                                        <h5 class="modal-title" style="font-weight: bold;">Ditel Topik Dosen Lain {{ $data->judul }}</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                     </div>
                                                                     <div class="modal-body">
@@ -1411,6 +1411,11 @@ $(document).ready(function() {
 
 document.querySelectorAll('.clickable-row').forEach(function(row) {
   row.addEventListener('click', function(e) {
+    // Jika ada modal yang sedang terbuka, abaikan klik baris (biar klik di dalam modal tidak menutup modal)
+    if (e.target.closest('.modal')) {
+      return;
+    }
+    
     if (
       e.target.closest('form') ||
       e.target.closest('button') ||
@@ -1433,6 +1438,7 @@ document.querySelectorAll('.clickable-row').forEach(function(row) {
     if (target) {
       var modal = document.querySelector(target);
       if (modal) {
+        // Pastikan opsi default (bisa tutup dengan klik backdrop)
         var modalInstance = new bootstrap.Modal(modal);
         modalInstance.show();
       }
