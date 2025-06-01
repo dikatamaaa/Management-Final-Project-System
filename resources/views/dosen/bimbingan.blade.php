@@ -168,7 +168,26 @@
                                                 {{--<div class="mt-1 small text-muted">{{ \Illuminate\Support\Str::limit($b->kritik_saran, 30) }}</div>--}}
                                             @endif
                                         @elseif($b->status=='rejected')
-                                            <span class="text-danger">{{ $b->alasan_tolak }}</span>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalAlasanTolak{{ $b->id }}">
+                                                Lihat Alasan
+                                            </button>
+                                            <!-- Modal Alasan Tolak -->
+                                            <div class="modal fade" id="modalAlasanTolak{{ $b->id }}" tabindex="-1" aria-labelledby="modalAlasanTolakLabel{{ $b->id }}" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalAlasanTolakLabel{{ $b->id }}">Alasan Penolakan</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <span class="text-danger">{{ $b->alasan_tolak }}</span>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
                                         @endif
                                     </td>
                                     <td>
