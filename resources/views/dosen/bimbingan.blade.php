@@ -152,10 +152,10 @@
                                                     <div class="modal-header">
                                                       <h5 class="modal-title" id="modalMasukanLabel{{ $b->id }}">Masukan</h5>
                                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
+                                                    </div>                                                    
                                                     <div class="modal-body">
                                                       <textarea name="kritik_saran" class="form-control" rows="5" required>{{ $b->kritik_saran }}</textarea>
-                                                    </div>
+                                                    </div>                                                    
                                                     <div class="modal-footer">
                                                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                       <button class="btn btn-info" type="submit">Kirim</button>
@@ -165,7 +165,7 @@
                                               </div>
                                             </div>
                                             @if($b->kritik_saran)
-                                                <div class="mt-1 small text-muted">{{ \Illuminate\Support\Str::limit($b->kritik_saran, 30) }}</div>
+                                                {{--<div class="mt-1 small text-muted">{{ \Illuminate\Support\Str::limit($b->kritik_saran, 30) }}</div>--}}
                                             @endif
                                         @elseif($b->status=='rejected')
                                             <span class="text-danger">{{ $b->alasan_tolak }}</span>

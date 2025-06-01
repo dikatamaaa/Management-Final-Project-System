@@ -179,7 +179,7 @@ flatpickr("#jadwalBimbingan", {
       </div>
       <div class="modal-body">
                     <table class="table table-sm table-bordered">
-            <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Pembimbing</th><th>Jadwal</th><th>Status</th><th>Materi</th><th>Masukan</th></tr></thead>
+            <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Pembimbing</th><th>Jadwal</th><th>Status</th><th>Materi Bimbingan</th><th>Catatan Pembimbing</th></tr></thead>
                         <tbody>
                         @forelse($bimbinganKelompok as $i => $b)
                             <tr>
