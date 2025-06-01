@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nim');
             $table->string('judul');            
-            $table->string('dokumen')->nullable();
+            $table->string('dokumen_terkait')->nullable();
             $table->enum('pembimbing', ['1', '2']);
             $table->dateTime('jadwal');
             $table->enum('status', ['pending', 'accepted', 'rejected', 'selesai'])->default('pending');

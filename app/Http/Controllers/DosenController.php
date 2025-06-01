@@ -453,7 +453,12 @@ class DosenController extends Controller
         $mahasiswaNama = \App\Models\Mahasiswa::pluck('nama','nim');
         // Ambil judul kelompok untuk setiap nim
         $kelompokJudulList = \App\Models\Kelompok::pluck('judul','nim');
-        return view('dosen.bimbingan', compact('bimbinganList', 'mahasiswaNama', 'nama_dosen', 'kelompokJudulList'));
+        // Ambil dokumen mahasiswa untuk setiap nim di bimbinganList
+        $dokumenMahasiswaList = [];
+        foreach ($bimbinganList as $b) {
+            $dokumenMahasiswaList[$b->nim] = \App\Models\DokumenMahasiswa::where('nim', $b->nim)->get();
+        }
+        return view('dosen.bimbingan', compact('bimbinganList', 'mahasiswaNama', 'nama_dosen', 'kelompokJudulList', 'dokumenMahasiswaList'));
     }
 
     /**
@@ -488,7 +493,7 @@ class DosenController extends Controller
         $bimbingan->status = 'selesai';
         $bimbingan->save();
         // (opsional) notifikasi ke mahasiswa
-        return back()->with('success', 'Kritik & saran berhasil diberikan!');
+        return back()->with('success', 'Catatan dosen berhasil diberikan!');
     }
 
     /**

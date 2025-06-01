@@ -100,6 +100,7 @@
                                     <th>Pembimbing</th>
                                     <th>Jadwal</th>
                                     <th>Status</th>
+                                    <th>Dokumen</th>
                                     <th>Materi Bimbingan</th>
                                     <th>Catatan Dosen</th>
                                     <th>Aksi</th>
@@ -121,24 +122,37 @@
                                         @if($b->status=='selesai')<span class="badge bg-info text-dark">Selesai</span>@endif
                                     </td>
                                     <td>
-                                        {{ \Illuminate\Support\Str::limit($b->catatan, 30) }}
-                                        @if(strlen($b->catatan) > 30)
-                                            <button class="btn btn-link btn-sm p-0" data-bs-toggle="modal" data-bs-target="#modalCatatan{{ $b->id }}">Lihat</button>
-                                            <!-- Modal Catatan Lengkap -->
-                                            <div class="modal fade" id="modalCatatan{{ $b->id }}" tabindex="-1" aria-labelledby="modalCatatanLabel{{ $b->id }}" aria-hidden="true">
-                                              <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                  <div class="modal-header">
-                                                    <h5 class="modal-title" id="modalCatatanLabel{{ $b->id }}">Catatan Lengkap</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                  </div>
-                                                  <div class="modal-body">
-                                                    {{ $b->catatan }}
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
+                                        @if($b->dokumen_terkait)
+                                            @if($b->dokumenTerkait)
+                                                <a href="{{ $b->dokumenTerkait->link }}" target="_blank">{{ $b->dokumenTerkait->judul }}</a>
+                                            @else
+                                                -
+                                            @endif
+                                        @else
+                                            -
                                         @endif
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCatatan{{ $b->id }}">
+                                            Lihat Materi
+                                        </button>
+                                        <!-- Modal Catatan Materi Bimbingan -->
+                                        <div class="modal fade" id="modalCatatan{{ $b->id }}" tabindex="-1" aria-labelledby="modalCatatanLabel{{ $b->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalCatatanLabel{{ $b->id }}">Materi Bimbingan</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ $b->catatan ?? '-' }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
                                         @if($b->status=='accepted' || $b->status=='selesai')

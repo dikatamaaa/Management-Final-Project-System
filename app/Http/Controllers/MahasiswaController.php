@@ -190,6 +190,7 @@ class MahasiswaController extends Controller
             'pembimbing' => 'required|in:1,2',
             'jadwal' => 'required|date_format:Y-m-d H:i',
             'catatan' => 'nullable|string',
+            'dokumen_terkait' => 'nullable|exists:dokumen_mahasiswa,id',
         ]);
         $nim = auth()->guard('mahasiswa')->user()->nim;
         $pembimbingDua = \App\Models\Kelompok::where('nim', $nim)->first()->pembimbing_dua ?? null;
@@ -205,6 +206,7 @@ class MahasiswaController extends Controller
             'jadwal' => $request->jadwal,
             'status' => 'pending',
             'catatan' => $request->catatan,
+            'dokumen_terkait' => $request->dokumen_terkait,
         ]);
         return back()->with('success', 'Pengajuan bimbingan berhasil dikirim!');
     }

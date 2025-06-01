@@ -63,10 +63,10 @@
                         @csrf
                         <div class="mb-2">
                             <label class="form-label">Pilih Dokumen Terkait</label>
-                            <select id="selectDokumen" class="form-select">
+                            <select id="selectDokumen" name="dokumen_terkait" class="form-select">
                                 <option value="">-- Pilih Dokumen Terkait --</option>
                                 @foreach($dokumenKelompokList as $dok)
-                                    <option value="{{ $dok->judul }}">{{ $dok->judul }}</option>
+                                    <option value="{{ $dok->id }}">{{ $dok->judul }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-2 mb-2">
                         <button class="btn btn-primary" type="submit" @if(!$kelompokSaya) disabled @endif>Ajukan Bimbingan</button>
-                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#logBimbinganModal">
+                            <button type="button" class="btn btn-info" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLogBimbingan">
                                 Lihat Log Bimbingan
                             </button>
                         </div>
@@ -169,51 +169,129 @@ flatpickr("#jadwalBimbingan", {
   </div>
 </div>
 
-<!-- Log Bimbingan Modal -->
-<div class="modal fade" id="logBimbinganModal" tabindex="-1" aria-labelledby="logBimbinganModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="logBimbinganModalLabel">Log Bimbingan</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-                    <table class="table table-sm table-bordered">
-            <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Pembimbing</th><th>Jadwal</th><th>Status</th><th>Materi Bimbingan</th><th>Catatan Pembimbing</th></tr></thead>
-                        <tbody>
-                        @forelse($bimbinganKelompok as $i => $b)
-                            <tr>
-                                <td>{{ $i+1 }}</td>
-                                <td>{{ $anggotaNama[$b->nim] ?? '-' }}</td>
-                                <td>{{ $b->judul }}</td>
-                                <td>{{ $b->pembimbing == '1' ? 'Pembimbing 1' : 'Pembimbing 2' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($b->jadwal)->format('d-m-Y H:i') }}</td>
-                                <td>
-                                    @if($b->status=='pending')<span class="badge bg-warning text-dark">Pending</span>@endif
-                                    @if($b->status=='accepted')<span class="badge bg-success">Accepted</span>@endif
-                                    @if($b->status=='rejected')<span class="badge bg-danger">Rejected</span>@endif
-                                    @if($b->status=='selesai')<span class="badge bg-info text-dark">Selesai</span>@endif
-                                </td>
-                                <td>{{ $b->catatan }}</td>
-                                <td>
-                                    @if($b->status=='rejected')
-                                        <span class="text-danger">{{ $b->alasan_tolak }}</span>
-                                    @endif
-                                    @if($b->kritik_saran && $b->status!='rejected')
-                                        {{ $b->kritik_saran }}
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                <tr><td colspan="8" class="text-center">Belum ada pengajuan bimbingan</td></tr>
-                        @endforelse
-                        </tbody>
-                    </table>
+<!-- Offcanvas Log Bimbingan -->
+<div class="offcanvas offcanvas-end offcanvas-log-bimbingan" tabindex="-1" id="offcanvasLogBimbingan" aria-labelledby="offcanvasLogBimbinganLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasLogBimbinganLabel">Log Bimbingan</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <table class="table table-sm table-bordered">
+        <thead><tr><th>#</th><th>Nama</th><th>Judul</th><th>Pembimbing</th><th>Jadwal</th><th>Status</th><th>Materi Bimbingan</th><th>Catatan Pembimbing</th></tr></thead>
+        <tbody>
+        @forelse($bimbinganKelompok as $i => $b)
+            <tr>
+                <td>{{ $i+1 }}</td>
+                <td>{{ $anggotaNama[$b->nim] ?? '-' }}</td>
+                <td>{{ $b->judul }}</td>
+                <td>{{ $b->pembimbing == '1' ? 'Pembimbing 1' : 'Pembimbing 2' }}</td>
+                <td>{{ \Carbon\Carbon::parse($b->jadwal)->format('d-m-Y H:i') }}</td>
+                <td>
+                    @if($b->status=='pending')<span class="badge bg-warning text-dark">Pending</span>@endif
+                    @if($b->status=='accepted')<span class="badge bg-success">Accepted</span>@endif
+                    @if($b->status=='rejected')<span class="badge bg-danger">Rejected</span>@endif
+                    @if($b->status=='selesai')<span class="badge bg-info text-dark">Selesai</span>@endif
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalMateri{{ $b->id }}">
+                        Lihat Materi
+                    </button>
+                </td>
+                <td>
+                    @if($b->status=='rejected')
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalCatatanPembimbing{{ $b->id }}">
+                            Lihat Catatan
+                        </button>
+                    @elseif($b->kritik_saran && $b->status!='rejected')
+                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCatatanPembimbing{{ $b->id }}">
+                            Lihat Catatan
+                        </button>
+                    @else
+                        -
+                    @endif
+                </td>
+            </tr>
+        @empty
+        <tr><td colspan="8" class="text-center">Belum ada pengajuan bimbingan</td></tr>
+        @endforelse
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal untuk setiap bimbingan, diletakkan di luar tabel agar Bootstrap modal berfungsi -->
+@foreach($bimbinganKelompok as $b)
+    <!-- Modal Materi Bimbingan -->
+    <div class="modal fade" id="modalMateri{{ $b->id }}" tabindex="-1" aria-labelledby="modalMateriLabel{{ $b->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalMateriLabel{{ $b->id }}">Materi Bimbingan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <div class="modal-body">
+                    {{ $b->catatan ?? '-' }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- Modal Catatan Pembimbing -->
+    <div class="modal fade" id="modalCatatanPembimbing{{ $b->id }}" tabindex="-1" aria-labelledby="modalCatatanPembimbingLabel{{ $b->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCatatanPembimbingLabel{{ $b->id }}">
+                        @if($b->status=='rejected') Alasan Penolakan @else Catatan Pembimbing @endif
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if($b->status=='rejected')
+                        <span class="text-danger">{{ $b->alasan_tolak ?? '-' }}</span>
+                    @elseif($b->kritik_saran && $b->status!='rejected')
+                        {{ $b->kritik_saran }}
+                    @else
+                        -
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<style>
+@media (min-width: 768px) {
+    .offcanvas-log-bimbingan {
+        width: 80vw !important;
+        max-width: 100vw;
+    }
+}
+</style>
+<script>
+document.addEventListener('hidden.bs.offcanvas', function (event) {
+    // Hapus backdrop jika tidak ada offcanvas yang sedang terbuka
+    if (document.querySelectorAll('.offcanvas.show').length === 0) {
+        document.querySelectorAll('.offcanvas-backdrop').forEach(function(backdrop) {
+            backdrop.parentNode.removeChild(backdrop);
+        });
+        document.body.classList.remove('offcanvas-backdrop');
+        document.body.style = '';
+    }
+});
+</script>
+<script>
+document.addEventListener('shown.bs.offcanvas', function (event) {
+    let backdrops = document.querySelectorAll('.offcanvas-backdrop');
+    if (backdrops.length > 1) {
+        for (let i = 0; i < backdrops.length - 1; i++) {
+            backdrops[i].parentNode.removeChild(backdrops[i]);
+        }
+    }
+});
+</script>
 @endsection 
