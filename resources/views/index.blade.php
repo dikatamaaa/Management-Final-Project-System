@@ -25,7 +25,7 @@
         .main-logo {
             display: block;
             margin: 0 auto 2.2rem auto;
-            width: 220px;
+            width: 300px;
             max-width: 70vw;
             height: auto;
         }
@@ -84,8 +84,8 @@
 <body>
     <div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <div class="main-box text-center">
-            <img class="main-logo" src="{{ asset('storage/assets/img/Logo/TAKU_black.PNG') }}" alt="Logo TAKU">
-            <div class="main-heading">Welcome to <img src="{{ asset('storage/assets/img/Logo/TAKU_black.PNG') }}" alt="Logo TAKU" class="inline-logo"></div>
+            <img class="main-logo" src="{{ asset('storage/assets/img/Logo/TAku(600).svg') }}" alt="Logo TAKU">
+            <div class="main-heading">Welcome to<img src="{{ asset('storage/assets/img/Logo/TAku(100).svg') }}" alt="Logo TAKU" class="inline-logo"></div>
             <div class="main-desc">
                 Platform untuk mahasiswa Telkom University, khususnya program studi S1 Teknik Komputer, yang mempermudah proses manajemen tugas akhir.
             </div>

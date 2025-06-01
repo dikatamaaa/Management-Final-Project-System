@@ -26,7 +26,7 @@
         .login-logo {
             display: block;
             margin: 0 auto 1.5rem auto;
-            width: 220px;
+            width: 300px;
             max-width: 80vw;
             height: auto;
         }
@@ -101,7 +101,7 @@
                 <div class="card">
                     <div class="card-body p-5">
                         <p class="text-center">
-                            <img class="img-fluid login-logo" src="{{ asset('storage/assets/img/Logo/TAKU_black.PNG') }}" alt="Logo TAKU">
+                            <img class="img-fluid login-logo" src="{{ asset('storage/assets/img/Logo/TAku(600).svg') }}" alt="Logo TAKU">
                         </p>
                         <h2 class="text-dark card-title mb-2 mt-3">Login</h2>
                         @if ($errors->has('login'))
