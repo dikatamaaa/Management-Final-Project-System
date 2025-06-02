@@ -71,6 +71,7 @@ Route::get('/admin/dosen', [AdminController::class, 'MenampilkanDataDosen'])->mi
 Route::post('/admin/dosen/edit/{id}', [AdminController::class, 'EditDataDosen'])->name('dosen.edit')->middleware('auth:admin');
 Route::get('/admin/dosen/hapus/{id}', [AdminController::class, 'HapusDataDosen'])->name('dosen.hapus')->middleware('auth:admin');
 Route::post('/admin/dosen/GantiKataSandi/{id}', [AdminController::class, 'GantiKataSandiDosen'])->name('dosen.GantiKataSandi')->middleware('auth:admin');
+Route::post('/admin/dosen/import-csv', [\App\Http\Controllers\DosenController::class, 'importCsv'])->name('dosen.import_csv')->middleware('auth:admin');
 
 Route::post('/admin/mahasiswa', [AdminController::class, 'TambahDataMahasiswa'])->name('mahasiswa.tambah')->middleware('auth:admin');
 Route::get('/admin/mahasiswa', [AdminController::class, 'MenampilkanDataMahasiswa'])->middleware('auth:admin');

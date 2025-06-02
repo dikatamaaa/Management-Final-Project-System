@@ -193,9 +193,38 @@
                     <div class="card shadow">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">
                             <p class="text-dark m-0 fw-bold">Data Dosen Pembimbing</p>
-                            <button class="btn btn-sm link-light" type="button" style="background: #881d1d;" data-bs-toggle="modal" data-bs-target="#ModalTambahDosenPembimbing">
-                                <i class="fas fa-plus"></i>&nbsp;Tambah Dosen Pembimbing
-                            </button>
+                            <div>
+                                <button class="btn btn-sm btn-success me-2" type="button" data-bs-toggle="modal" data-bs-target="#ModalImportCSV">
+                                    <i class="fas fa-file-csv"></i>&nbsp;Import CSV
+                                </button>
+                                <button class="btn btn-sm link-light" type="button" style="background: #881d1d;" data-bs-toggle="modal" data-bs-target="#ModalTambahDosenPembimbing">
+                                    <i class="fas fa-plus"></i>&nbsp;Tambah Dosen Pembimbing
+                                </button>
+                            </div>
+                            <div class="modal fade" id="ModalImportCSV" tabindex="-1" aria-labelledby="ModalImportCSVLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form action="{{ route('dosen.import_csv') }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalImportCSVLabel">Import Dosen dari CSV</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="csv_file" class="form-label">Pilih File CSV</label>
+                                                    <input type="file" class="form-control" id="csv_file" name="csv_file" accept=".csv" required>
+                                                    <div class="form-text">Format: NIP,Kode Dosen,Nama (header opsional)</div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-success">Import</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="modal fade" role="dialog" tabindex="-1" id="ModalTambahDosenPembimbing">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">

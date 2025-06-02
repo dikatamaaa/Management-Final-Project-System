@@ -661,5 +661,54 @@ class DosenController extends Controller
         \App\Models\Kelompok::where('judul', $topik->judul)->update(['pembimbing_satu' => $dosen->nama]);
         return back()->with('success', 'Anda berhasil mengambil topik ini sebagai pembimbing!');
     }
+
+    /**
+     * Import Dosen dari CSV (NIP, Kode Dosen, Nama)
+     */
+    public function importCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        $file = $request->file('csv_file');
+        $handle = fopen($file->getRealPath(), 'r');
+        $header = fgetcsv($handle);
+        
+        // Cek jika header bukan NIP/Kode Dosen/Nama, asumsikan data langsung
+        if ($header && (stripos($header[0], 'nip') !== false || stripos($header[1], 'kode') !== false || stripos($header[2], 'nama') !== false)) {
+            // header valid, lanjut
+        } else {
+            // header bukan header, treat as data
+            rewind($handle);
+        }
+
+        $count = 0;
+        while (($row = fgetcsv($handle)) !== false) {
+            $nip = trim($row[0] ?? '');
+            $kode_dosen = trim($row[1] ?? '');
+            $nama = trim($row[2] ?? '');
+
+            if ($nip && $kode_dosen && $nama) {
+                // Cek jika sudah ada, skip
+                if (!\App\Models\Dosen::where('nip', $nip)->exists()) {
+                    \App\Models\Dosen::create([
+                        'nip' => $nip,
+                        'kode_dosen' => $kode_dosen,
+                        'nama' => $nama,
+                        'email' => $nip . '@dummy.local',
+                        'no_hp' => null,
+                        'nama_pengguna' => $nip,
+                        'kata_sandi' => bcrypt($nip), // password default = nip
+                        'foto' => null,
+                        'role' => 'dosen',
+                    ]);
+                    $count++;
+                }
+            }
+        }
+        fclose($handle);
+        return redirect('/admin/dosen')->with('success', "Berhasil import $count dosen dari CSV.");
+    }
 }
 
