@@ -528,7 +528,7 @@
                                                                 </div>
                                                                 @error('bidang')<div class="text-danger">{{ $message }}</div>@enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Kuota (ditentukan admin):</label>
-                                                                <input class="form-control form-control-sm @error('kuota') is-invalid @enderror" type="number" name="kuota" value="{{ $kuotaMax }}" readonly disabled>
+                                                                <input class="form-control form-control-sm @error('kuota') is-invalid @enderror" type="number" name="kuota" value="{{ $kuotaMax }}" readonly>
                                                                 @error('kuota')
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
@@ -572,10 +572,10 @@
                                                     @endphp
                                                     @if($data->status == 'Proposal')
                                                         <span class="badge rounded-pill bg-primary">Proposal</span>
-                                                    @elseif($data->status == 'TA')
-                                                        <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
-                                                    @elseif($jumlah_anggota >= $data->kuota)
-                                                        <span class="badge rounded-pill bg-danger">Full</span>
+                                                    @elseif($jumlah_anggota >= $kuotaMin)
+                                                        <span class="badge rounded-pill {{ $jumlah_anggota >= $data->kuota ? 'bg-danger' : 'bg-warning text-dark' }}">
+                                                            {{ $jumlah_anggota >= $data->kuota ? 'Full' : 'Siap Diterima' }}
+                                                        </span>
                                                         <div class="mt-2">
                                                             <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;" onclick="event.stopPropagation();">
                                                                 @csrf
@@ -606,6 +606,10 @@
                                                               </div>
                                                             </div>
                                                         </div>
+                                                    @elseif($data->status == 'Proposal')
+                                                        <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                    @elseif($data->status == 'TA')
+                                                        <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                     @elseif($data->status == 'Available')
                                                         <span class="badge rounded-pill bg-success">Available</span>
                                                     @elseif($data->status == 'Booked')
@@ -999,12 +1003,46 @@
                                                         @endphp
                                                         @if($data->status == 'Proposal')
                                                             <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                        @elseif($jumlah_anggota >= $kuotaMin)
+                                                            <span class="badge rounded-pill {{ $jumlah_anggota >= $data->kuota ? 'bg-danger' : 'bg-warning text-dark' }}">
+                                                                {{ $jumlah_anggota >= $data->kuota ? 'Full' : 'Siap Diterima' }}
+                                                            </span>
+                                                            <div class="mt-2">
+                                                                <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;" onclick="event.stopPropagation();">
+                                                                    @csrf
+                                                                    <input type="hidden" name="judul" value="{{ $data->judul }}">
+                                                                    <button type="submit" class="btn btn-success btn-sm ms-1">Diterima</button>
+                                                                </form>
+                                                                <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();">Ditolak</button>
+                                                                <!-- Modal Tolak -->
+                                                                <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true" onclick="event.stopPropagation();">
+                                                                  <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                      <form action="{{ route('kelompok.tolak_full') }}" method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="judul" value="{{ $data->judul }}">
+                                                                        <div class="modal-header">
+                                                                          <h5 class="modal-title" id="modalTolakLabel{{ $data->id }}">Alasan Penolakan</h5>
+                                                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                          <textarea name="alasan" class="form-control" required placeholder="Tulis alasan penolakan..." onclick="event.stopPropagation();"></textarea>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                                          <button type="submit" class="btn btn-danger">Tolak</button>
+                                                                        </div>
+                                                                      </form>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                            </div>
                                                         @elseif($data->status == 'TA')
                                                             <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
-                                                        @elseif($jumlah_anggota >= $data->kuota)
-                                                            <span class="badge rounded-pill bg-danger">Full</span>
                                                         @elseif($data->status == 'Available')
                                                             <span class="badge rounded-pill bg-success">Available</span>
+                                                        @elseif($data->status == 'Booked')
+                                                            <span class="badge rounded-pill bg-warning text-dark">Booked</span>
                                                         @else
                                                             <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
                                                         @endif
