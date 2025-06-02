@@ -216,6 +216,7 @@ class MahasiswaController extends Controller
      */
     public function importCsv(Request $request)
     {
+        set_time_limit(300); // Tambah waktu eksekusi jadi 5 menit
         $user = auth()->guard('mahasiswa')->user();
         if ($user && $user->wajib_ganti_password) {
             return redirect('/mahasiswa/ganti-password-awal');
@@ -233,34 +234,47 @@ class MahasiswaController extends Controller
             // header bukan header, treat as data
             rewind($handle);
         }
-        $count = 0;
+        $batch = [];
+        $now = now();
+        $nims = [];
         while (($row = fgetcsv($handle)) !== false) {
             $nim = trim($row[0] ?? '');
             $nama = trim($row[1] ?? '');
             if ($nim && $nama) {
-                // Cek jika sudah ada, skip
-                if (!\App\Models\Mahasiswa::where('nim', $nim)->exists()) {
-                    \App\Models\Mahasiswa::create([
-                        'nim' => $nim,
-                        'nama' => $nama,
-                        'kelas' => '-',
-                        'program_studi' => '-',
-                        'fakultas' => '-',
-                        'angkatan' => date('Y'),
-                        'email' => $nim . '@dummy.local',
-                        'no_hp' => null,
-                        'nama_pengguna' => $nim,
-                        'kata_sandi' => bcrypt($nim), // password default = nim
-                        'foto' => null,
-                        'role' => 'mahasiswa',
-                        'wajib_ganti_password' => 1, // Selalu 1
-                    ]);
-                    $count++;
-                }
+                $nims[] = $nim;
+                $batch[] = [
+                    'nim' => $nim,
+                    'nama' => $nama,
+                    'kelas' => '-',
+                    'program_studi' => '-',
+                    'fakultas' => '-',
+                    'angkatan' => date('Y'),
+                    'email' => $nim . '@dummy.local',
+                    'no_hp' => null,
+                    'nama_pengguna' => $nim,
+                    'kata_sandi' => bcrypt($nim),
+                    'foto' => null,
+                    'role' => 'mahasiswa',
+                    'wajib_ganti_password' => 1,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
         }
         fclose($handle);
-        return redirect('/admin/mahasiswa')->with('success', "Berhasil import $count mahasiswa dari CSV (wajib ganti password).");
+        // Ambil NIM yang sudah ada agar tidak insert duplikat
+        $existingNims = \App\Models\Mahasiswa::whereIn('nim', $nims)->pluck('nim')->toArray();
+        $insertBatch = array_filter($batch, function($item) use ($existingNims) {
+            return !in_array($item['nim'], $existingNims);
+        });
+        // Batch insert (per 500)
+        $chunks = array_chunk($insertBatch, 500);
+        $count = 0;
+        foreach ($chunks as $chunk) {
+            \App\Models\Mahasiswa::insert($chunk);
+            $count += count($chunk);
+        }
+        return redirect('/admin/mahasiswa')->with('success', "Berhasil import $count mahasiswa dari CSV (wajib ganti password)." );
     }
 
     /**

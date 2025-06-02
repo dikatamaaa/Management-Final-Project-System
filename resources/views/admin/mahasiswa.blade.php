@@ -41,6 +41,18 @@
                             <span>Template Dokumen</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/pengaturan_topik">
+                            <i class="fas fa-cogs"></i>
+                            <span>Pengaturan Topik</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/jadwal_sidang">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Jadwal Sidang</span>
+                        </a>
+                    </li>
 
                     <li class="nav-item dropdown">
                         <a class="dropdown-toggle nav-link active" aria-expanded="false" data-bs-toggle="dropdown" href="#">
@@ -67,7 +79,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="logout">
+                        <a class="nav-link" href="/logout">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Keluar</span>
                         </a>
@@ -335,10 +347,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-4" style="background: #fff; border-radius: 18px; box-shadow: 0 2px 16px rgba(136,29,29,0.08);">
                             <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
-                                <table class="table table-striped table-hover" id="tableData">
-                                    <thead>
+                                <table class="table table-hover align-middle" id="tableData" style="border-radius: 12px; overflow: hidden; background: #fafbfc;">
+                                    <thead class="table-light" style="border-radius: 12px;">
                                         <tr>
                                             <th class="text-center">No</th>
                                             <th class="text-center">NIM</th>
@@ -355,8 +367,8 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($menampilkanDataMahasiswa as $data)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                        <tr style="transition: background 0.2s;">
+                                            <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">{{ $data->nim }}</td>
                                             <td class="text-center">{{ $data->nama }}</td>
                                             <td class="text-center">{{ $data->kelas }}</td>
@@ -366,30 +378,30 @@
                                             <td class="text-center">{{ $data->email }}</td>
                                             <td class="text-center">{{ $data->no_hp }}</td>
                                             <td class="text-center">{{ $data->nama_pengguna }}</td>
-                                            <td>
-                                                <p class="text-center">
-                                                <button class="btn btn-warning btn-sm btn-edit-mhs" type="button" data-bs-toggle="modal" data-bs-target="#modalMahasiswaDinamis"
-                                                    data-id="{{ $data->id }}" data-nim="{{ $data->nim }}" data-nama="{{ $data->nama }}" data-kelas="{{ $data->kelas }}" data-program_studi="{{ $data->program_studi }}" data-fakultas="{{ $data->fakultas }}" data-angkatan="{{ $data->angkatan }}" data-email="{{ $data->email }}" data-no_hp="{{ $data->no_hp }}" data-nama_pengguna="{{ $data->nama_pengguna }}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-danger btn-sm ms-1 me-1 btn-hapus-mhs" type="button" data-bs-toggle="modal" data-bs-target="#modalMahasiswaDinamis"
-                                                    data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                                <button class="btn btn-info btn-sm me-1 btn-lihat-mhs" type="button" data-bs-toggle="modal" data-bs-target="#modalMahasiswaDinamis"
-                                                    data-id="{{ $data->id }}" data-nim="{{ $data->nim }}" data-nama="{{ $data->nama }}" data-kelas="{{ $data->kelas }}" data-program_studi="{{ $data->program_studi }}" data-fakultas="{{ $data->fakultas }}" data-angkatan="{{ $data->angkatan }}" data-email="{{ $data->email }}" data-no_hp="{{ $data->no_hp }}" data-nama_pengguna="{{ $data->nama_pengguna }}">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <button class="btn btn-primary btn-sm btn-ganti-password-mhs" type="button" data-bs-toggle="modal" data-bs-target="#modalMahasiswaDinamis"
-                                                    data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
-                                                    <i class="fas fa-key"></i>
-                                                </button>
-                                                </p>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center gap-1">
+                                                    <button class="btn btn-warning btn-sm btn-edit-mhs rounded-circle shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalMahasiswaDinamis"
+                                                        data-id="{{ $data->id }}" data-nim="{{ $data->nim }}" data-nama="{{ $data->nama }}" data-kelas="{{ $data->kelas }}" data-program_studi="{{ $data->program_studi }}" data-fakultas="{{ $data->fakultas }}" data-angkatan="{{ $data->angkatan }}" data-email="{{ $data->email }}" data-no_hp="{{ $data->no_hp }}" data-nama_pengguna="{{ $data->nama_pengguna }}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm btn-hapus-mhs rounded-circle shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalMahasiswaDinamis"
+                                                        data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                    <button class="btn btn-info btn-sm btn-lihat-mhs rounded-circle shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalMahasiswaDinamis"
+                                                        data-id="{{ $data->id }}" data-nim="{{ $data->nim }}" data-nama="{{ $data->nama }}" data-kelas="{{ $data->kelas }}" data-program_studi="{{ $data->program_studi }}" data-fakultas="{{ $data->fakultas }}" data-angkatan="{{ $data->angkatan }}" data-email="{{ $data->email }}" data-no_hp="{{ $data->no_hp }}" data-nama_pengguna="{{ $data->nama_pengguna }}">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-primary btn-sm btn-ganti-password-mhs rounded-circle shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalMahasiswaDinamis"
+                                                        data-id="{{ $data->id }}" data-nama="{{ $data->nama }}">
+                                                        <i class="fas fa-key"></i>
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
+                                    <tfoot class="table-light">
                                         <tr>
                                             <td class="text-center"><strong>No</strong></td>
                                             <td class="text-center"><strong>NIM</strong></td>
@@ -405,7 +417,7 @@
                                         </tr>
                                     </tfoot>
                                 </table>
-                                {{ $menampilkanDataMahasiswa->links() }}
+                                {{-- {{ $menampilkanDataMahasiswa->links() }} --}}
                             </div>
                         </div>
                     </div>
@@ -450,7 +462,6 @@
         });
 
         // Datatables
-        /*
         $(document).ready( function () {
             $('#tableData').DataTable({
                 language: {
@@ -461,9 +472,10 @@
                     emptyTable: "Tidak Ada Data Tersedia",
                     zeroRecords: "Tidak Ditemukan Hasil",
                 },
-                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
+                pageLength: 20,
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Semua"]],
                 columnDefs: [{
-                    targets: 11,
+                    targets: 10,
                     searchable: false,
                     orderable: false,
                 },{
@@ -479,7 +491,6 @@
                 }
             });
         });
-        */
 
         // Form Select Fakultas dan Program Studi
         const dataProdi = {
