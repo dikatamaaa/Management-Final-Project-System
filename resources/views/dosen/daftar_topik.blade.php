@@ -528,7 +528,7 @@
                                                                 </div>
                                                                 @error('bidang')<div class="text-danger">{{ $message }}</div>@enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Kuota (ditentukan admin):</label>
-                                                                <input class="form-control form-control-sm @error('kuota') is-invalid @enderror" type="number" name="kuota" value="{{ $kuotaMax }}" readonly>
+                                                                <input class="form-control form-control-sm @error('kuota') is-invalid @enderror" type="number" name="kuota" value="{{ $kuotaMax }}" readonly disabled>
                                                                 @error('kuota')
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
@@ -688,8 +688,8 @@
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
                                                                 @enderror
-                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Kuota :</label>
-                                                                <input class="form-control form-control-sm @error('kuota_'.$data->id) is-invalid @enderror" type="number" name="kuota_{{$data->id}}" value="{{ old('kuota', $data->kuota) }}" placeholder="Kuota">
+                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Kuota (ditentukan admin):</label>
+                                                                <input class="form-control form-control-sm @error('kuota_'.$data->id) is-invalid @enderror" type="number" name="kuota_{{$data->id}}" value="{{ $kuotaMax }}" readonly disabled>
                                                                 @error('kuota_'.$data->id)
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>

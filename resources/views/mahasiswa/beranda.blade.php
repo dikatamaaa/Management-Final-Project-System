@@ -384,7 +384,7 @@
                 datasets: [{
                     data: @json($statusCounts),
                     backgroundColor: [
-                        '#4ade80', '#f87171', '#60a5fa', '#facc15', '#a78bfa'
+                        '#4ade80', '#f87171', '#60a5fa', '#38bdf8', '#facc15'
                     ],
                     borderWidth: 2,
                     borderColor: '#fff',
