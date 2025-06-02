@@ -80,8 +80,10 @@ class PageController extends Controller
         // Komposisi Status Topik
         $statusLabels = ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked'];
         $statusCounts = [
-            \App\Models\DaftarTopik::where('status', 'Tersedia')->count(),
-            \App\Models\DaftarTopik::where('status', 'Penuh')->count(),
+            // Gabungkan Tersedia+Available
+            \App\Models\DaftarTopik::whereIn('status', ['Tersedia', 'Available'])->count(),
+            // Gabungkan Penuh+Full
+            \App\Models\DaftarTopik::whereIn('status', ['Penuh', 'Full'])->count(),
             \App\Models\DaftarTopik::where('status', 'Proposal')->count(),
             \App\Models\DaftarTopik::where('status', 'TA')->count(),
             \App\Models\DaftarTopik::where('status', 'Booked')->count(),

@@ -88,63 +88,6 @@
                         <h3 class="text-dark mb-0">Dashboard</h3>
                     </div>
                     <div class="row">
-                        <div class="col-3">
-                            <div class="card shadow border-start-primary py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>Topik yang tersedia</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>199</span></div>
-                                        </div>
-                                        <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-clipboard2-check-fill fa-2x text-gray-300">
-                                                <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"></path>
-                                                <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585c.055.156.085.325.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5c0-.175.03-.344.085-.5m6.769 6.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708.708Z"></path>
-                                            </svg></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="card shadow border-start-primary py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>jumlah anggota kelompok</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>3</span></div>
-                                        </div>
-                                        <div class="col-auto"><i class="fas fa-users fa-2x text-gray-300"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="card shadow border-start-primary py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>progres capstone design</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>40%</span></div>
-                                        </div>
-                                        <div class="col-auto"><i class="fas fa-chart-line fa-2x text-gray-300"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="card shadow border-start-primary py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>jumlah bimbingan</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0 fs-5"><span class="me-1">PBB1: 11,</span><span>PBB2: 8</span></div>
-                                        </div>
-                                        <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
                         <div class="col-md-6 mb-4">
                             <div class="card shadow">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
