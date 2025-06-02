@@ -208,18 +208,31 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @php $no = 1; @endphp
+                                                @if($pembimbingSatu && $pembimbingSatu != '-')
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>Shin Tae Yong</td>
-                                                    <td>STY</td>
+                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ $pembimbingSatu }}</td>
+                                                    <td>{{ \App\Models\Dosen::where('nama', $pembimbingSatu)->first()->kode_dosen ?? '-' }}</td>
                                                     <td>Pembimbing 1</td>
                                                 </tr>
+                                                @endif
+                                                @if($pembimbingDua && $pembimbingDua != '-')
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>Shin Tae Jong</td>
-                                                    <td>STJ</td>
+                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ $pembimbingDua }}</td>
+                                                    <td>{{ \App\Models\Dosen::where('nama', $pembimbingDua)->first()->kode_dosen ?? '-' }}</td>
                                                     <td>Pembimbing 2</td>
                                                 </tr>
+                                                @endif
+                                                @if(($pembimbingSatu == '-' || !$pembimbingSatu) && ($pembimbingDua == '-' || !$pembimbingDua))
+                                                <tr>
+                                                    <td></td>
+                                                    <td class="text-center">Belum ada pembimbing</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                @endif
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -253,41 +266,38 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @php $no = 1; @endphp
+                                                @forelse($anggotaKelompok as $anggota)
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>1103228233</td>
-                                                    <td>Irfan</td>
-                                                    <td><button class="btn btn-info btn-sm ms-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatKelompok"><i class="fas fa-eye"></i></button>
-                                                        <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatKelompok">
+                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ $anggota->nim }}</td>
+                                                    <td>{{ $anggota->nama_anggota }}</td>
+                                                    <td>
+                                                        <button class="btn btn-info btn-sm ms-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatKelompok{{ $anggota->id }}"><i class="fas fa-eye"></i></button>
+                                                        <!-- Modal detail anggota kelompok -->
+                                                        <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatKelompok{{ $anggota->id }}">
                                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" style="font-weight: bold;">Lihat Data Kelompok</h5><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                                                                        <h5 class="modal-title" style="font-weight: bold;">Lihat Data Kelompok</h5>
+                                                                        <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <div class="row">
                                                                             <div class="col-5"><span style="font-weight: bold;">NIM</span></div>
-                                                                            <div class="col-7">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>1103228233</p>
-                                                                            </div>
+                                                                            <div class="col-7"><p><span class="fw-bold">:&nbsp;</span>{{ $anggota->nim }}</p></div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="col-5"><span style="font-weight: bold;">Nama</span></div>
-                                                                            <div class="col-7">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>Irfan</p>
-                                                                            </div>
+                                                                            <div class="col-7"><p><span class="fw-bold">:&nbsp;</span>{{ $anggota->nama_anggota }}</p></div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="col-5"><span style="font-weight: bold;">Status Pembimbing 1</span></div>
-                                                                            <div class="col-7">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>Shin Tae Yong</p>
-                                                                            </div>
+                                                                            <div class="col-7"><p><span class="fw-bold">:&nbsp;</span>{{ $pembimbingSatu }}</p></div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="col-5"><span style="font-weight: bold;">Status Pembimbing 2</span></div>
-                                                                            <div class="col-7">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>Umar Ali</p>
-                                                                            </div>
+                                                                            <div class="col-7"><p><span class="fw-bold">:&nbsp;</span>{{ $pembimbingDua }}</p></div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer"><button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button></div>
@@ -296,6 +306,14 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                @empty
+                                                <tr>
+                                                    <td></td>
+                                                    <td class="text-center">Belum ada anggota kelompok</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                @endforelse
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -419,9 +437,9 @@
         new Chart(ctxStatus, {
             type: 'doughnut',
             data: {
-                labels: ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked'],
+                labels: @json($statusLabels),
                 datasets: [{
-                    data: [12, 5, 3, 2, 4], // Dummy data, ganti dengan data dinamis jika perlu
+                    data: @json($statusCounts),
                     backgroundColor: [
                         '#4ade80', '#f87171', '#60a5fa', '#facc15', '#a78bfa'
                     ],
@@ -450,10 +468,10 @@
         new Chart(ctxBidang, {
             type: 'bar',
             data: {
-                labels: ['Web', 'AI', 'Jaringan', 'IoT', 'Data Science'],
+                labels: @json($bidangLabels),
                 datasets: [{
                     label: 'Jumlah Topik',
-                    data: [7, 4, 6, 3, 5], // Dummy data
+                    data: @json($bidangData),
                     backgroundColor: '#60a5fa',
                     borderRadius: 8,
                     maxBarThickness: 32
@@ -490,9 +508,9 @@
         new Chart(ctxPieDosen, {
             type: 'pie',
             data: {
-                labels: ['Dr. A', 'Dr. B', 'Dr. C', 'Dr. D', 'Dr. E'],
+                labels: @json($dosenLabels),
                 datasets: [{
-                    data: [8, 5, 7, 4, 6], // Dummy data
+                    data: @json($dosenData),
                     backgroundColor: [
                         '#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171'
                     ],
@@ -520,38 +538,20 @@
         new Chart(ctxLineBimbingan, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                labels: @json($progressLabels),
                 datasets: [
+                    @foreach($dosenLabels as $i => $kode)
                     {
-                        label: 'Dr. A',
-                        data: [2, 3, 4, 5, 6, 7],
-                        borderColor: '#60a5fa',
+                        label: '{{ $kode }}',
+                        data: @json($progressData[$kode]),
+                        borderColor: ['#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171'][{{ $i }} % 5],
                         backgroundColor: 'rgba(96,165,250,0.12)',
                         tension: 0.4,
                         fill: false,
                         pointRadius: 4,
-                        pointBackgroundColor: '#60a5fa',
+                        pointBackgroundColor: ['#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171'][{{ $i }} % 5],
                     },
-                    {
-                        label: 'Dr. B',
-                        data: [1, 2, 2, 3, 4, 5],
-                        borderColor: '#4ade80',
-                        backgroundColor: 'rgba(74,222,128,0.12)',
-                        tension: 0.4,
-                        fill: false,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#4ade80',
-                    },
-                    {
-                        label: 'Dr. C',
-                        data: [0, 1, 2, 2, 3, 4],
-                        borderColor: '#facc15',
-                        backgroundColor: 'rgba(250,204,21,0.12)',
-                        tension: 0.4,
-                        fill: false,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#facc15',
-                    }
+                    @endforeach
                 ]
             },
             options: {

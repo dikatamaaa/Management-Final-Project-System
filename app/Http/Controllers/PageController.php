@@ -77,7 +77,56 @@ class PageController extends Controller
         if ($user && $user->wajib_ganti_password) {
             return redirect('/mahasiswa/ganti-password-awal');
         }
-        return view('mahasiswa.beranda');
+        // Komposisi Status Topik
+        $statusLabels = ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked'];
+        $statusCounts = [
+            \App\Models\DaftarTopik::where('status', 'Tersedia')->count(),
+            \App\Models\DaftarTopik::where('status', 'Penuh')->count(),
+            \App\Models\DaftarTopik::where('status', 'Proposal')->count(),
+            \App\Models\DaftarTopik::where('status', 'TA')->count(),
+            \App\Models\DaftarTopik::where('status', 'Booked')->count(),
+        ];
+        // Jumlah Topik per Bidang
+        $bidangCounts = \App\Models\DaftarTopik::all()->flatMap(function($item) {
+            return is_array($item->bidang) ? $item->bidang : [$item->bidang];
+        })->countBy()->toArray();
+        $bidangLabels = array_keys($bidangCounts);
+        $bidangData = array_values($bidangCounts);
+        // Proporsi Topik per Dosen
+        $dosenTopik = \App\Models\DaftarTopik::whereNotNull('kode_dosen')
+            ->selectRaw('kode_dosen, count(*) as total')
+            ->groupBy('kode_dosen')
+            ->pluck('total', 'kode_dosen')
+            ->toArray();
+        $dosenLabels = array_keys($dosenTopik);
+        $dosenData = array_values($dosenTopik);
+        // Progress Bimbingan per Dosen (jumlah bimbingan per bulan per dosen)
+        $progressLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+        $progressData = [];
+        foreach ($dosenLabels as $kode) {
+            $progressData[$kode] = [];
+            foreach (range(1, 6) as $bulan) {
+                $progressData[$kode][] = \App\Models\Bimbingan::whereMonth('created_at', $bulan)
+                    ->where('pembimbing', $kode)
+                    ->count();
+            }
+        }
+        // Data Kelompok
+        $kelompok = \App\Models\Kelompok::where('nim', $user->nim)->first();
+        $pembimbingSatu = $kelompok->pembimbing_satu ?? '-';
+        $pembimbingDua = $kelompok->pembimbing_dua ?? '-';
+        $anggotaKelompok = [];
+        if ($kelompok) {
+            $anggotaKelompok = \App\Models\Kelompok::where('judul', $kelompok->judul)->get();
+        }
+        return view('mahasiswa.beranda', compact(
+            'statusLabels', 'statusCounts',
+            'bidangLabels', 'bidangData',
+            'dosenLabels', 'dosenData',
+            'progressLabels', 'progressData',
+            'pembimbingSatu', 'pembimbingDua',
+            'anggotaKelompok'
+        ));
     }
     public function daftarTopikMahasiswa() {
         $user = auth()->guard('mahasiswa')->user();
