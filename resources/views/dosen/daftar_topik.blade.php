@@ -576,13 +576,14 @@
                                                         <span class="badge rounded-pill {{ $jumlah_anggota >= $data->kuota ? 'bg-danger' : 'bg-warning text-dark' }}">
                                                             {{ $jumlah_anggota >= $data->kuota ? 'Full' : 'Siap Diterima' }}
                                                         </span>
+                                                        @if(Auth::guard('dosen')->user()->kode_dosen == $data->kode_dosen)
                                                         <div class="mt-2">
-                                                            <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;" onclick="event.stopPropagation();">
+                                                            <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
                                                                 @csrf
                                                                 <input type="hidden" name="judul" value="{{ $data->judul }}">
-                                                                <button type="submit" class="btn btn-success btn-sm ms-1">Diterima</button>
+                                                                <button type="submit" class="btn btn-success btn-sm ms-1" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Diterima</button>
                                                             </form>
-                                                            <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();">Ditolak</button>
+                                                            <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Ditolak</button>
                                                             <!-- Modal Tolak -->
                                                             <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true" onclick="event.stopPropagation();">
                                                               <div class="modal-dialog">
@@ -606,6 +607,7 @@
                                                               </div>
                                                             </div>
                                                         </div>
+                                                        @endif
                                                     @elseif($data->status == 'Proposal')
                                                         <span class="badge rounded-pill bg-primary">Proposal</span>
                                                     @elseif($data->status == 'TA')
@@ -620,13 +622,13 @@
                                                 </td>
                                                 <td>
                                                     <p class="text-center">
-                                                        <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalEditDaftarTopik{{$data->id}}" onclick="event.stopPropagation();">
+                                                        <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalEditDaftarTopik{{$data->id}}" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        <button class="btn btn-danger btn-sm ms-1 me-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalHapusDaftarTopik{{$data->id}}" onclick="event.stopPropagation();">
+                                                        <button class="btn btn-danger btn-sm ms-1 me-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalHapusDaftarTopik{{$data->id}}" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </button>
-                                                        <button class="btn btn-success btn-sm ms-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalTambahMahasiswa{{$data->id}}" onclick="event.stopPropagation();">
+                                                        <button class="btn btn-success btn-sm ms-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalTambahMahasiswa{{$data->id}}" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
                                                             <i class="fas fa-user-plus"></i> Tambah Mahasiswa
                                                         </button>
                                                     </p>
@@ -1007,13 +1009,14 @@
                                                             <span class="badge rounded-pill {{ $jumlah_anggota >= $data->kuota ? 'bg-danger' : 'bg-warning text-dark' }}">
                                                                 {{ $jumlah_anggota >= $data->kuota ? 'Full' : 'Siap Diterima' }}
                                                             </span>
+                                                            @if(Auth::guard('dosen')->user()->kode_dosen == $data->kode_dosen)
                                                             <div class="mt-2">
-                                                                <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;" onclick="event.stopPropagation();">
+                                                                <form action="{{ route('kelompok.terima') }}" method="POST" style="display:inline;" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
                                                                     @csrf
                                                                     <input type="hidden" name="judul" value="{{ $data->judul }}">
-                                                                    <button type="submit" class="btn btn-success btn-sm ms-1">Diterima</button>
+                                                                    <button type="submit" class="btn btn-success btn-sm ms-1" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Diterima</button>
                                                                 </form>
-                                                                <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();">Ditolak</button>
+                                                                <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Ditolak</button>
                                                                 <!-- Modal Tolak -->
                                                                 <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true" onclick="event.stopPropagation();">
                                                                   <div class="modal-dialog">
@@ -1037,6 +1040,7 @@
                                                                   </div>
                                                                 </div>
                                                             </div>
+                                                            @endif
                                                         @elseif($data->status == 'TA')
                                                             <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                         @elseif($data->status == 'Available')
@@ -1454,11 +1458,10 @@ $(document).ready(function() {
 
 document.querySelectorAll('.clickable-row').forEach(function(row) {
   row.addEventListener('click', function(e) {
-    // Jika ada modal yang sedang terbuka, abaikan klik baris (biar klik di dalam modal tidak menutup modal)
-    if (e.target.closest('.modal')) {
+    // Jika ada modal yang sedang terbuka, atau klik pada backdrop modal, abaikan klik baris
+    if (e.target.closest('.modal') || e.target.classList.contains('modal-backdrop') || document.querySelector('.modal.show')) {
       return;
     }
-    
     if (
       e.target.closest('form') ||
       e.target.closest('button') ||
