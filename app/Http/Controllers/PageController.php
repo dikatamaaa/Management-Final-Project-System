@@ -102,24 +102,39 @@ class PageController extends Controller
             ->toArray();
         $dosenLabels = array_keys($dosenTopik);
         $dosenData = array_values($dosenTopik);
-        // Progress Bimbingan per Dosen (jumlah bimbingan per bulan per dosen)
-        $progressLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
-        $progressData = [];
-        foreach ($dosenLabels as $kode) {
-            $progressData[$kode] = [];
-            foreach (range(1, 6) as $bulan) {
-                $progressData[$kode][] = \App\Models\Bimbingan::whereMonth('created_at', $bulan)
-                    ->where('pembimbing', $kode)
-                    ->count();
-            }
-        }
         // Data Kelompok
         $kelompok = \App\Models\Kelompok::where('nim', $user->nim)->first();
         $pembimbingSatu = $kelompok->pembimbing_satu ?? '-';
         $pembimbingDua = $kelompok->pembimbing_dua ?? '-';
         $anggotaKelompok = [];
+        $nims = [];
         if ($kelompok) {
             $anggotaKelompok = \App\Models\Kelompok::where('judul', $kelompok->judul)->get();
+            $nims = $anggotaKelompok->pluck('nim')->toArray();
+        }
+        // Progress Bimbingan per Pembimbing 1 & 2 kelompok ini
+        $progressLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+        $progressData = [];
+        $pembimbingChartLabels = [];
+        if ($pembimbingSatu && $pembimbingSatu != '-') {
+            $pembimbingChartLabels[] = $pembimbingSatu;
+            $progressData[$pembimbingSatu] = [];
+            foreach (range(1, 6) as $bulan) {
+                $progressData[$pembimbingSatu][] = \App\Models\Bimbingan::whereMonth('created_at', $bulan)
+                    ->whereIn('nim', $nims)
+                    ->where('pembimbing', 1)
+                    ->count();
+            }
+        }
+        if ($pembimbingDua && $pembimbingDua != '-') {
+            $pembimbingChartLabels[] = $pembimbingDua;
+            $progressData[$pembimbingDua] = [];
+            foreach (range(1, 6) as $bulan) {
+                $progressData[$pembimbingDua][] = \App\Models\Bimbingan::whereMonth('created_at', $bulan)
+                    ->whereIn('nim', $nims)
+                    ->where('pembimbing', 2)
+                    ->count();
+            }
         }
         return view('mahasiswa.beranda', compact(
             'statusLabels', 'statusCounts',
@@ -127,7 +142,7 @@ class PageController extends Controller
             'dosenLabels', 'dosenData',
             'progressLabels', 'progressData',
             'pembimbingSatu', 'pembimbingDua',
-            'anggotaKelompok'
+            'anggotaKelompok', 'pembimbingChartLabels'
         ));
     }
     public function daftarTopikMahasiswa() {
