@@ -49,7 +49,40 @@ class PageController extends Controller
 ######################### Halaman ADMIN ########################################
 ######################### Halaman DOSEN ########################################
     public function berandaDosen() {
-        return view('dosen.beranda');
+        $daftarTopik = \App\Models\DaftarTopik::all();
+        $jumlahTersedia = \App\Models\DaftarTopik::whereIn('status', ['Tersedia', 'Available'])->count();
+        $jumlahDiambil = \App\Models\DaftarTopik::whereNotIn('status', ['Tersedia', 'Available'])->count();
+
+        // Pie Chart: Proporsi Topik per Dosen
+        $dosenTopik = \App\Models\DaftarTopik::whereNotNull('kode_dosen')
+            ->selectRaw('kode_dosen, count(*) as total')
+            ->groupBy('kode_dosen')
+            ->pluck('total', 'kode_dosen')
+            ->toArray();
+        $pieLabels = array_keys($dosenTopik);
+        $pieData = array_values($dosenTopik);
+
+        // Bar Chart: Jumlah Topik per Bidang
+        $bidangCounts = \App\Models\DaftarTopik::all()->flatMap(function($item) {
+            return is_array($item->bidang) ? $item->bidang : [$item->bidang];
+        })->countBy()->toArray();
+        $barLabels = array_keys($bidangCounts);
+        $barData = array_values($bidangCounts);
+
+        // Line Chart: Progress Bimbingan per Dosen (dummy, sesuaikan jika ada model Bimbingan)
+        $progressLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+        $progressData = [];
+        $dosenList = $pieLabels;
+        foreach ($dosenList as $dosen) {
+            $progressData[$dosen] = [rand(0,2), rand(2,4), rand(3,5), rand(4,6), rand(5,7), rand(6,8)]; // Dummy, ganti dengan query asli jika ada
+        }
+
+        return view('dosen.beranda', compact(
+            'daftarTopik', 'jumlahTersedia', 'jumlahDiambil',
+            'pieLabels', 'pieData',
+            'barLabels', 'barData',
+            'progressLabels', 'progressData', 'dosenList'
+        ));
     }
     public function daftarTopikDosen() {
         $kode_dosen = auth()->guard('dosen')->user()->kode_dosen;

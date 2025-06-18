@@ -95,7 +95,7 @@
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
                                             <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>Topik yang tersedia</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>199</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span>{{ $jumlahTersedia }}</span></div>
                                         </div>
                                         <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-clipboard2-check-fill fa-2x text-gray-300">
                                                 <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"></path>
@@ -111,7 +111,7 @@
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
                                             <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>Topik yang sudah diambil</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>199</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span>{{ $jumlahDiambil }}</span></div>
                                         </div>
                                         <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-card-checklist fa-2x text-gray-300">
                                                 <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"></path>
@@ -174,12 +174,22 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @foreach($daftarTopik as $i => $topik)
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>Budidaya Ikan Air Tawar</td>
-                                                    <td>STY</td>
-                                                    <td><span class="badge rounded-pill bg-success">Tersedia</span></td>
+                                                    <td>{{ $i+1 }}</td>
+                                                    <td>{{ $topik->judul }}</td>
+                                                    <td>{{ $topik->kode_dosen }}</td>
+                                                    <td>
+                                                        @if($topik->status == 'Tersedia' || $topik->status == 'Available')
+                                                            <span class="badge rounded-pill bg-success">Tersedia</span>
+                                                        @elseif($topik->status == 'Penuh' || $topik->status == 'Full')
+                                                            <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                        @else
+                                                            <span class="badge rounded-pill bg-secondary">{{ $topik->status }}</span>
+                                                        @endif
+                                                    </td>
                                                 </tr>
+                                                @endforeach
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -437,11 +447,11 @@
         new Chart(ctxPieDosen, {
             type: 'pie',
             data: {
-                labels: ['Dr. A', 'Dr. B', 'Dr. C', 'Dr. D', 'Dr. E'],
+                labels: @json($pieLabels),
                 datasets: [{
-                    data: [8, 5, 7, 4, 6],
+                    data: @json($pieData),
                     backgroundColor: [
-                        '#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171'
+                        '#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171', '#f472b6', '#34d399', '#fbbf24', '#818cf8', '#f87171'
                     ],
                     borderWidth: 2,
                     borderColor: '#fff',
@@ -468,10 +478,10 @@
         new Chart(ctxBidang, {
             type: 'bar',
             data: {
-                labels: ['Web', 'AI', 'Jaringan', 'IoT', 'Data Science'],
+                labels: @json($barLabels),
                 datasets: [{
                     label: 'Jumlah Topik',
-                    data: [7, 4, 6, 3, 5],
+                    data: @json($barData),
                     backgroundColor: '#60a5fa',
                     borderRadius: 8,
                     maxBarThickness: 32
@@ -509,38 +519,20 @@
         new Chart(ctxLineBimbingan, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                labels: @json($progressLabels),
                 datasets: [
+                    @foreach($dosenList as $idx => $dosen)
                     {
-                        label: 'Dr. A',
-                        data: [2, 3, 4, 5, 6, 7],
-                        borderColor: '#60a5fa',
+                        label: '{{ $dosen }}',
+                        data: @json($progressData[$dosen]),
+                        borderColor: ['#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171', '#f472b6', '#34d399', '#fbbf24', '#818cf8', '#f87171'][$idx % 10],
                         backgroundColor: 'rgba(96,165,250,0.12)',
                         tension: 0.4,
                         fill: false,
                         pointRadius: 4,
-                        pointBackgroundColor: '#60a5fa',
-                    },
-                    {
-                        label: 'Dr. B',
-                        data: [1, 2, 2, 3, 4, 5],
-                        borderColor: '#4ade80',
-                        backgroundColor: 'rgba(74,222,128,0.12)',
-                        tension: 0.4,
-                        fill: false,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#4ade80',
-                    },
-                    {
-                        label: 'Dr. C',
-                        data: [0, 1, 2, 2, 3, 4],
-                        borderColor: '#facc15',
-                        backgroundColor: 'rgba(250,204,21,0.12)',
-                        tension: 0.4,
-                        fill: false,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#facc15',
-                    }
+                        pointBackgroundColor: ['#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171', '#f472b6', '#34d399', '#fbbf24', '#818cf8', '#f87171'][$idx % 10],
+                    }@if(!$loop->last),@endif
+                    @endforeach
                 ]
             },
             options: {

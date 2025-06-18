@@ -474,7 +474,7 @@
                                             <div class="modal fade" role="dialog" tabindex="-1" id="ModalTambahDaftarTopik">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
-                                                        <form action="{{ route('daftar_topik.tambah') }}" method="post" enctype="multipart/form-data">
+                                                        <form action="{{ route('daftar_topik.tambah') }}" method="post" enctype="multipart/form-data" id="formTambahTopik">
                                                             @csrf
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title text-dark" style="color: var(--bs-emphasis-color);font-weight: bold;">Tambah Topik</h5>
@@ -482,21 +482,13 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <label class="form-label text-dark" style="font-weight: bold;">Judul :</label>
-                                                                <input class="form-control form-control-sm @error('judul') is-invalid @enderror" type="text" name="judul" placeholder="Judul Topik">
+                                                                <input class="form-control form-control-sm @error('judul') is-invalid @enderror" type="text" name="judul" placeholder="Judul Topik" required>
                                                                 @error('judul')
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
                                                                 @enderror
-                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Program Studi :</label>
-                                                                <select class="form-select form-select-sm @error('program_studi') is-invalid @enderror" name="program_studi" id="program_studiP">
-                                                                    <option selected disabled>-- Pilih Program Studi --</option>
-                                                                </select>
-                                                                @error('program_studi')
-                                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                                                                    <br>
-                                                                @enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Fakultas :</label>
-                                                                <select class="form-select form-select-sm @error('fakultas') is-invalid @enderror" name="fakultas" id="fakultasP" onchange="updateProgramStudiP()">
+                                                                <select class="form-select form-select-sm @error('fakultas') is-invalid @enderror" name="fakultas" id="fakultasP" onchange="updateProgramStudiP()" required>
                                                                     <option value="" selected>-- Pilih Fakultas --</option>
                                                                     <option value="Fakultas Teknik Elektro (FTE)">Fakultas Teknik Elektro (FTE)</option>
                                                                     <option value="Fakultas Rekayasa Industri (FRI)">Fakultas Rekayasa Industri (FRI)</option>
@@ -507,6 +499,14 @@
                                                                     <option value="Fakultas Ilmu Terapan (FIT)">Fakultas Ilmu Terapan (FIT)</option>
                                                                 </select>
                                                                 @error('fakultas')
+                                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
+                                                                    <br>
+                                                                @enderror
+                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Program Studi :</label>
+                                                                <select class="form-select form-select-sm @error('program_studi') is-invalid @enderror" name="program_studi" id="program_studiP" required>
+                                                                    <option value="" selected>-- Pilih Program Studi --</option>
+                                                                </select>
+                                                                @error('program_studi')
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
                                                                 @enderror
@@ -534,7 +534,7 @@
                                                                     <br>
                                                                 @enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Deskripsi :</label>
-                                                                <textarea class="form-control form-control-sm @error('deskripsi') is-invalid @enderror" name="deskripsi" rows="5" placeholder="Deskripsi Tentang Topik..."></textarea>
+                                                                <textarea class="form-control form-control-sm @error('deskripsi') is-invalid @enderror" name="deskripsi" rows="5" placeholder="Deskripsi Tentang Topik..." required></textarea>
                                                                 @error('deskripsi')
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
@@ -1293,13 +1293,10 @@
             "Fakultas Ilmu Terapan (FIT)": ["D3 Teknik Telekomunikasi", "D3 Rekayasa Perangkat Lunak Aplikasi", "D3 Sistem Informasi", "D3 Sistem Informasi Akuntansi", "D3 Teknologi Komputer", "D3 Digital Marketing", "D3 Hospitality & Culinary Art", "D3 Teknik Telekomunikasi (Jakarat)", "S1 Terapan Digital Creative Multimedia", "S1 Terapan Sistem Informasi Kota Cerdas"]
         };
 
-        function updateProgramStudiP() {
+        window.updateProgramStudiP = function() {
             const fakultasP = document.getElementById('fakultasP').value;
             const programStudiSelectP = document.getElementById('program_studiP');
-    
-            // Kosongkan pilihan sebelumnya
-            programStudiSelectP.innerHTML = '<option selected>-- Pilih Program Studi --</option>';
-    
+            programStudiSelectP.innerHTML = '<option value="">-- Pilih Program Studi --</option>';
             if (dataP[fakultasP]) {
                 dataP[fakultasP].forEach(function(prodi) {
                     const option = document.createElement('option');
@@ -1309,6 +1306,12 @@
                 });
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('fakultasP') && document.getElementById('fakultasP').value) {
+                window.updateProgramStudiP();
+            }
+        });
 
     $(document).ready(function() {
         $('#bidang').select2({
@@ -1383,9 +1386,13 @@ window.toggleDropdownBidangDosen = function(id = null) {
         dropdown = document.getElementById('dropdownBidangDosen');
         arrow = document.getElementById('dropdownArrowDosen');
     }
-    dropdown.classList.toggle('active');
-    arrow.innerHTML = dropdown.classList.contains('active') ? '&#9650;' : '&#9660;';
+    
+    if (dropdown && arrow) {
+        dropdown.classList.toggle('active');
+        arrow.innerHTML = dropdown.classList.contains('active') ? '&#9650;' : '&#9660;';
+    }
 }
+
 window.updateDropdownBidangLabelDosen = function(id = null) {
     let checkboxes, label;
     if (id) {
@@ -1395,29 +1402,47 @@ window.updateDropdownBidangLabelDosen = function(id = null) {
         checkboxes = document.querySelectorAll('#dropdownBidangDosen input[type=checkbox]');
         label = document.getElementById('dropdownBidangLabelDosen');
     }
-    let checked = 0;
-    let checkedLabels = [];
-    checkboxes.forEach(cb => {
-        if (cb.checked) {
-            checked++;
-            checkedLabels.push(cb.parentElement.textContent.trim());
+    
+    if (label) {
+        let checked = 0;
+        let checkedLabels = [];
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                checked++;
+                checkedLabels.push(cb.parentElement.textContent.trim());
+            }
+        });
+        if (checked === 0) {
+            label.textContent = 'Pilih Bidang';
+        } else if (checked === 1) {
+            label.textContent = checkedLabels[0];
+        } else {
+            label.textContent = checked + ' bidang dipilih';
         }
-    });
-    if (checked === 0) {
-        label.textContent = 'Pilih Bidang';
-    } else if (checked === 1) {
-        label.textContent = checkedLabels[0];
-    } else {
-        label.textContent = checked + ' bidang dipilih';
     }
 }
+
 document.addEventListener('DOMContentLoaded', function() {
-    updateDropdownBidangLabelDosen(); // Untuk modal tambah
-    @if(isset($menampilkanDataDaftarTopik))
-        @foreach($menampilkanDataDaftarTopik as $data)
-            updateDropdownBidangLabelDosen({{ $data->id }});
-        @endforeach
-    @endif
+    // Inisialisasi dropdown bidang untuk form tambah topik
+    window.updateDropdownBidangLabelDosen();
+    // Inisialisasi untuk form edit topik
+    if (typeof menampilkanDataDaftarTopik !== 'undefined') {
+        menampilkanDataDaftarTopik.forEach(function(data) {
+            window.updateDropdownBidangLabelDosen(data.id);
+        });
+    }
+    // Pastikan event listener untuk dropdown bidang berfungsi
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.custom-dropdown')) {
+            document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+                const arrow = dropdown.querySelector('[id^="dropdownArrowDosen"]');
+                if (arrow) {
+                    arrow.innerHTML = '&#9660;';
+                }
+            });
+        }
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1543,5 +1568,38 @@ document.querySelectorAll('.clickable-row').forEach(function(row) {
 @endforeach
 // ... existing code ...
     </script>
+    <script>
+try {
+    const dataP = {
+        "Fakultas Teknik Elektro (FTE)": ["S1 Teknik Elektro", "S1 Teknik Telekomunikasi", "S1 Teknik Fisika", "S1 Teknik Komputer", "S1 Teknik Biomedis", "S1 Teknik Sistem Energi", "S1 Teknik Telekomunikasi (Jakarta)", "S2 Teknik Elektro", "S3 Teknik Elektro"],
+        "Fakultas Rekayasa Industri (FRI)": ["S1 Teknik Industri", "S1 Sistem Informasi", "S1 Teknik Logistik", "S1 Manajemen Rekayasa", "S1 Sistem Informasi (Jakarta)", "S2 Teknik Industri", "S2 Sistem Informasi"],
+        "Fakultas Informatika (FIF)": ["S1 Informatika", "S1 Teknologi Informasi", "S1 Informatika PJJ", "S1 Sains Data", "S1 Rekayasa Perangkat Lunak", "S1 Teknologi Informasi (Jakarta)", "S2 Informatika", "S2 Ilmu Forensik", "S3 Informatika"],
+        "Fakultas Ekonomi dan Bisnis (FEB)": ["S1 Manajemen Bisnis Telekomunikasi & Informatika (MBTI)", "S1 Akuntansi", "S1 Leisure Management", "S1 Administrasi Bisnis", "S1 Bisnis Digital", "S2 Manajemen", "S2 Manajemen PJJ", "S2 Administrasi Bisnis"],
+        "Fakultas Komunikasi dan Ilmu Sosial (FKI)": ["S1 Ilmu Komunikasi", "S1 Hubungan Masyarakat", "S1 Digital Content Brodcating", "S1 Psikologi", "S2 Ilmu Komunikasi"],
+        "Fakultas Industri Kreatif (FIK)": ["S1 Desain Komunikasi Visual", "S1 Desian Produk", "S1 Desain Interior", "S1 Seni Rupa", "S1 Kriya", "S1 Film dan Animasi", "S1 Desain Komunikasi Visual (Jakarta)", "S2 Desain"],
+        "Fakultas Ilmu Terapan (FIT)": ["D3 Teknik Telekomunikasi", "D3 Rekayasa Perangkat Lunak Aplikasi", "D3 Sistem Informasi", "D3 Sistem Informasi Akuntansi", "D3 Teknologi Komputer", "D3 Digital Marketing", "D3 Hospitality & Culinary Art", "D3 Teknik Telekomunikasi (Jakarat)", "S1 Terapan Digital Creative Multimedia", "S1 Terapan Sistem Informasi Kota Cerdas"]
+    };
+
+    window.updateProgramStudiP = function() {
+        const fakultasP = document.getElementById('fakultasP').value;
+        const programStudiSelectP = document.getElementById('program_studiP');
+        programStudiSelectP.innerHTML = '<option value="">-- Pilih Program Studi --</option>';
+        if (dataP[fakultasP]) {
+            dataP[fakultasP].forEach(function(prodi) {
+                const option = document.createElement('option');
+                option.value = prodi;
+                option.text = prodi;
+                programStudiSelectP.add(option);
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('fakultasP') && document.getElementById('fakultasP').value) {
+            window.updateProgramStudiP();
+        }
+    });
+} catch(e) { console.error('Dropdown Prodi Error:', e); }
+</script>
 </body>
 </html>

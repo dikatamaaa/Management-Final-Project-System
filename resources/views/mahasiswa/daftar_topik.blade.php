@@ -98,30 +98,63 @@
                                             <h5 class="modal-title text-dark" style="color: var(--bs-emphasis-color);font-weight: bold;">Daftar Topik Yang Dipilih</h5><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
+                                            @php
+                                                $nim = auth()->guard('mahasiswa')->user()->nim;
+                                                $topik_dipilih = null;
+                                                foreach($daftarTopik as $topik) {
+                                                    if(\App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists()) {
+                                                        $topik_dipilih = $topik;
+                                                        break;
+                                                    }
+                                                }
+                                                $anggota = $topik_dipilih ? \App\Models\Kelompok::where('judul', $topik_dipilih->judul)->get() : collect();
+                                            @endphp
+                                            @if($topik_dipilih)
                                             <div class="row">
                                                 <div class="col"><span class="text-dark fw-bold">Judul</span></div>
                                                 <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;Budidaya Ikan Air Tawar</p>
+                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;{{ $topik_dipilih->judul }}</p>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col"><span class="text-dark fw-bold">Kode Dosen</span></div>
                                                 <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;STY</p>
+                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;{{ $topik_dipilih->kode_dosen }}</p>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col"><span class="text-dark fw-bold">Kelompok</span></div>
                                                 <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;<span class="badge rounded-pill bg-dark m-1">Irfan</span><span class="badge rounded-pill bg-dark m-1">Geral</span><span class="badge rounded-pill bg-dark m-1">Dika</span></p>
+                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;
+                                                        @foreach($anggota as $a)
+                                                            <span class="badge rounded-pill bg-dark m-1">{{ $a->nama_anggota }}</span>
+                                                        @endforeach
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col"><span class="text-dark fw-bold">Status</span></div>
                                                 <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;<span class="badge rounded-pill bg-warning text-dark m-1">Sedang Diproses...</span></p>
+                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;
+                                                        @if($topik_dipilih->status == 'Tersedia' || $topik_dipilih->status == 'Available')
+                                                            <span class="badge rounded-pill bg-success">Available</span>
+                                                        @elseif($topik_dipilih->status == 'Penuh' || $topik_dipilih->status == 'Full')
+                                                            <span class="badge rounded-pill bg-danger">Full</span>
+                                                        @elseif($topik_dipilih->status == 'Proposal')
+                                                            <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                        @elseif($topik_dipilih->status == 'TA')
+                                                            <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                                        @else
+                                                            <span class="badge rounded-pill bg-warning text-dark">{{ $topik_dipilih->status }}</span>
+                                                        @endif
+                                                    </p>
                                                 </div>
                                             </div>
+                                            @else
+                                            <div class="row">
+                                                <div class="col text-center text-muted">Belum ada topik yang dipilih oleh kelompok Anda.</div>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -574,4 +607,5 @@
     }
     </style>
 </body>
+</html>
 </html>
