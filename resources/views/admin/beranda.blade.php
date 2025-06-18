@@ -256,10 +256,10 @@
                         <div class="col-md-4 mb-4">
                             <div class="card shadow">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <p class="text-dark m-0 fw-bold">Progress Bimbingan per Dosen</p>
+                                    <p class="text-dark m-0 fw-bold">Komposisi Status Topik</p>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="lineBimbinganChart" height="180"></canvas>
+                                    <canvas id="statusTopikChart" height="180"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -299,16 +299,20 @@
     </script>
     <script>
     // Pie Chart: Proporsi Topik per Dosen
+    const pieLabels = @json($pieLabels);
+    const pieData = @json($pieData);
+    const pieColors = [
+        '#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171',
+        '#fbbf24', '#34d399', '#818cf8', '#f472b6', '#a3e635'
+    ];
     const ctxPieDosen = document.getElementById('pieDosenTopikChart').getContext('2d');
     new Chart(ctxPieDosen, {
         type: 'pie',
         data: {
-            labels: ['Dr. A', 'Dr. B', 'Dr. C', 'Dr. D', 'Dr. E'],
+            labels: pieLabels,
             datasets: [{
-                data: [8, 5, 7, 4, 6],
-                backgroundColor: [
-                    '#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171'
-                ],
+                data: pieData,
+                backgroundColor: pieColors.slice(0, pieLabels.length),
                 borderWidth: 2,
                 borderColor: '#fff',
             }]
@@ -329,14 +333,16 @@
         }
     });
     // Bar Chart: Jumlah Topik per Bidang
+    const barLabels = @json($barLabels);
+    const barData = @json($barData);
     const ctxBidang = document.getElementById('bidangTopikChart').getContext('2d');
     new Chart(ctxBidang, {
         type: 'bar',
         data: {
-            labels: ['Web', 'AI', 'Jaringan', 'IoT', 'Data Science'],
+            labels: barLabels,
             datasets: [{
                 label: 'Jumlah Topik',
-                data: [7, 4, 6, 3, 5],
+                data: barData,
                 backgroundColor: '#60a5fa',
                 borderRadius: 8,
                 maxBarThickness: 32
@@ -368,44 +374,27 @@
             maintainAspectRatio: false
         }
     });
-    // Line Chart: Progress Bimbingan per Dosen
-    const ctxLineBimbingan = document.getElementById('lineBimbinganChart').getContext('2d');
-    new Chart(ctxLineBimbingan, {
-        type: 'line',
+    // Donut Chart: Komposisi Status Topik
+    const statusLabels = @json($statusLabels);
+    const statusCounts = @json($statusCounts);
+    const statusColors = [
+        '#4ade80', // Tersedia
+        '#f87171', // Penuh
+        '#60a5fa', // Proposal
+        '#38bdf8', // TA
+        '#facc15'  // Booked
+    ];
+    const ctxStatus = document.getElementById('statusTopikChart').getContext('2d');
+    new Chart(ctxStatus, {
+        type: 'doughnut',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
-            datasets: [
-                {
-                    label: 'Dr. A',
-                    data: [2, 3, 4, 5, 6, 7],
-                    borderColor: '#60a5fa',
-                    backgroundColor: 'rgba(96,165,250,0.12)',
-                    tension: 0.4,
-                    fill: false,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#60a5fa',
-                },
-                {
-                    label: 'Dr. B',
-                    data: [1, 2, 2, 3, 4, 5],
-                    borderColor: '#4ade80',
-                    backgroundColor: 'rgba(74,222,128,0.12)',
-                    tension: 0.4,
-                    fill: false,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#4ade80',
-                },
-                {
-                    label: 'Dr. C',
-                    data: [0, 1, 2, 2, 3, 4],
-                    borderColor: '#facc15',
-                    backgroundColor: 'rgba(250,204,21,0.12)',
-                    tension: 0.4,
-                    fill: false,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#facc15',
-                }
-            ]
+            labels: statusLabels,
+            datasets: [{
+                data: statusCounts,
+                backgroundColor: statusColors,
+                borderWidth: 2,
+                borderColor: '#fff',
+            }]
         },
         options: {
             plugins: {
@@ -416,30 +405,16 @@
                         color: '#334155',
                         font: { family: 'Poppins', size: 14 }
                     }
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false
                 }
             },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 } }
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#e5e7eb' },
-                    ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 }, stepSize: 1 }
-                }
-            },
+            cutout: '70%',
             responsive: true,
             maintainAspectRatio: false
         }
     });
     </script>
     <style>
-    #pieDosenTopikChart, #bidangTopikChart, #lineBimbinganChart {
+    #pieDosenTopikChart, #bidangTopikChart, #statusTopikChart {
         min-height: 180px;
         max-height: 260px;
     }

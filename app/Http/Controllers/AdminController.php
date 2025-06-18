@@ -24,7 +24,29 @@ class AdminController extends Controller
     public function JumlahData() : View {
         $JumlahDataMahasiswa = Mahasiswa::count();
         $JumlahDataDosen = Dosen::count();
-        return view('admin.beranda',compact('JumlahDataMahasiswa', 'JumlahDataDosen'));
+        // Ambil data topik per dosen
+        $dosenTopik = Dosen::withCount('topik')->get();
+        $dosenTopik = $dosenTopik->filter(function($dosen) {
+            return $dosen->topik_count > 0;
+        });
+        $pieLabels = $dosenTopik->pluck('kode_dosen')->toArray();
+        $pieData = $dosenTopik->pluck('topik_count')->toArray();
+        // Ambil data topik per bidang
+        $bidangCounts = \App\Models\DaftarTopik::all()->flatMap(function($item) {
+            return is_array($item->bidang) ? $item->bidang : [$item->bidang];
+        })->countBy()->toArray();
+        $barLabels = array_keys($bidangCounts);
+        $barData = array_values($bidangCounts);
+        // Komposisi Status Topik
+        $statusLabels = ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked'];
+        $statusCounts = [
+            \App\Models\DaftarTopik::whereIn('status', ['Tersedia', 'Available'])->count(),
+            \App\Models\DaftarTopik::whereIn('status', ['Penuh', 'Full'])->count(),
+            \App\Models\DaftarTopik::where('status', 'Proposal')->count(),
+            \App\Models\DaftarTopik::where('status', 'TA')->count(),
+            \App\Models\DaftarTopik::where('status', 'Booked')->count(),
+        ];
+        return view('admin.beranda',compact('JumlahDataMahasiswa', 'JumlahDataDosen', 'pieLabels', 'pieData', 'barLabels', 'barData', 'statusLabels', 'statusCounts'));
     }
 
     /**

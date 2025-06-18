@@ -13,4 +13,9 @@ class Dosen extends Authenticatable
     public function getAuthPassword() {
         return $this->kata_sandi;
     }
+
+    public function topik()
+    {
+        return $this->hasMany(\App\Models\DaftarTopik::class, 'kode_dosen', 'kode_dosen');
+    }
 }
