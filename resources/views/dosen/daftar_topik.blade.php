@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="{{ asset('/storage/assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Choices.js untuk bidang -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 </head>
 <style>
     body, table, th, td {
@@ -511,21 +514,11 @@
                                                                     <br>
                                                                 @enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Bidang :</label>
-                                                                <div class="custom-dropdown" id="dropdownBidangDosen">
-                                                                    <div class="dropdown-btn" onclick="toggleDropdownBidangDosen()">
-                                                                        <span id="dropdownBidangLabelDosen">Pilih Bidang</span>
-                                                                        <span id="dropdownArrowDosen">&#9660;</span>
-                                                                    </div>
-                                                                    <div class="dropdown-content">
-                                                                        @foreach($bidangList as $bidang)
-                                                                            <label class="checkbox-label">
-                                                                                <input type="checkbox" name="bidang[]" value="{{ $bidang }}"
-                                                                                    {{ (collect(old('bidang'))->contains($bidang)) ? 'checked' : '' }} onchange="updateDropdownBidangLabelDosen()">
-                                                                                {{ $bidang }}
-                                                                            </label>
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
+                                                                <select class="form-control bidang-edit-select" name="bidang[]" multiple required>
+                                                                    @foreach($bidangList as $bidang)
+                                                                        <option value="{{ $bidang }}" {{ (collect(old('bidang'))->contains($bidang)) ? 'selected' : '' }}>{{ $bidang }}</option>
+                                                                    @endforeach
+                                                                </select>
                                                                 @error('bidang')<div class="text-danger">{{ $message }}</div>@enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Kuota (ditentukan admin):</label>
                                                                 <input class="form-control form-control-sm @error('kuota') is-invalid @enderror" type="number" name="kuota" value="{{ $kuotaMax }}" readonly>
@@ -679,22 +672,11 @@
                                                                     <br>
                                                                 @enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Bidang :</label>
-                                                                <div class="custom-dropdown" id="dropdownBidangDosen{{$data->id}}">
-                                                                    <input type="hidden" name="bidang[]" value="">
-                                                                    <div class="dropdown-btn" onclick="toggleDropdownBidangDosen({{$data->id}})">
-                                                                        <span id="dropdownBidangLabelDosen{{$data->id}}">Pilih Bidang</span>
-                                                                        <span id="dropdownArrowDosen{{$data->id}}">&#9660;</span>
-                                                                    </div>
-                                                                    <div class="dropdown-content">
-                                                                        @foreach($bidangList as $bidang)
-                                                                            <label class="checkbox-label">
-                                                                                <input type="checkbox" name="bidang[]" value="{{ $bidang }}"
-                                                                                    {{ (collect(old('bidang', $data->bidang ?? []))->contains($bidang)) ? 'checked' : '' }} onchange="updateDropdownBidangLabelDosen({{$data->id}})">
-                                                                                {{ $bidang }}
-                                                                            </label>
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
+                                                                <select class="form-control bidang-edit-select" name="bidang_{{$data->id}}[]" multiple required>
+                                                                    @foreach($bidangList as $bidang)
+                                                                        <option value="{{ $bidang }}" {{ (collect(old('bidang_'.$data->id, $data->bidang ?? []))->contains($bidang)) ? 'selected' : '' }}>{{ $bidang }}</option>
+                                                                    @endforeach
+                                                                </select>
                                                                 @error('bidang_'.$data->id)
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
@@ -1408,74 +1390,6 @@ $(document).ready(function() {
     });
 });
 
-window.toggleDropdownBidangDosen = function(id = null) {
-    let dropdown, arrow;
-    if (id) {
-        dropdown = document.getElementById('dropdownBidangDosen' + id);
-        arrow = document.getElementById('dropdownArrowDosen' + id);
-    } else {
-        dropdown = document.getElementById('dropdownBidangDosen');
-        arrow = document.getElementById('dropdownArrowDosen');
-    }
-    
-    if (dropdown && arrow) {
-        dropdown.classList.toggle('active');
-        arrow.innerHTML = dropdown.classList.contains('active') ? '&#9650;' : '&#9660;';
-    }
-}
-
-window.updateDropdownBidangLabelDosen = function(id = null) {
-    let checkboxes, label;
-    if (id) {
-        checkboxes = document.querySelectorAll('#dropdownBidangDosen' + id + ' input[type=checkbox]');
-        label = document.getElementById('dropdownBidangLabelDosen' + id);
-    } else {
-        checkboxes = document.querySelectorAll('#dropdownBidangDosen input[type=checkbox]');
-        label = document.getElementById('dropdownBidangLabelDosen');
-    }
-    
-    if (label) {
-        let checked = 0;
-        let checkedLabels = [];
-        checkboxes.forEach(cb => {
-            if (cb.checked) {
-                checked++;
-                checkedLabels.push(cb.parentElement.textContent.trim());
-            }
-        });
-        if (checked === 0) {
-            label.textContent = 'Pilih Bidang';
-        } else if (checked === 1) {
-            label.textContent = checkedLabels[0];
-        } else {
-            label.textContent = checked + ' bidang dipilih';
-        }
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Inisialisasi dropdown bidang untuk form tambah topik
-    window.updateDropdownBidangLabelDosen();
-    // Inisialisasi untuk form edit topik
-    if (typeof menampilkanDataDaftarTopik !== 'undefined') {
-        menampilkanDataDaftarTopik.forEach(function(data) {
-            window.updateDropdownBidangLabelDosen(data.id);
-        });
-    }
-    // Pastikan event listener untuk dropdown bidang berfungsi
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.custom-dropdown')) {
-            document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
-                dropdown.classList.remove('active');
-                const arrow = dropdown.querySelector('[id^="dropdownArrowDosen"]');
-                if (arrow) {
-                    arrow.innerHTML = '&#9660;';
-                }
-            });
-        }
-    });
-});
-
 document.addEventListener('DOMContentLoaded', function() {
     const input = document.getElementById('searchJudulDosenLain');
     if (input) {
@@ -1581,6 +1495,33 @@ try {
         }
     });
 } catch(e) { console.error('Dropdown Prodi Error:', e); }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ... kode lain ...
+    const bidangSelectDosen = document.getElementById('bidangSelectDosen');
+    if (bidangSelectDosen) {
+        new Choices(bidangSelectDosen, {
+            removeItemButton: true,
+            searchResultLimit: 100,
+            shouldSort: false,
+            placeholder: true,
+            placeholderValue: 'Pilih bidang...'
+        });
+    }
+    // ... kode lain ...
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.bidang-edit-select').forEach(function(select) {
+        new Choices(select, {
+            removeItemButton: true,
+            searchResultLimit: 100,
+            shouldSort: false,
+            placeholder: true,
+            placeholderValue: 'Pilih bidang...'
+        });
+    });
+});
 </script>
 </body>
 </html>
