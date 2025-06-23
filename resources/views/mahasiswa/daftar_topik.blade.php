@@ -499,6 +499,11 @@
                             Batal Booked
                         </button>
                     @endif
+                    @if($topik->status == 'Menunggu Pembimbing' && $sudah_booking)
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBatalMenunggu{{ $topik->id }}" onclick="event.stopPropagation();">
+                            Batal
+                        </button>
+                    @endif
                     <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">
                         <i class="fa fa-close"></i>&nbsp;Tutup
                     </button>
@@ -519,6 +524,28 @@
                     </div>
                     <div class="modal-body">
                         <p>Apakah Anda yakin ingin membatalkan booking topik <strong>{{ $topik->judul }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endif
+    @if($topik->status == 'Menunggu Pembimbing' && $sudah_booking)
+    <div class="modal fade" id="modalBatalMenunggu{{ $topik->id }}" tabindex="-1" aria-labelledby="modalBatalMenungguLabel{{ $topik->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('mahasiswa.batal_menunggu', $topik->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalBatalMenungguLabel{{ $topik->id }}">Konfirmasi Batal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin membatalkan pengajuan topik <strong>{{ $topik->judul }}</strong>?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>

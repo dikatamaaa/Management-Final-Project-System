@@ -507,4 +507,19 @@ class MahasiswaController extends Controller
             return back()->with('error', 'Gagal membatalkan booking topik.');
         }
     }
+
+    /**
+     * Mahasiswa membatalkan topik status Menunggu Pembimbing
+     */
+    public function batalMenunggu($id)
+    {
+        $user = auth()->guard('mahasiswa')->user();
+        $topik = \App\Models\DaftarTopik::findOrFail($id);
+        $nim = $user->nim;
+        // Hapus data kelompok mahasiswa pada topik ini
+        \App\Models\Kelompok::where('judul', $topik->judul)->delete();
+        // Hapus topik langsung
+        $topik->delete();
+        return back()->with('success', 'Pengajuan topik berhasil dibatalkan dan topik dihapus.');
+    }
 }

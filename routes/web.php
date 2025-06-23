@@ -179,3 +179,4 @@ Route::post('/mahasiswa/daftar_topik/buat', [MahasiswaController::class, 'buatTo
 Route::post('/dosen/daftar_topik/ambil/{id}', [DosenController::class, 'ambilTopikMahasiswa'])->name('dosen.ambil_topik_mahasiswa')->middleware('auth:dosen');
 
 Route::post('/mahasiswa/daftar_topik/batal_booked/{id}', [MahasiswaController::class, 'batalBooked'])->name('mahasiswa.batal_booked')->middleware('auth:mahasiswa');
+Route::post('/mahasiswa/daftar_topik/batal_menunggu/{id}', [MahasiswaController::class, 'batalMenunggu'])->name('mahasiswa.batal_menunggu')->middleware('auth:mahasiswa');
