@@ -584,27 +584,8 @@
                                                                 <button type="submit" class="btn btn-success btn-sm ms-1" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Diterima</button>
                                                             </form>
                                                             <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Ditolak</button>
-                                                            <!-- Modal Tolak -->
-                                                            <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true" onclick="event.stopPropagation();">
-                                                              <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                  <form action="{{ route('kelompok.tolak_full') }}" method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="judul" value="{{ $data->judul }}">
-                                                                    <div class="modal-header">
-                                                                      <h5 class="modal-title" id="modalTolakLabel{{ $data->id }}">Alasan Penolakan</h5>
-                                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                      <textarea name="alasan" class="form-control" required placeholder="Tulis alasan penolakan..." onclick="event.stopPropagation();"></textarea>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                                      <button type="submit" class="btn btn-danger">Tolak</button>
-                                                                    </div>
-                                                                  </form>
-                                                                </div>
-                                                              </div>
+                                                            
+                                                            
                                                             </div>
                                                         </div>
                                                         @endif
@@ -634,6 +615,30 @@
                                                     </p>
                                                 </td>
                                             </tr>
+                                            @if($jumlah_anggota >= $kuotaMin && Auth::guard('dosen')->user()->kode_dosen == $data->kode_dosen)
+                                            <!-- Modal Tolak -->
+                                            <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form action="{{ route('kelompok.tolak_full') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="judul" value="{{ $data->judul }}">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="modalTolakLabel{{ $data->id }}">Alasan Penolakan</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <textarea name="alasan" class="form-control" required placeholder="Tulis alasan penolakan..."></textarea>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                                <button type="submit" class="btn btn-danger">Tolak</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
                                             <!-- Modal Edit Topik -->
                                             <div class="modal fade bidang-modal" role="dialog" tabindex="-1" id="ModalEditDaftarTopik{{$data->id}}">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -751,7 +756,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Modal Ditel Topik -->
+                                            <!-- Modal Detail Topik -->
                                             <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatDaftarTopik{{$data->id}}">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
@@ -955,6 +960,54 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    @foreach ($topikMahasiswa as $data)
+                                        <div class="modal fade" id="ModalDetailTopikMahasiswa{{ $data->id }}" tabindex="-1" aria-labelledby="ModalDetailTopikMahasiswaLabel{{ $data->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="ModalDetailTopikMahasiswaLabel{{ $data->id }}">Detail Topik Mahasiswa</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
+                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->judul }}</p></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-4"><span style="font-weight: bold;">Program Studi</span></div>
+                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->program_studi ?? '-' }}</p></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
+                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->fakultas ?? '-' }}</p></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
+                                                            <div class="col-8">
+                                                                <p><span class="fw-bold">:&nbsp;</span>
+                                                                    @if(is_array($data->bidang))
+                                                                        @foreach($data->bidang as $bidang)
+                                                                            <span class="badge bg-dark me-1">{{ $bidang }}</span>
+                                                                        @endforeach
+                                                                    @else
+                                                                        <span class="badge bg-dark me-1">{{ $data->bidang }}</span>
+                                                                    @endif
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
+                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->kuota }} Orang</p></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
+                                                            <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->deskripsi }}</p></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -1017,28 +1070,6 @@
                                                                     <button type="submit" class="btn btn-success btn-sm ms-1" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Diterima</button>
                                                                 </form>
                                                                 <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Ditolak</button>
-                                                                <!-- Modal Tolak -->
-                                                                <div class="modal fade" id="modalTolak{{ $data->id }}" tabindex="-1" aria-labelledby="modalTolakLabel{{ $data->id }}" aria-hidden="true" onclick="event.stopPropagation();">
-                                                                  <div class="modal-dialog">
-                                                                    <div class="modal-content">
-                                                                      <form action="{{ route('kelompok.tolak_full') }}" method="POST">
-                                                                        @csrf
-                                                                        <input type="hidden" name="judul" value="{{ $data->judul }}">
-                                                                        <div class="modal-header">
-                                                                          <h5 class="modal-title" id="modalTolakLabel{{ $data->id }}">Alasan Penolakan</h5>
-                                                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                          <textarea name="alasan" class="form-control" required placeholder="Tulis alasan penolakan..." onclick="event.stopPropagation();"></textarea>
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                                          <button type="submit" class="btn btn-danger">Tolak</button>
-                                                                        </div>
-                                                                      </form>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
                                                             </div>
                                                             @endif
                                                         @elseif($data->status == 'TA')
@@ -1171,11 +1202,11 @@
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-   <script src="{{ asset('/storage/assets/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('/storage/assets/js/theme.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="{{ asset('/storage/assets/js/theme.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
     <script>
@@ -1517,58 +1548,8 @@ document.querySelectorAll('.clickable-row').forEach(function(row) {
   });
 });
 
-// ... existing code ...
-@foreach ($topikMahasiswa as $data)
-<div class="modal fade" id="ModalDetailTopikMahasiswa{{ $data->id }}" tabindex="-1" aria-labelledby="ModalDetailTopikMahasiswaLabel{{ $data->id }}" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalDetailTopikMahasiswaLabel{{ $data->id }}">Detail Topik Mahasiswa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-4"><span style="font-weight: bold;">Judul</span></div>
-                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->judul }}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-4"><span style="font-weight: bold;">Program Studi</span></div>
-                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->program_studi ?? '-' }}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-4"><span style="font-weight: bold;">Fakultas</span></div>
-                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->fakultas ?? '-' }}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-4"><span style="font-weight: bold;">Bidang</span></div>
-                    <div class="col-8">
-                        <p><span class="fw-bold">:&nbsp;</span>
-                            @if(is_array($data->bidang))
-                                @foreach($data->bidang as $bidang)
-                                    <span class="badge bg-dark me-1">{{ $bidang }}</span>
-                                @endforeach
-                            @else
-                                <span class="badge bg-dark me-1">{{ $data->bidang }}</span>
-                            @endif
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4"><span style="font-weight: bold;">Kuota</span></div>
-                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->kuota }} Orang</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-4"><span style="font-weight: bold;">Deskripsi</span></div>
-                    <div class="col-8"><p><span class="fw-bold">:&nbsp;</span>{{ $data->deskripsi }}</p></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
-// ... existing code ...
-    </script>
-    <script>
+
+
 try {
     const dataP = {
         "Fakultas Teknik Elektro (FTE)": ["S1 Teknik Elektro", "S1 Teknik Telekomunikasi", "S1 Teknik Fisika", "S1 Teknik Komputer", "S1 Teknik Biomedis", "S1 Teknik Sistem Energi", "S1 Teknik Telekomunikasi (Jakarta)", "S2 Teknik Elektro", "S3 Teknik Elektro"],

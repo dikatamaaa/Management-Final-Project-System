@@ -481,4 +481,30 @@ class MahasiswaController extends Controller
         $dokumen->delete();
         return back()->with('success', 'Dokumen berhasil dihapus!');
     }
+
+    /**
+     * Mahasiswa membatalkan booking topik (Booked)
+     */
+    public function batalBooked($id)
+    {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        $topik = \App\Models\DaftarTopik::findOrFail($id);
+        $nim = $user->nim;
+        // Hapus data kelompok mahasiswa pada topik ini
+        $deleted = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->delete();
+        // Jika sudah tidak ada anggota, ubah status topik jadi Available
+        $sisa_anggota = \App\Models\Kelompok::where('judul', $topik->judul)->count();
+        if ($sisa_anggota == 0) {
+            $topik->status = 'Available';
+            $topik->save();
+        }
+        if ($deleted) {
+            return back()->with('success', 'Booking topik berhasil dibatalkan.');
+        } else {
+            return back()->with('error', 'Gagal membatalkan booking topik.');
+        }
+    }
 }

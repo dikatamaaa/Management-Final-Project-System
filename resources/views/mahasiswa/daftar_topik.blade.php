@@ -215,7 +215,11 @@
                                                         @if(!$sudah_punya_kelompok)
                                                             <form action="{{ route('mahasiswa.pilih_topik', $topik->id) }}" method="POST" style="display:inline;">
                                                                 @csrf
-                                                                <button type="submit" class="btn btn-primary btn-sm ms-2" onclick="event.stopPropagation();">Pilih Topik</button>
+                                                                <button type="button" class="btn btn-primary btn-sm ms-2"
+                                                                    onclick="event.stopPropagation(); this.form.submit(); return false;"
+                                                                    onmousedown="event.stopPropagation();">
+                                                                    Pilih Topik
+                                                                </button>
                                                             </form>
                                                         @endif
                                                     @elseif($topik->status == 'Penuh' || $topik->status == 'Full')
@@ -399,11 +403,14 @@
                             $nim = auth()->guard('mahasiswa')->user()->nim;
                             $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
                         @endphp
-                        @if($topik->status == 'Booked' && $sudah_booking)
-                            <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}" onclick="event.stopPropagation();">
-                                Tambah Anggota
-                            </button>
-                        @endif
+                        
+                            @if($sudah_booking && $topik->status == 'Booked')
+                                <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}" onclick="event.stopPropagation();">
+                                    Tambah Anggota
+                                </button>
+                            @endif
+                            
+                        
                     </h5>
                     <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                 </div>
@@ -487,11 +494,41 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
+                    @if($topik->status == 'Booked' && $sudah_booking)
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBatalBooked{{ $topik->id }}" onclick="event.stopPropagation();">
+                            Batal Booked
+                        </button>
+                    @endif
+                    <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">
+                        <i class="fa fa-close"></i>&nbsp;Tutup
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Modal Batal Booked -->
+    @if($topik->status == 'Booked' && $sudah_booking)
+    <div class="modal fade" id="modalBatalBooked{{ $topik->id }}" tabindex="-1" aria-labelledby="modalBatalBookedLabel{{ $topik->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('mahasiswa.batal_booked', $topik->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalBatalBookedLabel{{ $topik->id }}">Konfirmasi Batal Booked</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin membatalkan booking topik <strong>{{ $topik->judul }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endif
     @endforeach
     <style>
     body, table, th, td {
@@ -607,5 +644,4 @@
     }
     </style>
 </body>
-</html>
 </html>
