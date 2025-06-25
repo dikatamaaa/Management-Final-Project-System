@@ -222,7 +222,19 @@ class PageController extends Controller
         return back()->with(['success' => 'Topik berhasil di-booking! Silakan tambahkan anggota kelompok.']);
     }
     public function kelompokMahasiswa() {
-        return view('mahasiswa.pembimbing-dua');
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        return view('mahasiswa.kelompok');
+    }
+    
+    public function profilMahasiswa() {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        return view('mahasiswa.profil');
     }
 ######################### Halaman MAHASIWA ########################################
 }
