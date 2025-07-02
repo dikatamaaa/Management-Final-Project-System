@@ -21,21 +21,11 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Bidang (boleh lebih dari satu)</label>
-            <div class="custom-dropdown" id="dropdownBidang">
-                <div class="dropdown-btn" onclick="toggleDropdownBidang()">
-                    <span id="dropdownBidangLabel">Pilih Bidang</span>
-                    <span id="dropdownArrow">&#9660;</span>
-                </div>
-                <div class="dropdown-content">
-                    @foreach($bidangList as $bidang)
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="bidang[]" value="{{ $bidang }}"
-                                {{ (collect(old('bidang'))->contains($bidang)) ? 'checked' : '' }} onchange="updateDropdownBidangLabel()">
-                            {{ $bidang }}
-                        </label>
-                    @endforeach
-                </div>
-            </div>
+            <select class="form-control" id="bidangSelect" name="bidang[]" multiple required>
+                @foreach($bidangList as $bidang)
+                    <option value="{{ $bidang }}" {{ (collect(old('bidang'))->contains($bidang)) ? 'selected' : '' }}>{{ $bidang }}</option>
+                @endforeach
+            </select>
             @error('bidang')<div class="text-danger">{{ $message }}</div>@enderror
         </div>
         <div class="mb-3">
@@ -125,60 +115,6 @@
 </style>
 
 <script>
-function toggleDropdownBidang() {
-    const dropdown = document.getElementById('dropdownBidang');
-    dropdown.classList.toggle('active');
-    // Ganti arah panah
-    const arrow = document.getElementById('dropdownArrow');
-    arrow.innerHTML = dropdown.classList.contains('active') ? '&#9650;' : '&#9660;';
-}
-// Tutup dropdown jika klik di luar
-window.addEventListener('click', function(event) {
-    const dropdown = document.getElementById('dropdownBidang');
-    if (!dropdown.contains(event.target)) {
-        dropdown.classList.remove('active');
-        document.getElementById('dropdownArrow').innerHTML = '&#9660;';
-    }
-});
-function updateDropdownBidangLabel() {
-    const checkboxes = document.querySelectorAll('#dropdownBidang input[type=checkbox]');
-    let checked = 0;
-    let checkedLabels = [];
-    checkboxes.forEach(cb => {
-        if (cb.checked) {
-            checked++;
-            checkedLabels.push(cb.parentElement.textContent.trim());
-        }
-    });
-    const label = document.getElementById('dropdownBidangLabel');
-    if (checked === 0) {
-        label.textContent = 'Pilih Bidang';
-    } else if (checked === 1) {
-        label.textContent = checkedLabels[0];
-    } else {
-        label.textContent = checked + ' bidang dipilih';
-    }
-}
-// Inisialisasi label saat halaman dimuat (untuk old value)
-document.addEventListener('DOMContentLoaded', updateDropdownBidangLabel);
-
-$(document).ready(function() {
-    const kuota = parseInt($('#kuota').val()) || 1;
-    const maxAnggotaTambahan = kuota - 1;
-    $('#anggotaTambahan').select2({
-        placeholder: 'Cari nama atau NIM',
-        width: '100%',
-        maximumSelectionLength: maxAnggotaTambahan,
-        language: {
-            maximumSelected: function(args) {
-                return 'Maksimal ' + maxAnggotaTambahan + ' anggota tambahan';
-            }
-        }
-    });
-});
-</script>
-
-<script>
 document.addEventListener('DOMContentLoaded', function() {
     const kuota = parseInt(document.getElementById('kuota').value) || 1;
     const maxAnggotaTambahan = kuota - 1;
@@ -218,6 +154,15 @@ document.addEventListener('DOMContentLoaded', function() {
             anggotaSelect.selectedOptions[anggotaSelect.selectedOptions.length-1].selected = false;
             choices.removeActiveItems();
         }
+    });
+
+    const bidangSelect = document.getElementById('bidangSelect');
+    const bidangChoices = new Choices(bidangSelect, {
+        removeItemButton: true,
+        searchResultLimit: 100,
+        shouldSort: false,
+        placeholder: true,
+        placeholderValue: 'Pilih bidang...'
     });
 });
 </script>

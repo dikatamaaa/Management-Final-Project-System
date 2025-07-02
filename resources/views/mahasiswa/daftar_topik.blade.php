@@ -325,37 +325,38 @@
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <ul class="navbar-nav flex-nowrap ms-auto">
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                                        <span class="badge bg-danger badge-counter">
+                                            {{ Auth::guard('mahasiswa')->user()->unreadNotifications->count() }}
+                                        </span>
+                                        <i class="fas fa-bell fa-fw"></i>
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                        <h6 class="dropdown-header">alerts center</h6><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 12, 2019</span>
-                                                <p>A new monthly report is ready to download!</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 7, 2019</span>
-                                                <p>$290.29 has been deposited into your account!</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Spending Alert: We've noticed unusually high spending for your account.</p>
-                                            </div>
-                                        </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                        <h6 class="dropdown-header">Alerts Center</h6>
+                                        @forelse (Auth::guard('mahasiswa')->user()->notifications as $notif)
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="me-3">
+                                                    <div class="bg-warning icon-circle">
+                                                        <i class="fas fa-exclamation-triangle text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <span class="small text-gray-500">{{ $notif->created_at->format('d M Y H:i') }}</span>
+                                                    <p>{{ $notif->data['pesan'] }}</p>
+                                                </div>
+                                            </a>
+                                        @empty
+                                            <a class="dropdown-item text-center small text-gray-500" href="#">Tidak ada notifikasi</a>
+                                        @endforelse
+                                        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                                     </div>
                                 </div>
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">{{ Auth::guard('mahasiswa')->user()->nama_pengguna }}</span><span class="badge rounded-pill me-2" style="background: #881d1d;">Mahasiswa</span><img class="border rounded-circle img-profile" src="{{ asset('/storage/assets/img/avatars/'.(Auth::guard('mahasiswa')->user()->foto ?? 'default.jpg')) }}"></a>
-                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item disabled" href="/mahasiswa/profil"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profil</a>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="/mahasiswa/profil"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profil</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Keluar</a>
                                     </div>
                                 </div>
@@ -379,30 +380,63 @@
                                             <h5 class="modal-title text-dark" style="color: var(--bs-emphasis-color);font-weight: bold;">Daftar Topik Yang Dipilih</h5><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
+                                            @php
+                                                $nim = auth()->guard('mahasiswa')->user()->nim;
+                                                $topik_dipilih = null;
+                                                foreach($daftarTopik as $topik) {
+                                                    if(\App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists()) {
+                                                        $topik_dipilih = $topik;
+                                                        break;
+                                                    }
+                                                }
+                                                $anggota = $topik_dipilih ? \App\Models\Kelompok::where('judul', $topik_dipilih->judul)->get() : collect();
+                                            @endphp
+                                            @if($topik_dipilih)
                                             <div class="row">
                                                 <div class="col"><span class="text-dark fw-bold">Judul</span></div>
                                                 <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;Budidaya Ikan Air Tawar</p>
+                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;{{ $topik_dipilih->judul }}</p>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col"><span class="text-dark fw-bold">Kode Dosen</span></div>
                                                 <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;STY</p>
+                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;{{ $topik_dipilih->kode_dosen }}</p>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col"><span class="text-dark fw-bold">Kelompok</span></div>
                                                 <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;<span class="badge rounded-pill bg-dark m-1">Irfan</span><span class="badge rounded-pill bg-dark m-1">Geral</span><span class="badge rounded-pill bg-dark m-1">Dika</span></p>
+                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;
+                                                        @foreach($anggota as $a)
+                                                            <span class="badge rounded-pill bg-dark m-1">{{ $a->nama_anggota }}</span>
+                                                        @endforeach
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col"><span class="text-dark fw-bold">Status</span></div>
                                                 <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;<span class="badge rounded-pill bg-warning text-dark m-1">Sedang Diproses...</span></p>
+                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;
+                                                        @if($topik_dipilih->status == 'Tersedia' || $topik_dipilih->status == 'Available')
+                                                            <span class="badge rounded-pill bg-success">Available</span>
+                                                        @elseif($topik_dipilih->status == 'Penuh' || $topik_dipilih->status == 'Full')
+                                                            <span class="badge rounded-pill bg-danger">Full</span>
+                                                        @elseif($topik_dipilih->status == 'Proposal')
+                                                            <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                        @elseif($topik_dipilih->status == 'TA')
+                                                            <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                                        @else
+                                                            <span class="badge rounded-pill bg-warning text-dark">{{ $topik_dipilih->status }}</span>
+                                                        @endif
+                                                    </p>
                                                 </div>
                                             </div>
+                                            @else
+                                            <div class="row">
+                                                <div class="col text-center text-muted">Belum ada topik yang dipilih oleh kelompok Anda.</div>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -463,7 +497,11 @@
                                                         @if(!$sudah_punya_kelompok)
                                                             <form action="{{ route('mahasiswa.pilih_topik', $topik->id) }}" method="POST" style="display:inline;">
                                                                 @csrf
-                                                                <button type="submit" class="btn btn-primary btn-sm ms-2" onclick="event.stopPropagation();">Pilih Topik</button>
+                                                                <button type="button" class="btn btn-primary btn-sm ms-2"
+                                                                    onclick="event.stopPropagation(); this.form.submit(); return false;"
+                                                                    onmousedown="event.stopPropagation();">
+                                                                    Pilih Topik
+                                                                </button>
                                                             </form>
                                                         @endif
                                                     @elseif($topik->status == 'Penuh' || $topik->status == 'Full')
@@ -647,11 +685,14 @@
                             $nim = auth()->guard('mahasiswa')->user()->nim;
                             $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
                         @endphp
-                        @if($topik->status == 'Booked' && $sudah_booking)
-                            <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}" onclick="event.stopPropagation();">
-                                Tambah Anggota
-                            </button>
-                        @endif
+                        
+                            @if($sudah_booking && $topik->status == 'Booked')
+                                <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}" onclick="event.stopPropagation();">
+                                    Tambah Anggota
+                                </button>
+                            @endif
+                            
+                        
                     </h5>
                     <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                 </div>
@@ -735,11 +776,68 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button>
+                    @if($topik->status == 'Booked' && $sudah_booking)
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBatalBooked{{ $topik->id }}" onclick="event.stopPropagation();">
+                            Batal Booked
+                        </button>
+                    @endif
+                    @if($topik->status == 'Menunggu Pembimbing' && $sudah_booking)
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBatalMenunggu{{ $topik->id }}" onclick="event.stopPropagation();">
+                            Batal
+                        </button>
+                    @endif
+                    <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">
+                        <i class="fa fa-close"></i>&nbsp;Tutup
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Modal Batal Booked -->
+    @if($topik->status == 'Booked' && $sudah_booking)
+    <div class="modal fade" id="modalBatalBooked{{ $topik->id }}" tabindex="-1" aria-labelledby="modalBatalBookedLabel{{ $topik->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('mahasiswa.batal_booked', $topik->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalBatalBookedLabel{{ $topik->id }}">Konfirmasi Batal Booked</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin membatalkan booking topik <strong>{{ $topik->judul }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endif
+    @if($topik->status == 'Menunggu Pembimbing' && $sudah_booking)
+    <div class="modal fade" id="modalBatalMenunggu{{ $topik->id }}" tabindex="-1" aria-labelledby="modalBatalMenungguLabel{{ $topik->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('mahasiswa.batal_menunggu', $topik->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalBatalMenungguLabel{{ $topik->id }}">Konfirmasi Batal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin membatalkan pengajuan topik <strong>{{ $topik->judul }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endif
     @endforeach
     <style>
     body, table, th, td {

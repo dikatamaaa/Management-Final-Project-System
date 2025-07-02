@@ -12,7 +12,7 @@
         $kuota = \App\Models\DaftarTopik::where('judul', $judul)->first()->kuota ?? 99;
         $statusTopik = \App\Models\DaftarTopik::where('judul', $judul)->first()->status ?? null;
         $jumlahAnggota = \App\Models\Kelompok::where('judul', $judul)->count();
-        if ($jumlahAnggota >= $kuota && ($statusTopik === 'Full' || $statusTopik === 'Proposal' || $statusTopik === 'TA')) {
+        if (($statusTopik === 'Proposal' || $statusTopik === 'TA') || ($jumlahAnggota >= $kuota && $statusTopik === 'Full')) {
             $bolehKumpul = true;
         }
         $nims = \App\Models\Kelompok::where('judul', $judul)->pluck('nim');

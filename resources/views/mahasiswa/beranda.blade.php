@@ -791,16 +791,16 @@
             data: {
                 labels: @json($progressLabels),
                 datasets: [
-                    @foreach($dosenLabels as $i => $kode)
+                    @foreach($pembimbingChartLabels as $i => $label)
                     {
-                        label: '{{ $kode }}',
-                        data: @json($progressData[$kode]),
-                        borderColor: ['#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171'][{{ $i }} % 5],
+                        label: '{{ $label }}',
+                        data: @json($progressData[$label]),
+                        borderColor: ['#60a5fa', '#4ade80'][{{ $i }} % 2],
                         backgroundColor: 'rgba(96,165,250,0.12)',
                         tension: 0.4,
                         fill: false,
                         pointRadius: 4,
-                        pointBackgroundColor: ['#60a5fa', '#4ade80', '#facc15', '#a78bfa', '#f87171'][{{ $i }} % 5],
+                        pointBackgroundColor: ['#60a5fa', '#4ade80'][{{ $i }} % 2],
                     },
                     @endforeach
                 ]

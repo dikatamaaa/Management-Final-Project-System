@@ -144,6 +144,7 @@ Route::middleware(['auth:dosen'])->prefix('dosen')->name('dosen.')->group(functi
 Route::get('/mahasiswa/beranda', [PageController::class, 'berandaMahasiswa'])->middleware('auth:mahasiswa');
 Route::get('/mahasiswa/daftar_topik', [PageController::class, 'daftarTopikMahasiswa'])->middleware('auth:mahasiswa');
 Route::get('/mahasiswa/kelompok', [PageController::class, 'kelompokMahasiswa'])->middleware('auth:mahasiswa');
+Route::get('/mahasiswa/profil', [PageController::class, 'profilMahasiswa'])->middleware('auth:mahasiswa');
 Route::get('/mahasiswa/template_laporan', [MahasiswaController::class, 'TemplateLaporan'])->name('mahasiswa.template_laporan')->middleware('auth:mahasiswa');
 
 
@@ -177,3 +178,11 @@ Route::post('/mahasiswa/daftar_topik/buat', [MahasiswaController::class, 'buatTo
 
 // Dosen mengambil topik mahasiswa
 Route::post('/dosen/daftar_topik/ambil/{id}', [DosenController::class, 'ambilTopikMahasiswa'])->name('dosen.ambil_topik_mahasiswa')->middleware('auth:dosen');
+
+Route::post('/mahasiswa/daftar_topik/batal_booked/{id}', [MahasiswaController::class, 'batalBooked'])->name('mahasiswa.batal_booked')->middleware('auth:mahasiswa');
+Route::post('/mahasiswa/daftar_topik/batal_menunggu/{id}', [MahasiswaController::class, 'batalMenunggu'])->name('mahasiswa.batal_menunggu')->middleware('auth:mahasiswa');
+
+// Profile mahasiswa routes
+Route::post('/mahasiswa/profil/editFoto/{id}', [MahasiswaController::class, 'editFotoMahasiswa'])->name('mahasiswa.editFoto')->middleware('auth:mahasiswa');
+Route::post('/mahasiswa/profil/editBiodata/{id}', [MahasiswaController::class, 'editBiodataMahasiswa'])->name('mahasiswa.editBiodata')->middleware('auth:mahasiswa');
+Route::post('/mahasiswa/profil/gantiKataSandi/{id}', [MahasiswaController::class, 'gantiKataSandiMahasiswa'])->name('mahasiswa.gantiKataSandi')->middleware('auth:mahasiswa');

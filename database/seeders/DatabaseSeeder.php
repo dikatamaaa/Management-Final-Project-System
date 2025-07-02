@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ExportInfotaSeeder::class,
+            AdminSeeder::class,
+            DosenSeeder::class,
         ]);
     }
 }

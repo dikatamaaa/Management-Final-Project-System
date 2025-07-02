@@ -212,6 +212,7 @@ class DosenController extends Controller
         // Pengaturan admin
         $pengaturan = \App\Models\PengaturanTopik::first();
         $bidangList = $pengaturan->list_bidang ?? [];
+        sort($bidangList);
         $kuotaMin = $pengaturan->kuota_min ?? 2;
         $kuotaMax = $pengaturan->kuota_max ?? 5;
         // Daftar mahasiswa yang belum punya kelompok/topik

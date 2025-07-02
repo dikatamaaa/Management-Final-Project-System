@@ -483,4 +483,169 @@ class MahasiswaController extends Controller
         $dokumen->delete();
         return back()->with('success', 'Dokumen berhasil dihapus!');
     }
+
+    /**
+     * Mahasiswa membatalkan booking topik (Booked)
+     */
+    public function batalBooked($id)
+    {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        $topik = \App\Models\DaftarTopik::findOrFail($id);
+        $nim = $user->nim;
+        // Hapus data kelompok mahasiswa pada topik ini
+        $deleted = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->delete();
+        // Jika sudah tidak ada anggota, ubah status topik jadi Available
+        $sisa_anggota = \App\Models\Kelompok::where('judul', $topik->judul)->count();
+        if ($sisa_anggota == 0) {
+            $topik->status = 'Available';
+            $topik->save();
+        }
+        if ($deleted) {
+            return back()->with('success', 'Booking topik berhasil dibatalkan.');
+        } else {
+            return back()->with('error', 'Gagal membatalkan booking topik.');
+        }
+    }
+
+    /**
+     * Mahasiswa membatalkan topik status Menunggu Pembimbing
+     */
+    public function batalMenunggu($id)
+    {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        
+        $topik = \App\Models\DaftarTopik::findOrFail($id);
+        $nim = auth()->guard('mahasiswa')->user()->nim;
+        
+        // Pastikan mahasiswa login yang membuat topik ini
+        if ($topik->nim_pembuat !== $nim) {
+            return back()->with('error', 'Anda tidak berhak membatalkan topik ini!');
+        }
+        
+        // Pastikan status masih "Menunggu Pembimbing"
+        if ($topik->status !== 'Menunggu Pembimbing') {
+            return back()->with('error', 'Topik tidak dapat dibatalkan karena status sudah berubah!');
+        }
+        
+        // Hapus topik dan semua data kelompok terkait
+        \App\Models\Kelompok::where('judul', $topik->judul)->delete();
+        $topik->delete();
+        
+        return back()->with('success', 'Topik berhasil dibatalkan!');
+    }
+
+    /**
+     * Edit foto mahasiswa
+     */
+    public function editFotoMahasiswa(Request $request, $id)
+    {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        
+        $request->validate([
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        
+        // Pastikan mahasiswa yang login yang mengedit
+        if ($mahasiswa->id !== auth()->guard('mahasiswa')->user()->id) {
+            return back()->with('error', 'Anda tidak berhak mengedit profil ini!');
+        }
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(storage_path('app/public/assets/img/avatars'), $filename);
+            
+            // Hapus foto lama jika bukan default.jpg
+            if ($mahasiswa->foto && $mahasiswa->foto !== 'default.jpg') {
+                $oldPath = storage_path('app/public/assets/img/avatars/' . $mahasiswa->foto);
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
+                }
+            }
+            
+            $mahasiswa->foto = $filename;
+            $mahasiswa->save();
+        }
+
+        return back()->with('success', 'Foto berhasil diperbarui!');
+    }
+
+    /**
+     * Edit biodata mahasiswa
+     */
+    public function editBiodataMahasiswa(Request $request, $id)
+    {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        
+        $request->validate([
+            'nim' => 'required|string|max:20|unique:mahasiswa,nim,' . $id,
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:mahasiswa,email,' . $id,
+            'no_hp' => 'required|string|max:15',
+        ]);
+
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        
+        // Pastikan mahasiswa yang login yang mengedit
+        if ($mahasiswa->id !== auth()->guard('mahasiswa')->user()->id) {
+            return back()->with('error', 'Anda tidak berhak mengedit profil ini!');
+        }
+
+        $mahasiswa->nim = $request->nim;
+        $mahasiswa->nama = $request->nama;
+        $mahasiswa->email = $request->email;
+        $mahasiswa->no_hp = $request->no_hp;
+        $mahasiswa->save();
+
+        return back()->with('success', 'Biodata berhasil diperbarui!');
+    }
+
+    /**
+     * Ganti kata sandi mahasiswa
+     */
+    public function gantiKataSandiMahasiswa(Request $request, $id)
+    {
+        $user = auth()->guard('mahasiswa')->user();
+        if ($user && $user->wajib_ganti_password) {
+            return redirect('/mahasiswa/ganti-password-awal');
+        }
+        
+        $request->validate([
+            'password_lama' => 'required',
+            'password_baru' => 'required|min:6|confirmed',
+            'password_baru_confirmation' => 'required|min:6',
+        ]);
+
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        
+        // Pastikan mahasiswa yang login yang mengedit
+        if ($mahasiswa->id !== auth()->guard('mahasiswa')->user()->id) {
+            return back()->with('error', 'Anda tidak berhak mengedit profil ini!');
+        }
+
+        // Cek password lama
+        if (!password_verify($request->password_lama, $mahasiswa->password)) {
+            return back()->withErrors(['password_lama' => 'Kata sandi lama tidak sesuai!']);
+        }
+
+        // Update password baru
+        $mahasiswa->password = password_hash($request->password_baru, PASSWORD_DEFAULT);
+        $mahasiswa->save();
+
+        return back()->with('success', 'Kata sandi berhasil diperbarui!');
+    }
 }
