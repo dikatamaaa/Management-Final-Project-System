@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - Brand</title>
+    <title>Daftar Topik - Dosen</title>
     <link rel="stylesheet" href="{{ asset('/storage/assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
@@ -15,390 +15,269 @@
     <link rel="stylesheet" href="{{ asset('/storage/assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-</head>
-<style>
-    body, table, th, td {
-        font-family: 'Poppins', 'Roboto', Arial, sans-serif;
-    }
-    .card {
-        border-radius: 16px;
-        box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07);
-        border: none;
-        margin-bottom: 2rem;
-    }
-    .card-header {
-        background: #f8fafc;
-        border-radius: 16px 16px 0 0;
-        font-weight: 700;
-        font-size: 1.15rem;
-        color: #1e293b;
-        border-bottom: 1.5px solid #e5e7eb;
-    }
-    .table th, .table td {
-        padding: 0.55rem 0.7rem;
-        vertical-align: middle;
-        border-top: none;
-        border-bottom: 1.5px solid #e5e7eb;
-        background: transparent;
-    }
-    .table thead th {
-        background: #f1f5f9;
-        font-weight: 600;
-        border-bottom: 2px solid #d1d5db;
-    }
-    .table-striped > tbody > tr:nth-of-type(odd) {
-        --bs-table-accent-bg: #f8fafc;
-    }
-    .badge {
-        border-radius: 8px;
-        font-size: 0.85em;
-        padding: 0.35em 0.7em;
-        font-weight: 500;
-        letter-spacing: 0.01em;
-    }
-    .badge.bg-success {
-        background: #4ade80 !important;
-        color: #065f46 !important;
-    }
-    .badge.bg-danger {
-        background: #f87171 !important;
-        color: #7f1d1d !important;
-    }
-    .badge.bg-warning {
-        background: #facc15 !important;
-        color: #92400e !important;
-    }
-    .badge.bg-dark {
-        background: #334155 !important;
-        color: #fff !important;
-    }
-    .badge.bg-primary {
-        background: #60a5fa !important;
-        color: #1e3a8a !important;
-    }
-    .badge.bg-info {
-        background: #38bdf8 !important;
-        color: #0369a1 !important;
-    }
-    .btn {
-        border-radius: 7px !important;
-        font-size: 0.97em;
-        font-weight: 500;
-        transition: background 0.18s, box-shadow 0.18s;
-        box-shadow: 0 2px 8px 0 rgba(37,99,235,0.07);
-    }
-    .btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info {
-        border: none;
-    }
-    .btn-primary {
-        background: #2563eb;
-    }
-    .btn-primary:hover {
-        background: #1d4ed8;
-    }
-    .btn-success {
-        background: #22c55e;
-    }
-    .btn-success:hover {
-        background: #16a34a;
-    }
-    .btn-danger {
-        background: #ef4444;
-    }
-    .btn-danger:hover {
-        background: #b91c1c;
-    }
-    .btn-warning {
-        background: #facc15;
-        color: #92400e;
-    }
-    .btn-warning:hover {
-        background: #eab308;
-        color: #78350f;
-    }
-    .btn-info {
-        background: #38bdf8;
-        color: #0369a1;
-    }
-    .btn-info:hover {
-        background: #0ea5e9;
-        color: #075985;
-    }
-    .btn-sm {
-        padding: 0.32em 1.1em;
-        font-size: 0.93em;
-    }
-    .clickable-row {
-        cursor: pointer;
-        transition: background 0.18s;
-    }
-    .clickable-row:hover {
-        background: #f1f5f9 !important;
-    }
-    @media (max-width: 768px) {
-        .table th, .table td {
-            padding: 0.45rem 0.3rem;
-            font-size: 0.98em;
+    <style>
+        :root {
+            --primary-color: #881d1d;
+            --primary-darker: #6e1717;
+            --primary-lighter: #a83232;
+            --sidebar-text: rgba(255, 255, 255, 0.8);
+            --sidebar-text-active: #ffffff;
+            --secondary-color: #f8f9fa;
+            --font-family: 'Poppins', sans-serif;
         }
-        .btn-sm {
-            font-size: 0.91em;
-            padding: 0.28em 0.7em;
+        body {
+            font-family: var(--font-family);
+            background-color: var(--secondary-color);
+        }
+        #wrapper {
+            display: flex;
+        }
+        .sidebar {
+            background: var(--primary-color) !important;
+            transition: width 0.3s ease;
+        }
+        .sidebar .sidebar-brand {
+            height: 60px;
+            transition: background-color 0.2s ease;
+        }
+        .sidebar .sidebar-brand:hover {
+            background-color: var(--primary-darker);
+        }
+        .sidebar .sidebar-brand-icon img {
+            transition: transform 0.3s ease;
+        }
+        .sidebar .sidebar-brand:hover .sidebar-brand-icon img {
+            transform: scale(1.1) rotate(3deg);
+        }
+        hr.sidebar-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .sidebar .nav-item {
+            position: relative;
+        }
+        .sidebar .nav-item .nav-link {
+            color: var(--sidebar-text);
+            font-weight: 500;
+            padding: 0.9rem 1.25rem;
+            transition: all 0.2s ease-in-out;
+            border-left: 4px solid transparent;
+        }
+        .sidebar .nav-item .nav-link:hover {
+            color: var(--sidebar-text-active);
+            background-color: var(--primary-darker);
+            border-left-color: var(--primary-lighter);
+        }
+        .sidebar .nav-item.active .nav-link,
+        .sidebar .nav-link.active {
+            color: var(--sidebar-text-active);
+            font-weight: 600;
+            background-color: var(--primary-darker);
+            border-left-color: #ffffff;
+        }
+        .sidebar .nav-item .nav-link i {
+            font-size: 1em;
+            width: 24px;
+            text-align: center;
+            margin-right: 0.75rem;
+        }
+        .sidebar .dropdown-menu {
+            background-color: var(--primary-lighter);
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .sidebar .dropdown-item {
+            color: var(--sidebar-text);
+            padding: 0.6rem 1.5rem;
+            transition: background-color 0.2s ease;
+        }
+        .sidebar .dropdown-item:hover, .sidebar .dropdown-item:focus {
+            background-color: var(--primary-darker);
+            color: var(--sidebar-text-active);
+        }
+        .sidebar .dropdown-item i {
+            margin-right: 0.5rem;
+        }
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07);
+            border: none;
+            margin-bottom: 2rem;
         }
         .card-header {
-            font-size: 1.01rem;
+            background: #f8fafc;
+            border-radius: 16px 16px 0 0;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #1e293b;
+            border-bottom: 1.5px solid #e5e7eb;
         }
-    }
-    .table-responsive {
-        margin-bottom: 0.5rem;
-    }
-    /* Samakan tampilan select2 dengan Bootstrap form-control */
-    .select2-container--default .select2-selection--single,
-    .select2-container--default .select2-selection--multiple {
-        border: 1px solid #ced4da; /* Bootstrap default border */
-        border-radius: 0.375rem;    /* Bootstrap border radius */
-        height: auto;               /* Untuk menyesuaikan tinggi dinamis */
-        font-size: 0.8475rem;       /* Ukuran font opsional */
-    }
+        .table th, .table td {
+            padding: 0.55rem 0.7rem;
+            vertical-align: middle;
+            border-top: none;
+            border-bottom: 1.5px solid #e5e7eb;
+            background: transparent;
+        }
+        .table thead th {
+            background: #f1f5f9;
+            font-weight: 600;
+            border-bottom: 2px solid #d1d5db;
+        }
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            --bs-table-accent-bg: #f8fafc;
+        }
+        .badge {
+            border-radius: 8px;
+            font-size: 0.85em;
+            padding: 0.35em 0.7em;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+        .badge.bg-success {
+            background: #4ade80 !important;
+            color: #065f46 !important;
+        }
+        .badge.bg-danger {
+            background: #f87171 !important;
+            color: #7f1d1d !important;
+        }
+        .badge.bg-warning {
+            background: #facc15 !important;
+            color: #92400e !important;
+        }
+        .badge.bg-dark {
+            background: #334155 !important;
+            color: #fff !important;
+        }
+        .badge.bg-primary {
+            background: #60a5fa !important;
+            color: #1e3a8a !important;
+        }
+        .badge.bg-info {
+            background: #38bdf8 !important;
+            color: #0369a1 !important;
+        }
+        .btn {
+            border-radius: 7px !important;
+            font-size: 0.97em;
+            font-weight: 500;
+            transition: background 0.18s, box-shadow 0.18s;
+            box-shadow: 0 2px 8px 0 rgba(37,99,235,0.07);
+        }
+        .btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info {
+            border: none;
+        }
+        .btn-primary {
+            background: #2563eb;
+        }
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+        .btn-success {
+            background: #22c55e;
+        }
+        .btn-success:hover {
+            background: #16a34a;
+        }
+        .btn-danger {
+            background: #ef4444;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn-warning {
+            background: #facc15;
+            color: #92400e;
+        }
+        .btn-warning:hover {
+            background: #eab308;
+            color: #78350f;
+        }
+        .btn-info {
+            background: #38bdf8;
+            color: #0369a1;
+        }
+        .btn-info:hover {
+            background: #0ea5e9;
+            color: #075985;
+        }
+        .btn-sm {
+            padding: 0.32em 1.1em;
+            font-size: 0.93em;
+        }
+        .clickable-row {
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        .clickable-row:hover {
+            background: #f1f5f9 !important;
+        }
+        .table-responsive {
+            margin-bottom: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .table th, .table td {
+                padding: 0.45rem 0.3rem;
+                font-size: 0.98em;
+            }
+            .btn-sm {
+                font-size: 0.91em;
+                padding: 0.28em 0.7em;
+            }
+            .card-header {
+                font-size: 1.01rem;
+            }
+        }
+    </style>
+</head>
 
-    /* Hover & focus state agar seperti input Bootstrap */
-    .select2-container--default .select2-selection--single:focus,
-    .select2-container--default .select2-selection--multiple:focus,
-    .select2-container--default .select2-selection--single:hover,
-    .select2-container--default .select2-selection--multiple:hover {
-        border-color: #afb2b8;
-        outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); /* Bootstrap's focus effect */
-    }
-
-    /* Ukuran font dropdown list */
-    .select2-results__option {
-        font-size: 0.9375rem;
-    }
-
-    /* Ukuran font pada tag item yang dipilih (multiple mode) */
-    .select2-selection__choice {
-        font-size: 0.875rem;
-    }
-
-    /* Hilangkan spinner pada input number readonly */
-    input[type=number][readonly]::-webkit-inner-spin-button,
-    input[type=number][readonly]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    input[type=number][readonly] {
-        -moz-appearance: textfield;
-    }
-    .custom-dropdown {
-        position: relative;
-        width: 100%;
-        margin-bottom: 1rem;
-    }
-    .custom-dropdown .dropdown-btn {
-        background: #fff;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 12px 16px;
-        width: 100%;
-        text-align: left;
-        cursor: pointer;
-        font-size: 1.1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .custom-dropdown .dropdown-content {
-        display: none;
-        position: absolute;
-        background: #fff;
-        width: 100%;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        z-index: 10;
-        margin-top: 5px;
-        padding: 10px 0;
-        max-height: 250px;
-        overflow-y: auto;
-    }
-    .custom-dropdown.active .dropdown-content {
-        display: block;
-    }
-    .custom-dropdown .checkbox-label {
-        display: flex;
-        align-items: center;
-        padding: 8px 20px;
-        cursor: pointer;
-        font-size: 1.05rem;
-    }
-    .custom-dropdown .checkbox-label input[type=checkbox] {
-        margin-right: 10px;
-    }
-    /* Samakan tampilan search DataTables dengan input custom */
-    .dataTables_filter input[type="search"].form-control.form-control-sm {
-        min-width: 220px !important;
-        max-width: 300px !important;
-        float: right !important;
-        display: inline-block !important;
-        margin-left: 8px !important;
-        border-radius: 4px !important;
-        font-size: 0.875rem !important;
-        height: 32px !important;
-        padding: 4px 10px !important;
-        box-sizing: border-box !important;
-    }
-    .dataTables_filter label {
-        font-weight: normal !important;
-        color: #333 !important;
-        margin-bottom: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-    }
-    .dt-search input.dt-input[type="search"] {
-        min-width: 220px !important;
-        max-width: 300px !important;
-        float: right !important;
-        display: inline-block !important;
-        margin-left: 8px !important;
-        border-radius: 4px !important;
-        font-size: 0.875rem !important;
-        height: 32px !important;
-        padding: 4px 10px !important;
-        box-sizing: border-box !important;
-        background: #fff !important;
-        border: 1px solid #ced4da !important;
-    }
-    .dt-search label {
-        font-weight: normal !important;
-        color: #333 !important;
-        margin-bottom: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-    }
-    /* Modal detail topik dosen minimalis modern */
-    .modal-content {
-        border-radius: 18px;
-        box-shadow: 0 4px 32px 0 rgba(60,72,88,.13);
-        font-family: 'Poppins', 'Roboto', Arial, sans-serif;
-        border: none;
-    }
-    .modal-header {
-        border-bottom: 1.5px solid #f3f4f6;
-        padding: 1.2rem 1.5rem 0.7rem 1.5rem;
-        background: #fff;
-        border-radius: 18px 18px 0 0;
-    }
-    .modal-title {
-        font-weight: 700;
-        font-size: 1.25rem;
-        color: #1e293b;
-        letter-spacing: 0.01em;
-    }
-    .modal-body {
-        padding: 1.2rem 1.5rem 1.2rem 1.5rem;
-        background: #fff;
-    }
-    .modal-footer {
-        border-top: 1.5px solid #f3f4f6;
-        border-radius: 0 0 18px 18px;
-        background: #fff;
-        padding: 0.8rem 1.5rem;
-    }
-    .modal-body .row {
-        margin-bottom: 0.7em;
-        align-items: flex-start;
-    }
-    .modal-body .col-4 {
-        font-weight: 600;
-        color: #881d1d;
-        font-size: 1.04em;
-        min-width: 110px;
-    }
-    .modal-body .col-8 {
-        font-size: 1.04em;
-        color: #222;
-    }
-    .modal-body .fw-bold {
-        color: #222;
-    }
-    .modal-body .badge {
-        border-radius: 10px;
-        font-size: 0.97em;
-        padding: 0.38em 0.9em;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-        margin-bottom: 0.2em;
-        margin-right: 0.2em;
-    }
-    .modal-body .kelompok-badge-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.3em 0.5em;
-        margin-bottom: 0.5em;
-    }
-    .modal-footer .btn-secondary {
-        background: #f3f4f6;
-        color: #222;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 1.05em;
-        padding: 0.45em 1.5em;
-        box-shadow: 0 2px 8px 0 rgba(60,72,88,.08);
-        transition: background 0.18s;
-    }
-    .modal-footer .btn-secondary:hover {
-        background: #e5e7eb;
-        color: #881d1d;
-    }
-    @media (max-width: 600px) {
-        .modal-content { border-radius: 10px; }
-        .modal-header, .modal-body, .modal-footer { padding: 0.7rem 0.7rem; }
-        .modal-title { font-size: 1.08rem; }
-        .modal-body .col-4, .modal-body .col-8 { font-size: 0.98em; }
-    }
-    /* Perbaikan agar badge anggota kelompok tidak tembus (wrap, responsive, sama seperti mahasiswa) */
-    .kelompok-badge-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.3em 0.5em;
-        margin-bottom: 0.5em;
-    }
-    .kelompok-badge-list .badge {
-        display: inline-block;
-        margin-bottom: 0.2em;
-        word-break: break-word;
-        white-space: normal;
-        max-width: 100%;
-        font-size: 0.98em;
-        padding: 0.45em 1em;
-    }
-</style>
 <body id="page-top">
     <div id="wrapper">
-        <nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style="background: #881d1d;">
-            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-                    <div class="sidebar-brand-icon"><img class="img-fluid" src="{{ asset('/storage/assets/img/Logo/Logo%20White%20(1000%20x%201000%20piksel).png') }}" width="100px"></div>
+        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark" style="min-height: 100vh; position: fixed; left: 0; top: 0; width: 225px; z-index: 1030;">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon">
+                        <img class="img-fluid" src="{{ asset('storage/assets/img/Logo/TAKU_White.png') }}" width="100px" alt="Logo TAKU">
+                    </div>
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="/dosen/beranda"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/dosen/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/template_laporan"><i class="fas fa-file-word"></i><span>Template Laporan</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/pembimbing-dua"><i class="fas fa-user-friends"></i><span>Pembimbing Dua</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/bimbingan"><i class="fas fa-file-word"></i><span>Bimbingan</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/progres_ta"><i class="fas fa-chart-line"></i><span>Progres Tugas Akhir</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/penilaian-kelompok"><i class="fas fa-pencil-alt"></i><span>Penilaian Kelompok</span></a></li>
                     <li class="nav-item">
-                        <hr><a class="nav-link" href="/dosen/profil"><i class="fas fa-user"></i><span>Profil</span></a>
+                        <a class="nav-link" href="/dosen/beranda"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a></li>
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="/dosen/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/template_laporan"><i class="fas fa-file-word"></i><span>Template Laporan</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/pembimbing-dua"><i class="fas fa-user-friends"></i><span>Pembimbing Dua</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/bimbingan"><i class="fas fa-file-word"></i><span>Bimbingan</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/progres_ta"><i class="fas fa-chart-line"></i><span>Progres Tugas Akhir</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/penilaian-kelompok"><i class="fas fa-pencil-alt"></i><span>Penilaian Kelompok</span></a>
+                    </li>
+                    <li class="nav-item mt-auto">
+                        <hr class="sidebar-divider my-0">
+                        <a class="nav-link" href="/dosen/profil"><i class="fas fa-user"></i><span>Profil</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a>
+                    </li>
                 </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+                <div class="text-center d-none d-md-inline">
+                    <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
+                </div>
             </div>
         </nav>
-        <div class="d-flex flex-column" id="content-wrapper">
+
+        <div class="d-flex flex-column" id="content-wrapper" style="margin-left: 225px;">
             <div id="content">
                 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
@@ -431,6 +310,7 @@
                                     </div>
                                 </div>
                             </li>
+
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">{{ Auth::guard('dosen')->user()->nama_pengguna }}</span><span class="badge rounded-pill me-2" style="background: #881d1d;">Dosen</span><img class="border rounded-circle img-profile" src="{{ asset('/storage/assets/img/avatars/'.(Auth::guard('dosen')->user()->foto ?? 'default.jpg')) }}"></a>
@@ -442,6 +322,7 @@
                         </ul>
                     </div>
                 </nav>
+                
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
                         <h3 class="text-dark mb-0">Daftar Topik</h3>
@@ -1166,7 +1047,7 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © infoTA 2025</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © TAKU 2025</span></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>

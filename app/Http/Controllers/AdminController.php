@@ -195,7 +195,7 @@ class AdminController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:dosen,email',
             'no_hp' => 'required|numeric|digits_between:10,15|unique:dosen,no_hp',
-            'nama_pengguna' => 'required|regex:/^[A-Za-z0-9]+$/|min:5|max:50|unique:dosen,nama_pengguna',
+            'nama_pengguna' => 'required|regex:/^[A-Za-z0-9._@-]+$/|min:5|max:50|unique:dosen,nama_pengguna',
             'kata_sandi' => 'required|string|min:8',
         ],[
             'nip.required' => 'NIP Wajib Diisi!',
@@ -510,7 +510,7 @@ class AdminController extends Controller
         // Get Dosen by ID
         $mahasiswa = Mahasiswa::findOrFail($id);
 
-        // Perbarui Data Dosen
+        // Perbarui Data Mahasiswa
         $mahasiswa->update([
             'nim' => $request->input('nim_'.$id),
             'nama' => $request->input('nama_'.$id),
@@ -631,7 +631,7 @@ class AdminController extends Controller
         ]);
 
         if ($validasi->fails()) {
-            return redirect()->back()->withErrors($validasi)->with(['error' => 'Gagal Menambahkan Data!']);
+            return redirect()->back()->withErrors($validasi)->with(['error' => 'Gagal Mengupdate Data!']);
         }
 
         //get Admin by ID

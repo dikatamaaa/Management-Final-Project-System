@@ -1,5 +1,6 @@
 @extends('mahasiswa.layout')
 @section('content')
+
 @php
     $kelompokSaya = \App\Models\Kelompok::where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
     $bolehKumpul = false;
@@ -21,6 +22,11 @@
         $bimbinganKelompok = \App\Models\Bimbingan::whereIn('nim', $nims)->orderByDesc('created_at')->get();
     }
 @endphp
+
+<div class="d-sm-flex justify-content-between align-items-center mb-4">
+    <h3 class="text-dark mb-0">Dokumen & Bimbingan</h3>
+</div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6 mb-4">
@@ -118,7 +124,7 @@ flatpickr("#jadwalBimbingan", {
     time_24hr: true
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <!-- Log Dokumen Modal -->
 <div class="modal fade" id="logDokumenModal" tabindex="-1" aria-labelledby="logDokumenModalLabel" aria-hidden="true">

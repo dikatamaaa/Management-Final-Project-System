@@ -19,28 +19,50 @@
 
 <body id="page-top">
     <div id="wrapper">
-        <nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style="background: #881d1d;">
-            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-                    <div class="sidebar-brand-icon"><img class="img-fluid" src="{{ asset('/storage/assets/img/Logo/Logo%20White%20(1000%20x%201000%20piksel).png') }}" width="100px"></div>
+        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark" style="min-height: 100vh; position: fixed; left: 0; top: 0; width: 225px; z-index: 1030;">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon">
+                        <img class="img-fluid" src="{{ asset('storage/assets/img/Logo/TAKU_White.png') }}" width="100px" alt="Logo TAKU">
+                    </div>
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="/dosen/beranda"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/template_laporan"><i class="fas fa-file-word"></i><span>Template Laporan</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/pembimbing-dua"><i class="fas fa-user-friends"></i><span>Pembimbing Dua</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/bimbingan"><i class="fas fa-file-word"></i><span>Bimbingan</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/progres_ta"><i class="fas fa-chart-line"></i><span>Progres Tugas Akhir</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dosen/penilaian-kelompok"><i class="fas fa-pencil-alt"></i><span>Penilaian Kelompok</span></a></li>
-                    <li class="nav-item">
-                        <hr><a class="nav-link" href="/dosen/profil"><i class="fas fa-user"></i><span>Profil</span></a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/dosen/beranda"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/template_laporan"><i class="fas fa-file-word"></i><span>Template Laporan</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/pembimbing-dua"><i class="fas fa-user-friends"></i><span>Pembimbing Dua</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/bimbingan"><i class="fas fa-file-word"></i><span>Bimbingan</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/progres_ta"><i class="fas fa-chart-line"></i><span>Progres Tugas Akhir</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dosen/penilaian-kelompok"><i class="fas fa-pencil-alt"></i><span>Penilaian Kelompok</span></a>
+                    </li>
+                    <li class="nav-item mt-auto">
+                        <hr class="sidebar-divider my-0">
+                        <a class="nav-link" href="/dosen/profil"><i class="fas fa-user"></i><span>Profil</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a>
+                    </li>
                 </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+                <div class="text-center d-none d-md-inline">
+                    <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
+                </div>
             </div>
         </nav>
-        <div class="d-flex flex-column" id="content-wrapper">
+        <div class="d-flex flex-column" id="content-wrapper" style="margin-left: 225px;">
             <div id="content">
                 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
@@ -344,7 +366,7 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © infoTA 2025</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © TAKU 2025</span></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
@@ -581,6 +603,87 @@
     }
     .card .card-body {
         padding-bottom: 1.5rem;
+    }
+    :root {
+        --primary-color: #881d1d;
+        --primary-darker: #6e1717;
+        --primary-lighter: #a83232;
+        --sidebar-text: rgba(255, 255, 255, 0.8);
+        --sidebar-text-active: #ffffff;
+        --secondary-color: #f8f9fa;
+        --font-family: 'Poppins', sans-serif;
+    }
+    body {
+        font-family: var(--font-family);
+        background-color: var(--secondary-color);
+    }
+    #wrapper {
+        display: flex;
+    }
+    .sidebar {
+        background: var(--primary-color) !important;
+        transition: width 0.3s ease;
+    }
+    .sidebar .sidebar-brand {
+        height: 60px;
+        transition: background-color 0.2s ease;
+    }
+    .sidebar .sidebar-brand:hover {
+        background-color: var(--primary-darker);
+    }
+    .sidebar .sidebar-brand-icon img {
+        transition: transform 0.3s ease;
+    }
+    .sidebar .sidebar-brand:hover .sidebar-brand-icon img {
+        transform: scale(1.1) rotate(3deg);
+    }
+    hr.sidebar-divider {
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .sidebar .nav-item {
+        position: relative;
+    }
+    .sidebar .nav-item .nav-link {
+        color: var(--sidebar-text);
+        font-weight: 500;
+        padding: 0.9rem 1.25rem;
+        transition: all 0.2s ease-in-out;
+        border-left: 4px solid transparent;
+    }
+    .sidebar .nav-item .nav-link:hover {
+        color: var(--sidebar-text-active);
+        background-color: var(--primary-darker);
+        border-left-color: var(--primary-lighter);
+    }
+    .sidebar .nav-item.active .nav-link,
+    .sidebar .nav-link.active {
+        color: var(--sidebar-text-active);
+        font-weight: 600;
+        background-color: var(--primary-darker);
+        border-left-color: #ffffff;
+    }
+    .sidebar .nav-item .nav-link i {
+        font-size: 1em;
+        width: 24px;
+        text-align: center;
+        margin-right: 0.75rem;
+    }
+    .sidebar .dropdown-menu {
+        background-color: var(--primary-lighter);
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .sidebar .dropdown-item {
+        color: var(--sidebar-text);
+        padding: 0.6rem 1.5rem;
+        transition: background-color 0.2s ease;
+    }
+    .sidebar .dropdown-item:hover, .sidebar .dropdown-item:focus {
+        background-color: var(--primary-darker);
+        color: var(--sidebar-text-active);
+    }
+    .sidebar .dropdown-item i {
+        margin-right: 0.5rem;
     }
     </style>
 </body>

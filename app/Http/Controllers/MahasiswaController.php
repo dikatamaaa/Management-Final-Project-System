@@ -10,6 +10,7 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Hash;
 
 class MahasiswaController extends Controller
 {
@@ -363,8 +364,9 @@ class MahasiswaController extends Controller
             'email.email' => 'Format email tidak valid!',
         ]);
         $mahasiswa = auth()->guard('mahasiswa')->user();
+        
         // Cek apakah password baru sama dengan lama
-        if (\Hash::check($request->kata_sandi_baru, $mahasiswa->kata_sandi)) {
+        if (Hash::check($request->kata_sandi_baru, $mahasiswa->kata_sandi)) {
             return back()->withErrors(['kata_sandi_baru' => 'Kata Sandi Baru Harus Berbeda Dengan Kata Sandi Saat Ini!']);
         }
         $mahasiswa->kata_sandi = bcrypt($request->kata_sandi_baru);

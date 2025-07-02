@@ -4,80 +4,178 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>InfoTA - Beranda</title>
+    <title>TAKU - Beranda</title>
     <link rel="stylesheet" href="{{ asset('/storage/assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap">
     <link rel="stylesheet" href="{{ asset('/storage/assets/fonts/fontawesome-all.min.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Kustom untuk Makeover Navbar */
+        :root {
+            --primary-color: #881d1d;
+            --primary-darker: #6e1717;
+            --primary-lighter: #a83232;
+            --sidebar-text: rgba(255, 255, 255, 0.8);
+            --sidebar-text-active: #ffffff;
+            --secondary-color: #f8f9fa;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--secondary-color);
+        }
+
+        #wrapper {
+            display: flex;
+        }
+
+        /* === RENOVASI SIDEBAR === */
+        .sidebar {
+            background: var(--primary-color) !important;
+            transition: width 0.3s ease;
+        }
+        .sidebar .sidebar-brand {
+            height: 60px;
+            transition: background-color 0.2s ease;
+        }
+        .sidebar .sidebar-brand:hover {
+            background-color: var(--primary-darker);
+        }
+        .sidebar .sidebar-brand-icon img {
+            transition: transform 0.3s ease;
+        }
+        .sidebar .sidebar-brand:hover .sidebar-brand-icon img {
+            transform: scale(1.1) rotate(3deg);
+        }
+        
+        hr.sidebar-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .sidebar .nav-item {
+            position: relative;
+        }
+
+        .sidebar .nav-item .nav-link {
+            color: var(--sidebar-text);
+            font-weight: 500;
+            padding: 0.9rem 1.25rem;
+            transition: all 0.2s ease-in-out;
+            border-left: 4px solid transparent; /* Garis indikator non-aktif */
+        }
+        .sidebar .nav-item .nav-link:hover {
+            color: var(--sidebar-text-active);
+            background-color: var(--primary-darker);
+            border-left-color: var(--primary-lighter);
+        }
+        .sidebar .nav-item.active .nav-link {
+            color: var(--sidebar-text-active);
+            font-weight: 600;
+            background-color: var(--primary-darker);
+            border-left-color: #ffffff; /* Garis indikator aktif */
+        }
+
+        .sidebar .nav-item .nav-link i {
+            font-size: 1em;
+            width: 24px; /* Memberi ruang yang konsisten untuk ikon */
+            text-align: center;
+            margin-right: 0.75rem;
+        }
+
+        .sidebar .dropdown-menu {
+            background-color: var(--primary-lighter);
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .sidebar .dropdown-item {
+            color: var(--sidebar-text);
+            padding: 0.6rem 1.5rem;
+            transition: background-color 0.2s ease;
+        }
+        .sidebar .dropdown-item:hover, .sidebar .dropdown-item:focus {
+            background-color: var(--primary-darker);
+            color: var(--sidebar-text-active);
+        }
+        .sidebar .dropdown-item i {
+            margin-right: 0.5rem;
+        }
+
+        /* === RENOVASI TOPBAR === */
+        #content-wrapper {
+            width: 100%;
+        }
+        .topbar {
+            height: 60px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(0,0,0,0.05) !important;
+        }
+        .topbar .nav-item .nav-link {
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        .topbar .img-profile {
+            height: 40px;
+            width: 40px;
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .topbar .dropdown-list {
+            width: 20rem !important;
+        }
+        .topbar .dropdown-header {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
+        }
+        .topbar .dropdown-item {
+            transition: background-color 0.2s ease;
+        }
+        .topbar .dropdown-item:active {
+            background-color: #f8f9fa;
+        }
+        
+    </style>
 </head>
 
 <body id="page-top">
     <div id="wrapper">
-        <nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style="background: #881d1d;">
+        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark">
             <div class="container-fluid d-flex flex-column p-0">
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
                     <div class="sidebar-brand-icon">
-                        <img class="img-fluid" src="{{ asset('/storage/assets/img/Logo/Logo%20White%20(1000%20x%201000%20piksel).png') }}" width="100px">
+                        <img class="img-fluid" src="{{ asset('storage/assets/img/Logo/TAKU_White.png') }}" width="100px" alt="Logo TAKU">
                     </div>
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/admin/beranda">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/template_dokumen">
-                            <i class="far fa-newspaper"></i>
-                            <span>Template Dokumen</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/pengaturan_topik">
-                            <i class="fas fa-cogs"></i>
-                            <span>Pengaturan Topik</span>
-                        </a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/admin/beranda"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/jadwal_sidang">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Jadwal Sidang</span>
-                        </a>
+                        <a class="nav-link" href="/admin/template_dokumen"><i class="far fa-newspaper"></i><span>Template Dokumen</span></a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/pengaturan_topik"><i class="fas fa-cogs"></i><span>Pengaturan Topik</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/jadwal_sidang"><i class="fas fa-calendar-alt"></i><span>Jadwal Sidang</span></a>
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-                            <i class="fas fa-users"></i><span>Kelola Pengguna</span>
-                        </a>
+                        <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i class="fas fa-users"></i><span>Kelola Pengguna</span></a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/admin/dosen">
-                                <i class="fas fa-chalkboard-teacher"></i>&nbsp;Dosen
-                            </a>
-                            <a class="dropdown-item" href="/admin/mahasiswa">
-                                <i class="fas fa-user-graduate"></i>&nbsp;Mahasiswa
-                            </a>
+                            <a class="dropdown-item" href="/admin/dosen"><i class="fas fa-chalkboard-teacher"></i>Dosen</a>
+                            <a class="dropdown-item" href="/admin/mahasiswa"><i class="fas fa-user-graduate"></i>Mahasiswa</a>
                         </div>
                     </li>
-
-                    <li class="nav-item">
-                        <hr>
-                        <a class="nav-link" href="/admin/profil">
-                            <i class="fas fa-user"></i>
-                            <span>Profil</span>
-                        </a>
+                    <li class="nav-item mt-auto"> <!-- Mendorong menu profil & keluar ke bawah -->
+                         <hr class="sidebar-divider my-0">
+                        <a class="nav-link" href="/admin/profil"><i class="fas fa-user-cog"></i><span>Profil</span></a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Keluar</span>
-                        </a>
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a>
                     </li>
                 </ul>
                 <div class="text-center d-none d-md-inline">
@@ -184,6 +282,7 @@
                         </ul>
                     </div>
                 </nav>
+                
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
                         <h3 class="text-dark mb-0">Dashboard</h3>
@@ -268,11 +367,12 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © infoTA 2025</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © TAKU 2025</span></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
+    
     <script src="{{ asset('/storage/assets/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('/storage/assets/js/theme.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
