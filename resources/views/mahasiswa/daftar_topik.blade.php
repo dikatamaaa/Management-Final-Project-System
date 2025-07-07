@@ -50,7 +50,8 @@
             transition: background-color 0.2s ease;
         }
         .sidebar .sidebar-brand:hover {
-            background-color: var(--primary-darker);
+            /* background-color: var(--primary-darker); */
+            background-color: inherit;
         }
         .sidebar .sidebar-brand-icon img {
             transition: transform 0.3s ease;
