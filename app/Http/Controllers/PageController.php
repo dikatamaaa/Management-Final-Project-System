@@ -97,9 +97,6 @@ class PageController extends Controller
     public function dokumenCdDosen() {
         return view('dosen.dokumen_cd');
     }
-    public function progresTaDosen() {
-        return view('dosen.progres_ta');
-    }
     public function profilDosen() {
         return view('dosen.profil');
     }

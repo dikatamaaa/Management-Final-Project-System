@@ -102,7 +102,7 @@ Route::get('/dosen/beranda', [PageController::class, 'berandaDosen'])->middlewar
 Route::get('/dosen/daftar_topik', [PageController::class, 'daftarTopikDosen'])->middleware('auth:dosen');
 Route::get('/dosen/template_laporan', [PageController::class, 'templateLaporanDosen'])->middleware('auth:dosen');
 Route::get('/dosen/dokumen_cd', [PageController::class, 'dokumenCdDosen'])->middleware('auth:dosen');
-Route::get('/dosen/progres_ta', [PageController::class, 'progresTaDosen'])->middleware('auth:dosen');
+// Hapus atau komentari baris yang mengarah ke progres_ta
 Route::get('/dosen/profil', [PageController::class, 'profilDosen'])->middleware('auth:dosen');
 Route::get('/dosen/bimbingan', [DosenController::class, 'halamanBimbingan'])->middleware('auth:dosen')->name('dosen.bimbingan');
 
