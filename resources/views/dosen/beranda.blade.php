@@ -110,7 +110,7 @@
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
                         <h3 class="text-dark mb-0">Dashboard</h3>
                     </div>
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-3">
                             <div class="card shadow border-start-primary py-2">
                                 <div class="card-body">
@@ -143,40 +143,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
-                            <div class="card shadow border-start-primary py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>kelompok yang sudah selesai</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>199</span></div>
-                                        </div>
-                                        <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-person-fill-check fa-2x text-gray-300">
-                                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
-                                                <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4"></path>
-                                            </svg></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="card shadow border-start-primary py-2">
-                                <div class="card-body">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col me-2">
-                                            <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>kelompok yang belum selesai</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>199</span></div>
-                                        </div>
-                                        <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-person-fill-exclamation fa-2x text-gray-300">
-                                                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4"></path>
-                                                <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 1 0V11a.5.5 0 0 0-.5-.5m0 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"></path>
-                                            </svg></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="row mt-3">
+                    <div class="row">
                         <div class="col-6 mb-4">
                             <div class="card shadow">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -227,122 +195,7 @@
                             </div>
                         </div>
                         <div class="col-6 mb-4">
-                            <div class="card shadow">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <p class="text-dark m-0 fw-bold">Data Progres Tugas Akhir</p><a href="/dosen/progres_ta" class="btn btn-sm" type="button" style="color: rgb(136,29,29);"><strong>Lihat Selengkapnya...</strong><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right">
-                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
-                                        </svg></a>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive table mt-2" id="dataTable-2" role="grid" aria-describedby="dataTable_info">
-                                        <table class="table table-striped table-hover" id="tableData2">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Judul</th>
-                                                    <th>Capaian (%)</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Budidaya Ikan Air Tawar</td>
-                                                    <td>40%</td>
-                                                    <td><button class="btn btn-info btn-sm ms-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatProgresTugasAkhir"><i class="fas fa-eye"></i></button>
-                                                        <div class="modal fade" role="dialog" tabindex="-1" id="ModalLihatProgresTugasAkhir">
-                                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" style="font-weight: bold;">Lihat Progres Tugas Akhir</h5><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="row">
-                                                                            <div class="col-5"><span style="font-weight: bold;">Kelompok</span></div>
-                                                                            <div class="col-7">
-                                                                                <p><span class="fw-bold">:&nbsp;</span><span class="badge bg-dark m-1">Irfan</span><span class="badge bg-dark m-1">Dika</span><span class="badge bg-dark m-1">Geral</span></p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-5"><span style="font-weight: bold;">Judul</span></div>
-                                                                            <div class="col-7">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>Budidaya Ikan Air Tawar</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-5"><span style="font-weight: bold;">Status Pembimbing 1</span></div>
-                                                                            <div class="col-7">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>Shin Tae Yong</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-5"><span style="font-weight: bold;">Status Pembimbing 2</span></div>
-                                                                            <div class="col-7">
-                                                                                <p><span class="fw-bold">:&nbsp;</span>Umar Ali</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <hr>
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div id="PROGRES-TA" class="stepp-wrapper">
-                                                                                    <div id="ITEM-CD1" class="stepper-item completed">
-                                                                                        <div class="step-counter"><i><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check-lg">
-                                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022"></path>
-                                                                                                </svg></i></div>
-                                                                                        <div class="step-name"><small>CD 1</small></div>
-                                                                                    </div>
-                                                                                    <div id="ITEM-CD2" class="stepper-item completed">
-                                                                                        <div class="step-counter"><i><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check-lg">
-                                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022"></path>
-                                                                                                </svg></i></div>
-                                                                                        <div class="step-name"><small>CD 2</small></div>
-                                                                                    </div>
-                                                                                    <div id="ITEM-CD3" class="stepper-item active">
-                                                                                        <div class="step-counter"><i><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-word-fill">
-                                                                                                    <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5.485 4.879l1.036 4.144.997-3.655a.5.5 0 0 1 .964 0l.997 3.655 1.036-4.144a.5.5 0 0 1 .97.242l-1.5 6a.5.5 0 0 1-.967.01L8 7.402l-1.018 3.73a.5.5 0 0 1-.967-.01l-1.5-6a.5.5 0 1 1 .97-.242z"></path>
-                                                                                                </svg></i></div>
-                                                                                        <div class="step-name"><small>CD 3</small></div>
-                                                                                    </div>
-                                                                                    <div id="ITEM-CD4" class="stepper-item">
-                                                                                        <div class="step-counter"><i><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-word-fill">
-                                                                                                    <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5.485 4.879l1.036 4.144.997-3.655a.5.5 0 0 1 .964 0l.997 3.655 1.036-4.144a.5.5 0 0 1 .97.242l-1.5 6a.5.5 0 0 1-.967.01L8 7.402l-1.018 3.73a.5.5 0 0 1-.967-.01l-1.5-6a.5.5 0 1 1 .97-.242z"></path>
-                                                                                                </svg></i></div>
-                                                                                        <div class="step-name"><small>CD 4</small></div>
-                                                                                    </div>
-                                                                                    <div id="ITEM-CD5" class="stepper-item">
-                                                                                        <div class="step-counter"><i><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-word-fill">
-                                                                                                    <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5.485 4.879l1.036 4.144.997-3.655a.5.5 0 0 1 .964 0l.997 3.655 1.036-4.144a.5.5 0 0 1 .97.242l-1.5 6a.5.5 0 0 1-.967.01L8 7.402l-1.018 3.73a.5.5 0 0 1-.967-.01l-1.5-6a.5.5 0 1 1 .97-.242z"></path>
-                                                                                                </svg></i></div>
-                                                                                        <div class="step-name"><small>CD 5</small></div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer"><button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tutup</button></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td><strong>No</strong></td>
-                                                    <td><strong>Judul</strong></td>
-                                                    <td><strong>Capaian (%)</strong></td>
-                                                    <td><strong>Aksi</strong></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-md-4 mb-4">
-                            <div class="card shadow">
+                            <div class="card shadow mb-4">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <p class="text-dark m-0 fw-bold">Proporsi Topik per Dosen</p>
                                 </div>
@@ -350,24 +203,12 @@
                                     <canvas id="pieDosenTopikChart" height="180"></canvas>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
                             <div class="card shadow">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <p class="text-dark m-0 fw-bold">Jumlah Topik per Bidang</p>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="bidangTopikChart" height="180"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="card shadow">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <p class="text-dark m-0 fw-bold">Progress Bimbingan per Dosen</p>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="lineBimbinganChart" height="180"></canvas>
                                 </div>
                             </div>
                         </div>
