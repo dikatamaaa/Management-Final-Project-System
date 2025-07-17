@@ -406,9 +406,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Jenis Sidang</label>
                                                 <select class="form-select" name="jenis_sidang" required>
-                                                    <option value="Proposal" {{ $jadwal->jenis_sidang == 'Proposal' ? 'selected' : '' }}>Proposal</option>
-                                                    <option value="Progress" {{ $jadwal->jenis_sidang == 'Progress' ? 'selected' : '' }}>Progress</option>
-                                                    <option value="Final" {{ $jadwal->jenis_sidang == 'Final' ? 'selected' : '' }}>Final</option>
+                                                    <option value="Sidang Akhir" {{ isset($jadwal) && $jadwal->jenis_sidang == 'Sidang Akhir' ? 'selected' : '' }}>Sidang Akhir</option>
                                                 </select>
                                             </div>
                                             <div class="mb-3">
@@ -515,10 +513,7 @@
                     <div class="mb-3">
                         <label class="form-label">Jenis Sidang</label>
                         <select class="form-select" name="jenis_sidang" required>
-                            <option value="">Pilih Jenis Sidang</option>
-                            <option value="Proposal">Proposal</option>
-                            <option value="Progress">Progress</option>
-                            <option value="Final">Final</option>
+                            <option value="Sidang Akhir">Sidang Akhir</option>
                         </select>
                     </div>
                     <div class="mb-3">

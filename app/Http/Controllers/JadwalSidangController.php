@@ -13,7 +13,11 @@ class JadwalSidangController extends Controller
     public function index()
     {
         $jadwalSidang = JadwalSidang::with(['kelompok', 'dosenPenguji1', 'dosenPenguji2'])->get();
-        $kelompokList = Kelompok::all();
+        // Ambil hanya kelompok yang status topiknya 'Sidang'
+        $kelompokList = \App\Models\Kelompok::whereIn('judul', \App\Models\DaftarTopik::where('status', 'Sidang')->pluck('judul'))
+            ->groupBy('judul')
+            ->selectRaw('MIN(id) as id, judul')
+            ->get();
         $dosenList = Dosen::all();
         $menampilkanDataTemplateDokumen = Template::all();
         
@@ -29,7 +33,7 @@ class JadwalSidangController extends Controller
             'ruangan' => 'required|string',
             'penguji_1' => 'required|exists:dosen,id',
             'penguji_2' => 'required|exists:dosen,id|different:penguji_1',
-            'jenis_sidang' => 'required|in:Proposal,Progress,Final',
+            'jenis_sidang' => 'required|in:Sidang Akhir',
             'catatan' => 'nullable|string'
         ]);
 
@@ -47,8 +51,8 @@ class JadwalSidangController extends Controller
             'ruangan' => 'required|string',
             'penguji_1' => 'required|exists:dosen,id',
             'penguji_2' => 'required|exists:dosen,id|different:penguji_1',
-            'jenis_sidang' => 'required|in:Proposal,Progress,Final',
-            'status' => 'required|in:Scheduled,Completed,Postponed',
+            'jenis_sidang' => 'required|in:Sidang Akhir',
+            'status' => 'required|in:Scheduled,Completed,Postponed,Selesai',
             'catatan' => 'nullable|string'
         ]);
 

@@ -442,6 +442,10 @@
                                                         <span class="badge rounded-pill bg-primary">Proposal</span>
                                                     @elseif($data->status == 'TA')
                                                         <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                                    @elseif($data->status == 'Sidang')
+                                                        <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                                    @elseif($data->status == 'Selesai')
+                                                        <span class="badge rounded-pill bg-secondary">Selesai</span>
                                                     @elseif($jumlah_anggota >= $kuotaMin)
                                                         <span class="badge rounded-pill {{ $jumlah_anggota >= $data->kuota ? 'bg-danger' : 'bg-warning text-dark' }}">
                                                             {{ $jumlah_anggota >= $data->kuota ? 'Full' : 'Siap Diterima' }}
@@ -566,16 +570,16 @@
                                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                                     <br>
                                                                 @enderror
-                                                                @if($data->status == 'Proposal')
-                                                                    <label class="form-label text-dark mt-3" style="font-weight: bold;">Status</label>
-                                                                    <select class="form-select form-select-sm" name="status_{{ $data->id }}">
-                                                                        <option value="Proposal" {{ $data->status == 'Proposal' ? 'selected' : '' }}>Proposal</option>
-                                                                        <option value="Available" {{ $data->status == 'Available' ? 'selected' : '' }}>Available</option>
-                                                                        <option value="Booked" {{ $data->status == 'Booked' ? 'selected' : '' }}>Booked</option>
-                                                                        <option value="Full" {{ $data->status == 'Full' ? 'selected' : '' }}>Full</option>
-                                                                        <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>Tugas Akhir</option>
-                                                                    </select>
-                                                                @endif
+                                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Status</label>
+                                                                <select class="form-select form-select-sm" name="status_{{ $data->id }}">
+                                                                    <option value="Proposal" {{ $data->status == 'Proposal' ? 'selected' : '' }}>Proposal</option>
+                                                                    <option value="Available" {{ $data->status == 'Available' ? 'selected' : '' }}>Available</option>
+                                                                    <option value="Booked" {{ $data->status == 'Booked' ? 'selected' : '' }}>Booked</option>
+                                                                    <option value="Full" {{ $data->status == 'Full' ? 'selected' : '' }}>Full</option>
+                                                                    <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>Tugas Akhir</option>
+                                                                    <option value="Sidang" {{ $data->status == 'Sidang' ? 'selected' : '' }}>Sidang</option>
+                                                                    <option value="Selesai" {{ $data->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                                                                </select>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-secondary btn-sm" type="reset">
@@ -661,28 +665,20 @@
                                                             <div class="row">
                                                                 <div class="col-4"><span style="font-weight: bold;">Status</span></div>
                                                                 <div class="col-8">
-                                                                    @if($data->status == 'Proposal' || $data->status == 'TA')
-                                                                        <span class="badge rounded-pill {{ $data->status == 'Proposal' ? 'bg-primary' : 'bg-info text-dark' }}">{{ $data->status }}</span>
-                                                                        <form action="{{ route('daftar_topik.ubah_status', $data->id) }}" method="POST" class="mt-2">
-                                                                            @csrf
-                                                                            <select name="status" class="form-select form-select-sm d-inline w-auto" style="display:inline-block;">
-                                                                                <option value="Available" {{ $data->status == 'Available' ? 'selected' : '' }}>Available</option>
-                                                                                <option value="Booked" {{ $data->status == 'Booked' ? 'selected' : '' }}>Booked</option>
-                                                                                <option value="Full" {{ $data->status == 'Full' ? 'selected' : '' }}>Full</option>
-                                                                                <option value="Proposal" {{ $data->status == 'Proposal' ? 'selected' : '' }}>Proposal</option>
-                                                                                <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>Tugas Akhir</option>
-                                                                            </select>
-                                                                            <button type="submit" class="btn btn-primary btn-sm ms-1">Ubah Status</button>
-                                                                        </form>
-                                                                    @elseif($data->status == 'Full')
-                                                                        <span class="badge rounded-pill bg-danger">Full</span>
-                                                                    @elseif($data->status == 'Available')
-                                                                        <span class="badge rounded-pill bg-success">Available</span>
-                                                                    @elseif($data->status == 'Booked')
-                                                                        <span class="badge rounded-pill bg-warning text-dark">Booked</span>
-                                                                    @else
-                                                                        <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
-                                                                    @endif
+                                                                    <span class="badge rounded-pill {{ $data->status == 'Proposal' ? 'bg-primary' : ($data->status == 'TA' ? 'bg-info text-dark' : ($data->status == 'Sidang' ? '' : ($data->status == 'Selesai' ? 'bg-secondary' : ''))) }}" style="{{ $data->status == 'Sidang' ? 'background-color: #800080; color: #fff;' : '' }}">{{ $data->status }}</span>
+                                                                    <form action="{{ route('daftar_topik.ubah_status', $data->id) }}" method="POST" class="mt-2">
+                                                                        @csrf
+                                                                        <select name="status" class="form-select form-select-sm d-inline w-auto" style="display:inline-block;">
+                                                                            <option value="Available" {{ $data->status == 'Available' ? 'selected' : '' }}>Available</option>
+                                                                            <option value="Booked" {{ $data->status == 'Booked' ? 'selected' : '' }}>Booked</option>
+                                                                            <option value="Full" {{ $data->status == 'Full' ? 'selected' : '' }}>Full</option>
+                                                                            <option value="Proposal" {{ $data->status == 'Proposal' ? 'selected' : '' }}>Proposal</option>
+                                                                            <option value="TA" {{ $data->status == 'TA' ? 'selected' : '' }}>Tugas Akhir</option>
+                                                                            <option value="Sidang" {{ $data->status == 'Sidang' ? 'selected' : '' }}>Sidang</option>
+                                                                            <option value="Selesai" {{ $data->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                                                                        </select>
+                                                                        <button type="submit" class="btn btn-primary btn-sm ms-1">Ubah Status</button>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                             <div class="row">
@@ -915,6 +911,10 @@
                                                             <span class="badge rounded-pill bg-primary">Proposal</span>
                                                         @elseif($data->status == 'TA')
                                                             <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                                        @elseif($data->status == 'Sidang')
+                                                            <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                                        @elseif($data->status == 'Selesai')
+                                                            <span class="badge rounded-pill bg-secondary">Selesai</span>
                                                         @elseif($jumlah_anggota >= $kuotaMin)
                                                             <span class="badge rounded-pill {{ $jumlah_anggota >= $data->kuota ? 'bg-danger' : 'bg-warning text-dark' }}">
                                                                 {{ $jumlah_anggota >= $data->kuota ? 'Full' : 'Siap Diterima' }}
@@ -933,6 +933,10 @@
                                                             <span class="badge rounded-pill bg-success">Available</span>
                                                         @elseif($data->status == 'Booked')
                                                             <span class="badge rounded-pill bg-warning text-dark">Booked</span>
+                                                        @elseif($data->status == 'Sidang')
+                                                            <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                                        @elseif($data->status == 'Selesai')
+                                                            <span class="badge rounded-pill bg-secondary">Selesai</span>
                                                         @else
                                                             <span class="badge rounded-pill bg-warning text-dark">{{ $data->status }}</span>
                                                         @endif
@@ -996,6 +1000,10 @@
                                                                                 <span class="badge rounded-pill bg-warning text-dark">Booked</span>
                                                                             @elseif($data->status == 'Full')
                                                                                 <span class="badge rounded-pill bg-danger">Full</span>
+                                                                            @elseif($data->status == 'Sidang')
+                                                                                <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                                                            @elseif($data->status == 'Selesai')
+                                                                                <span class="badge rounded-pill bg-secondary">Selesai</span>
                                                                             @else
                                                                                 <span class="badge rounded-pill bg-primary">{{ $data->status }}</span>
                                                                             @endif

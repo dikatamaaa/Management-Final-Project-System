@@ -51,7 +51,12 @@ class PageController extends Controller
     public function berandaDosen() {
         $daftarTopik = \App\Models\DaftarTopik::all();
         $jumlahTersedia = \App\Models\DaftarTopik::whereIn('status', ['Tersedia', 'Available'])->count();
-        $jumlahDiambil = \App\Models\DaftarTopik::whereIn('status', ['Proposal', 'TA'])->count();
+        $kode_dosen = auth()->guard('dosen')->user()->kode_dosen;
+        $jumlahDiambil = \App\Models\DaftarTopik::where('kode_dosen', $kode_dosen)
+            ->whereIn('status', ['Proposal', 'TA', 'Sidang', 'Selesai', 'Booked', 'Full', 'Penuh'])
+            ->count();
+        // Hitung jumlah kelompok yang sudah selesai (status Selesai) untuk dosen ini
+        $jumlahSelesai = \App\Models\DaftarTopik::where('kode_dosen', $kode_dosen)->where('status', 'Selesai')->count();
 
         // Pie Chart: Proporsi Topik per Dosen
         $dosenTopik = \App\Models\DaftarTopik::whereNotNull('kode_dosen')
@@ -81,7 +86,8 @@ class PageController extends Controller
             'daftarTopik', 'jumlahTersedia', 'jumlahDiambil',
             'pieLabels', 'pieData',
             'barLabels', 'barData',
-            'progressLabels', 'progressData', 'dosenList'
+            'progressLabels', 'progressData', 'dosenList',
+            'jumlahSelesai'
         ));
     }
     public function daftarTopikDosen() {
@@ -108,15 +114,15 @@ class PageController extends Controller
             return redirect('/mahasiswa/ganti-password-awal');
         }
         // Komposisi Status Topik
-        $statusLabels = ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked'];
+        $statusLabels = ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked', 'Sidang', 'Selesai'];
         $statusCounts = [
-            // Gabungkan Tersedia+Available
             \App\Models\DaftarTopik::whereIn('status', ['Tersedia', 'Available'])->count(),
-            // Gabungkan Penuh+Full
             \App\Models\DaftarTopik::whereIn('status', ['Penuh', 'Full'])->count(),
             \App\Models\DaftarTopik::where('status', 'Proposal')->count(),
             \App\Models\DaftarTopik::where('status', 'TA')->count(),
             \App\Models\DaftarTopik::where('status', 'Booked')->count(),
+            \App\Models\DaftarTopik::where('status', 'Sidang')->count(),
+            \App\Models\DaftarTopik::where('status', 'Selesai')->count(),
         ];
         // Jumlah Topik per Bidang
         $bidangCounts = \App\Models\DaftarTopik::all()->flatMap(function($item) {
@@ -166,13 +172,21 @@ class PageController extends Controller
                     ->count();
             }
         }
+        // Ambil jadwal sidang untuk kelompok mahasiswa ini
+        $jadwalSidang = null;
+        if ($kelompok) {
+            $jadwalSidang = \App\Models\JadwalSidang::where('kelompok_id', $kelompok->id)
+                ->with(['dosenPenguji1', 'dosenPenguji2'])
+                ->first();
+        }
         return view('mahasiswa.beranda', compact(
             'statusLabels', 'statusCounts',
             'bidangLabels', 'bidangData',
             'dosenLabels', 'dosenData',
             'progressLabels', 'progressData',
             'pembimbingSatu', 'pembimbingDua',
-            'anggotaKelompok', 'pembimbingChartLabels'
+            'anggotaKelompok', 'pembimbingChartLabels',
+            'jadwalSidang'
         ));
     }
     public function daftarTopikMahasiswa() {

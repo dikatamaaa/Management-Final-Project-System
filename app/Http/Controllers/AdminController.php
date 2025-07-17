@@ -38,13 +38,15 @@ class AdminController extends Controller
         $barLabels = array_keys($bidangCounts);
         $barData = array_values($bidangCounts);
         // Komposisi Status Topik
-        $statusLabels = ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked'];
+        $statusLabels = ['Tersedia', 'Penuh', 'Proposal', 'TA', 'Booked', 'Sidang', 'Selesai'];
         $statusCounts = [
             \App\Models\DaftarTopik::whereIn('status', ['Tersedia', 'Available'])->count(),
             \App\Models\DaftarTopik::whereIn('status', ['Penuh', 'Full'])->count(),
             \App\Models\DaftarTopik::where('status', 'Proposal')->count(),
             \App\Models\DaftarTopik::where('status', 'TA')->count(),
             \App\Models\DaftarTopik::where('status', 'Booked')->count(),
+            \App\Models\DaftarTopik::where('status', 'Sidang')->count(),
+            \App\Models\DaftarTopik::where('status', 'Selesai')->count(),
         ];
         return view('admin.beranda',compact('JumlahDataMahasiswa', 'JumlahDataDosen', 'pieLabels', 'pieData', 'barLabels', 'barData', 'statusLabels', 'statusCounts'));
     }

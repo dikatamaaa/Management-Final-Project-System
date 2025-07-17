@@ -140,6 +140,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-3">
+                            <div class="card shadow border-start-primary py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-danger-emphasis fw-bold text-xs mb-1"><span>Kelompok yang sudah selesai</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span>{{ $jumlahSelesai }}</span></div>
+                                        </div>
+                                        <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-clipboard-check fa-2x text-gray-300"><path d="M10.854 6.146a.5.5 0 0 0-.708.708L11.293 8l-1.147 1.146a.5.5 0 0 0 .708.708l1.5-1.5a.5.5 0 0 0 0-.708l-1.5-1.5zm-4.708 0a.5.5 0 0 1 .708.708L4.707 8l1.147 1.146a.5.5 0 0 1-.708.708l-1.5-1.5a.5.5 0 0 1 0-.708l1.5-1.5z"></path><path d="M4.5 1a.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h7A.5.5 0 0 0 12 2v-.5a.5.5 0 0 0-.5-.5h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v12A1.5 1.5 0 0 1 11.5 16h-7A1.5 1.5 0 0 1 3 14.5v-12zM4.5 2a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-12a.5.5 0 0 0-.5-.5h-7z"></path></svg></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-4">
@@ -175,6 +188,10 @@
                                                             <span class="badge rounded-pill bg-primary">Proposal</span>
                                                         @elseif($topik->status == 'TA')
                                                             <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                                        @elseif($topik->status == 'Sidang')
+                                                            <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                                        @elseif($topik->status == 'Selesai')
+                                                            <span class="badge rounded-pill bg-secondary">Selesai</span>
                                                         @else
                                                             <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                                         @endif

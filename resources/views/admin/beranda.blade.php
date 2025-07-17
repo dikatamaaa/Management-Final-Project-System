@@ -478,11 +478,13 @@
     const statusLabels = @json($statusLabels);
     const statusCounts = @json($statusCounts);
     const statusColors = [
-        '#4ade80', // Tersedia
-        '#f87171', // Penuh
-        '#60a5fa', // Proposal
-        '#38bdf8', // TA
-        '#facc15'  // Booked
+        '#4ade80', // Tersedia (hijau)
+        '#f87171', // Penuh (merah)
+        '#60a5fa', // Proposal (biru)
+        '#38bdf8', // TA (biru muda)
+        '#facc15', // Booked (kuning)
+        '#800080', // Sidang (ungu)
+        '#a3a3a3'  // Selesai (abu-abu)
     ];
     const ctxStatus = document.getElementById('statusTopikChart').getContext('2d');
     new Chart(ctxStatus, {

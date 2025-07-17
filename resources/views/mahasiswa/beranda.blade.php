@@ -423,16 +423,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-6 mb-4">
-                            <div class="card shadow">
+                    <div class="row mt-3 d-flex align-items-stretch">
+                        <div class="col-md-4 mb-4 d-flex">
+                            <div class="card shadow h-100 w-100">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <p class="text-dark m-0 fw-bold">Data Pembimbing</p><button class="btn btn-sm" type="button" style="color: rgb(136,29,29);"><strong>Lihat Selengkapnya...</strong><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right">
-                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
-                                        </svg></button>
+                                    <p class="text-dark m-0 fw-bold">Data Pembimbing</p>
+                                    <button class="btn btn-sm" type="button" style="color: rgb(136,29,29); background: none; font-weight: bold;" data-bs-toggle="modal" data-bs-target="#modalDosenPembimbing">
+                                        Lihat Selengkapnya... <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path></svg>
+                                    </button>
                                 </div>
                                 <div class="card-body">
-                                    <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
+                                    <!-- Tabel Data Pembimbing -->
+                                    <div class="table-responsive table mt-2">
                                         <table class="table table-striped table-hover" id="tableData1">
                                             <thead>
                                                 <tr>
@@ -482,15 +484,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 mb-4">
-                            <div class="card shadow">
+                        <div class="col-md-4 mb-4 d-flex">
+                            <div class="card shadow h-100 w-100">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <p class="text-dark m-0 fw-bold">Data Kelompok</p><button class="btn btn-sm" type="button" style="color: rgb(136,29,29);"><strong>Lihat Selengkapnya...</strong><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right">
-                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
-                                        </svg></button>
+                                    <p class="text-dark m-0 fw-bold">Data Kelompok</p>
+                                    <button class="btn btn-sm" type="button" style="color: rgb(136,29,29); background: none; font-weight: bold;" data-bs-toggle="modal" data-bs-target="#modalDataKelompok">
+                                        Lihat Selengkapnya... <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path></svg>
+                                    </button>
                                 </div>
                                 <div class="card-body">
-                                    <div class="table-responsive table mt-2" id="dataTable-2" role="grid" aria-describedby="dataTable_info">
+                                    <!-- Tabel Data Kelompok -->
+                                    <div class="table-responsive table mt-2">
                                         <table class="table table-striped table-hover" id="tableData2">
                                             <thead>
                                                 <tr>
@@ -559,6 +563,50 @@
                                                 </tr>
                                             </tfoot>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4 d-flex">
+                            <div class="card shadow h-100 w-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="card-header py-3 d-flex align-items-center" style="gap: 8px;">
+                                        <i class="fas fa-calendar-alt me-2" style="font-size: 1.3em; color: #4f6ef7;"></i>
+                                        <p class="text-dark m-0 fw-bold">Jadwal Sidang Kamu</p>
+                                    </div>
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center" style="min-height: 340px;">
+                                        @if(isset($jadwalSidang) && $jadwalSidang && $jadwalSidang->judul)
+                                        <div class="w-100">
+                                            <table class="table table-borderless mb-0">
+                                                <tbody>
+                                                    <tr><th class="ps-0" style="width: 140px;">Judul TA</th><td>: {{ $jadwalSidang->judul }}</td></tr>
+                                                    <tr><th class="ps-0">Tanggal & Waktu</th><td>: {{ isset($jadwalSidang->tanggal_sidang) ? \Carbon\Carbon::parse($jadwalSidang->tanggal_sidang)->format('d/m/Y H:i') : '-' }}</td></tr>
+                                                    <tr><th class="ps-0">Ruangan</th><td>: {{ $jadwalSidang->ruangan ?? '-' }}</td></tr>
+                                                    <tr><th class="ps-0">Penguji 1</th><td>: {{ $jadwalSidang->dosenPenguji1->nama ?? '-' }}</td></tr>
+                                                    <tr><th class="ps-0">Penguji 2</th><td>: {{ $jadwalSidang->dosenPenguji2->nama ?? '-' }}</td></tr>
+                                                    <tr><th class="ps-0">Jenis Sidang</th><td>: {{ $jadwalSidang->jenis_sidang ?? '-' }}</td></tr>
+                                                    <tr><th class="ps-0">Status</th>
+                                                        <td>:
+                                                            @php
+                                                                $badge = 'secondary';
+                                                                if($jadwalSidang->status == 'Scheduled') $badge = 'primary';
+                                                                elseif($jadwalSidang->status == 'Completed') $badge = 'success';
+                                                                elseif($jadwalSidang->status == 'Postponed') $badge = 'warning';
+                                                            @endphp
+                                                            <span class="badge bg-{{ $badge }}">{{ $jadwalSidang->status ?? '-' }}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr><th class="ps-0">Catatan</th><td>: {{ $jadwalSidang->catatan ?? '-' }}</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        @else
+                                        <div class="text-center w-100 d-flex flex-column align-items-center justify-content-center" style="min-height: 220px;">
+                                            <i class="fas fa-calendar-times mb-3" style="font-size: 3em; color: #e5e7eb;"></i>
+                                            <p class="fw-bold text-muted mb-1">Belum ada jadwal sidang</p>
+                                            <p class="text-muted" style="font-size: 0.97em;">Silakan cek secara berkala atau hubungi admin jika ada kendala.</p>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -692,7 +740,13 @@
                 datasets: [{
                     data: @json($statusCounts),
                     backgroundColor: [
-                        '#4ade80', '#f87171', '#60a5fa', '#38bdf8', '#facc15'
+                        '#4ade80', // Tersedia (hijau)
+                        '#f87171', // Penuh (merah)
+                        '#60a5fa', // Proposal (biru)
+                        '#38bdf8', // TA (biru muda)
+                        '#facc15', // Booked (kuning)
+                        '#800080', // Sidang (ungu)
+                        '#a3a3a3'  // Selesai (abu-abu)
                     ],
                     borderWidth: 2,
                     borderColor: '#fff',
@@ -845,5 +899,94 @@
         padding-bottom: 1.5rem;
     }
     </style>
+    <!-- Modal Data Pembimbing -->
+    <div class="modal fade" id="modalDosenPembimbing" tabindex="-1" aria-labelledby="modalDosenPembimbingLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalDosenPembimbingLabel">Dosen Pembimbing</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Dosen</th>
+                  <th>Kode Dosen</th>
+                  <th>Posisi</th>
+                </tr>
+              </thead>
+              <tbody>
+                @php $no = 1; @endphp
+                @if($pembimbingSatu && $pembimbingSatu != '-')
+                <tr>
+                  <td>{{ $no++ }}</td>
+                  <td>{{ $pembimbingSatu }}</td>
+                  <td>{{ \App\Models\Dosen::where('nama', $pembimbingSatu)->first()->kode_dosen ?? '-' }}</td>
+                  <td>Pembimbing 1</td>
+                </tr>
+                @endif
+                @if($pembimbingDua && $pembimbingDua != '-')
+                <tr>
+                  <td>{{ $no++ }}</td>
+                  <td>{{ $pembimbingDua }}</td>
+                  <td>{{ \App\Models\Dosen::where('nama', $pembimbingDua)->first()->kode_dosen ?? '-' }}</td>
+                  <td>Pembimbing 2</td>
+                </tr>
+                @endif
+                @if(($pembimbingSatu == '-' || !$pembimbingSatu) && ($pembimbingDua == '-' || !$pembimbingDua))
+                <tr>
+                  <td colspan="4" class="text-center">Belum ada pembimbing</td>
+                </tr>
+                @endif
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Data Kelompok -->
+    <div class="modal fade" id="modalDataKelompok" tabindex="-1" aria-labelledby="modalDataKelompokLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalDataKelompokLabel">Data Kelompok</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>NIM</th>
+                  <th>Nama</th>
+                </tr>
+              </thead>
+              <tbody>
+                @php $no = 1; @endphp
+                @forelse($anggotaKelompok as $anggota)
+                <tr>
+                  <td>{{ $no++ }}</td>
+                  <td>{{ $anggota->nim }}</td>
+                  <td>{{ $anggota->nama_anggota }}</td>
+                </tr>
+                @empty
+                <tr>
+                  <td colspan="3" class="text-center">Belum ada anggota kelompok</td>
+                </tr>
+                @endforelse
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>

@@ -427,6 +427,10 @@
                                                             <span class="badge rounded-pill bg-primary">Proposal</span>
                                                         @elseif($topik_dipilih->status == 'TA')
                                                             <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                                        @elseif($topik_dipilih->status == 'Sidang')
+                                                            <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                                        @elseif($topik_dipilih->status == 'Selesai')
+                                                            <span class="badge rounded-pill bg-secondary">Selesai</span>
                                                         @else
                                                             <span class="badge rounded-pill bg-warning text-dark">{{ $topik_dipilih->status }}</span>
                                                         @endif
@@ -511,6 +515,10 @@
                                                         <span class="badge rounded-pill bg-primary">Proposal</span>
                                                     @elseif($topik->status == 'TA')
                                                         <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                                    @elseif($topik->status == 'Sidang')
+                                                        <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                                    @elseif($topik->status == 'Selesai')
+                                                        <span class="badge rounded-pill bg-secondary">Selesai</span>
                                                     @else
                                                         <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                                     @endif
@@ -748,6 +756,10 @@
                                     <span class="badge rounded-pill bg-primary">Proposal</span>
                                 @elseif($topik->status == 'TA')
                                     <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                @elseif($topik->status == 'Sidang')
+                                    <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                @elseif($topik->status == 'Selesai')
+                                    <span class="badge rounded-pill bg-secondary">Selesai</span>
                                 @else
                                     <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                 @endif
