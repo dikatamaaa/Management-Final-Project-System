@@ -168,11 +168,15 @@
                                                     <td>{{ $topik->kode_dosen }}</td>
                                                     <td>
                                                         @if($topik->status == 'Tersedia' || $topik->status == 'Available')
-                                                            <span class="badge rounded-pill bg-success">Tersedia</span>
+                                                            <span class="badge rounded-pill bg-success">Available</span>
                                                         @elseif($topik->status == 'Penuh' || $topik->status == 'Full')
-                                                            <span class="badge rounded-pill bg-danger">Penuh</span>
+                                                            <span class="badge rounded-pill bg-danger">Full</span>
+                                                        @elseif($topik->status == 'Proposal')
+                                                            <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                        @elseif($topik->status == 'TA')
+                                                            <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                         @else
-                                                            <span class="badge rounded-pill bg-secondary">{{ $topik->status }}</span>
+                                                            <span class="badge rounded-pill bg-warning text-dark">{{ $topik->status }}</span>
                                                         @endif
                                                     </td>
                                                 </tr>
