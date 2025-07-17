@@ -51,7 +51,7 @@ class PageController extends Controller
     public function berandaDosen() {
         $daftarTopik = \App\Models\DaftarTopik::all();
         $jumlahTersedia = \App\Models\DaftarTopik::whereIn('status', ['Tersedia', 'Available'])->count();
-        $jumlahDiambil = \App\Models\DaftarTopik::whereNotIn('status', ['Tersedia', 'Available'])->count();
+        $jumlahDiambil = \App\Models\DaftarTopik::whereIn('status', ['Proposal', 'TA'])->count();
 
         // Pie Chart: Proporsi Topik per Dosen
         $dosenTopik = \App\Models\DaftarTopik::whereNotNull('kode_dosen')
