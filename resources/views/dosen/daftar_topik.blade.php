@@ -440,6 +440,8 @@
                                                     @endphp
                                                     @if($data->status == 'Proposal')
                                                         <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                    @elseif($data->status == 'TA')
+                                                        <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                     @elseif($jumlah_anggota >= $kuotaMin)
                                                         <span class="badge rounded-pill {{ $jumlah_anggota >= $data->kuota ? 'bg-danger' : 'bg-warning text-dark' }}">
                                                             {{ $jumlah_anggota >= $data->kuota ? 'Full' : 'Siap Diterima' }}
@@ -457,10 +459,6 @@
                                                             </div>
                                                         </div>
                                                         @endif
-                                                    @elseif($data->status == 'Proposal')
-                                                        <span class="badge rounded-pill bg-primary">Proposal</span>
-                                                    @elseif($data->status == 'TA')
-                                                        <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                     @elseif($data->status == 'Available')
                                                         <span class="badge rounded-pill bg-success">Available</span>
                                                     @elseif($data->status == 'Booked')
@@ -915,6 +913,8 @@
                                                         @endphp
                                                         @if($data->status == 'Proposal')
                                                             <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                        @elseif($data->status == 'TA')
+                                                            <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                         @elseif($jumlah_anggota >= $kuotaMin)
                                                             <span class="badge rounded-pill {{ $jumlah_anggota >= $data->kuota ? 'bg-danger' : 'bg-warning text-dark' }}">
                                                                 {{ $jumlah_anggota >= $data->kuota ? 'Full' : 'Siap Diterima' }}
@@ -929,8 +929,6 @@
                                                                 <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalTolak{{ $data->id }}" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">Ditolak</button>
                                                             </div>
                                                             @endif
-                                                        @elseif($data->status == 'TA')
-                                                            <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
                                                         @elseif($data->status == 'Available')
                                                             <span class="badge rounded-pill bg-success">Available</span>
                                                         @elseif($data->status == 'Booked')
