@@ -129,6 +129,42 @@
         .card .card-body {
             padding-bottom: 1.5rem;
         }
+
+        /* === STYLING UNTUK TOMBOL AKSI === */
+        .btn-edit-dosen, .btn-hapus-dosen, .btn-lihat-dosen, .btn-ganti-password-dosen {
+            transition: all 0.3s ease;
+            border: none;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit-dosen:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3) !important;
+        }
+
+        .btn-hapus-dosen:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3) !important;
+        }
+
+        .btn-lihat-dosen:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(13, 202, 240, 0.3) !important;
+        }
+
+        .btn-ganti-password-dosen:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3) !important;
+        }
+
+        /* Gap untuk tombol aksi */
+        .gap-1 {
+            gap: 0.25rem !important;
+        }
     </style>
 </head>
 
@@ -423,21 +459,22 @@
                                             <td class="text-center">{{$data->email}}</td>
                                             <td class="text-center">{{$data->no_hp}}</td>
                                             <td class="text-center">{{$data->nama_pengguna}}</td>
-                                            <td>
-                                                <p class="text-center">
-                                                <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalEditDosenPembimbing{{$data->id}}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-danger btn-sm ms-1 me-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalHapusDosenPembimbing{{$data->id}}">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                                <button class="btn btn-info btn-sm me-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDosenPembimbing{{$data->id}}">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalGantiKataSandi{{$data->id}}">
-                                                    <i class="fas fa-key"></i>
-                                                </button>
-                                                </p>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center gap-1">
+                                                    <button class="btn btn-warning btn-sm btn-edit-dosen rounded-circle shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalEditDosenPembimbing{{$data->id}}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm btn-hapus-dosen rounded-circle shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalHapusDosenPembimbing{{$data->id}}">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                    <button class="btn btn-info btn-sm btn-lihat-dosen rounded-circle shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalLihatDosenPembimbing{{$data->id}}">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-primary btn-sm btn-ganti-password-dosen rounded-circle shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalGantiKataSandi{{$data->id}}">
+                                                        <i class="fas fa-key"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
 
                                                 <div class="modal fade" role="dialog" tabindex="-1" id="ModalEditDosenPembimbing{{$data->id}}">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">

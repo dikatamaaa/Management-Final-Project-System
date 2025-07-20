@@ -346,16 +346,6 @@
                                                     <br>
                                                 @enderror
 
-                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Program Studi :</label>
-                                                <select class="form-select form-select-sm @error('program_studi') is-invalid @enderror" name="program_studi" id="program_studiP">
-                                                    <option selected disabled>-- Pilih Program Studi --</option>
-                                                </select>
-                                                {{-- Pesan Error Untuk Program Studi --}}
-                                                @error('program_studi')
-                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
-                                                    <br>
-                                                @enderror
-
                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Fakultas :</label>
                                                 <select class="form-select form-select-sm @error('fakultas') is-invalid @enderror" name="fakultas" id="fakultasP" onchange="updateProgramStudiP()">
                                                     <option selected>-- Pilih Fakultas --</option>
@@ -369,6 +359,16 @@
                                                 </select>
                                                 {{-- Pesan Error Untuk Fakultas --}}
                                                 @error('fakultas')
+                                                    <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
+                                                    <br>
+                                                @enderror
+
+                                                <label class="form-label text-dark mt-3" style="font-weight: bold;">Program Studi :</label>
+                                                <select class="form-select form-select-sm @error('program_studi') is-invalid @enderror" name="program_studi" id="program_studiP">
+                                                    <option selected disabled>-- Pilih Program Studi --</option>
+                                                </select>
+                                                {{-- Pesan Error Untuk Program Studi --}}
+                                                @error('program_studi')
                                                     <small class="fw-bold" style="color: #881d1d;">{{ $message }}</small>
                                                     <br>
                                                 @enderror

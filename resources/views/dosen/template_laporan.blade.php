@@ -228,6 +228,188 @@
                 font-size: 1.01rem;
             }
         }
+        
+        /* Template Laporan Table Styling */
+        .template-table {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 0;
+        }
+        
+        .template-table thead th {
+            background: linear-gradient(135deg, #881d1d 0%, #a83232 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 1rem 1.5rem;
+            border: none;
+            text-align: center;
+        }
+        
+        .template-table thead th:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        .template-table thead th:last-child {
+            border-top-right-radius: 12px;
+        }
+        
+        .template-row {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .template-row:hover {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(136,29,29,0.1);
+        }
+        
+        .template-row:last-child {
+            border-bottom: none;
+        }
+        
+        .template-table tbody td {
+            padding: 1.25rem 1.5rem;
+            vertical-align: middle;
+            border: none;
+            background: transparent;
+        }
+        
+        .template-number {
+            font-weight: 700;
+            color: #881d1d;
+            font-size: 1.1em;
+            min-width: 60px;
+        }
+        
+        .template-name {
+            min-width: 300px;
+        }
+        
+        .template-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #881d1d 0%, #a83232 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3em;
+            box-shadow: 0 4px 12px rgba(136,29,29,0.2);
+        }
+        
+        .template-title {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1.05em;
+            margin-bottom: 0.25rem;
+        }
+        
+        .template-subtitle {
+            color: #64748b;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+        }
+        
+        .btn-download:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37,99,235,0.3);
+        }
+        
+        .btn-download:active {
+            transform: translateY(0);
+        }
+        
+        .empty-template-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-icon {
+            font-size: 4em;
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-title {
+            color: #64748b;
+            font-weight: 600;
+            font-size: 1.3em;
+            margin-bottom: 0.75rem;
+        }
+        
+        .empty-description {
+            color: #94a3b8;
+            font-size: 1em;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        /* Responsive adjustments for template table */
+        @media (max-width: 768px) {
+            .template-table thead th {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.85em;
+            }
+            
+            .template-table tbody td {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .template-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1em;
+                margin-right: 0.75rem !important;
+            }
+            
+            .template-title {
+                font-size: 0.95em;
+            }
+            
+            .template-subtitle {
+                font-size: 0.8em;
+            }
+            
+            .btn-download {
+                padding: 0.5rem 1rem;
+                font-size: 0.85em;
+            }
+            
+            .template-name .d-flex {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 0.5rem;
+            }
+            
+            .template-icon {
+                align-self: center;
+            }
+        }
     </style>
 </head>
 
@@ -325,28 +507,60 @@
                         <h3 class="text-dark mb-0">Template Laporan</h3>
                     </div>
                     <div class="card shadow">
-                        <div class="card-body">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="text-dark m-0 fw-bold">
+                                <i class="fas fa-file-word me-2" style="color: #881d1d;"></i>
+                                Daftar Template Laporan
+                            </h5>
+                            <span class="badge bg-primary">{{ $templates->count() }} Template</span>
+                        </div>
+                        <div class="card-body p-4">
                             @if($templates->count() > 0)
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Nama Dokumen</th>
-                                        <th class="text-center">Link</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($templates as $i => $tpl)
-                                    <tr>
-                                        <td class="text-center">{{ $i+1 }}</td>
-                                        <td class="text-center">{{ $tpl->nama_dokumen }}</td>
-                                        <td class="text-center"><a href="{{ $tpl->template_dokumen }}" target="_blank" class="btn btn-primary btn-sm">Lihat/Download</a></td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table template-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">Nama Dokumen</th>
+                                            <th class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($templates as $i => $tpl)
+                                        <tr class="template-row">
+                                            <td class="text-center template-number">{{ $i+1 }}</td>
+                                            <td class="template-name">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="template-icon me-3">
+                                                        <i class="fas fa-file-word"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="template-title">{{ $tpl->nama_dokumen }}</div>
+                                                        <div class="template-subtitle">Template Dokumen</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ $tpl->template_dokumen }}" target="_blank" class="btn btn-download">
+                                                    <i class="fas fa-download me-2"></i>
+                                                    Lihat/Download
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                             @else
-                            <div class="alert alert-info">Belum ada template laporan.</div>
+                            <div class="empty-template-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-file-word"></i>
+                                </div>
+                                <h5 class="empty-title">Belum Ada Template Laporan</h5>
+                                <p class="empty-description">
+                                    Template laporan belum tersedia. Silakan hubungi admin untuk informasi lebih lanjut.
+                                </p>
+                            </div>
                             @endif
                         </div>
                     </div>

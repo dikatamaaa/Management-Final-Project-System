@@ -138,6 +138,214 @@
         .topbar .dropdown-item:active {
             background-color: #f8f9fa;
         }
+
+        /* === STYLING UNTUK DATETIME INPUT === */
+        input[type="datetime-local"] {
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        input[type="datetime-local"]:hover {
+            border-color: #881d1d;
+            box-shadow: 0 4px 12px rgba(136, 29, 29, 0.15);
+            transform: translateY(-1px);
+        }
+
+        input[type="datetime-local"]:focus {
+            border-color: #881d1d;
+            box-shadow: 0 0 0 3px rgba(136, 29, 29, 0.1);
+            outline: none;
+            background: #ffffff;
+        }
+
+        /* Styling untuk dropdown yang lebih smooth */
+        .form-select {
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .form-select:hover {
+            border-color: #881d1d;
+            box-shadow: 0 4px 12px rgba(136, 29, 29, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .form-select:focus {
+            border-color: #881d1d;
+            box-shadow: 0 0 0 3px rgba(136, 29, 29, 0.1);
+            outline: none;
+            background: #ffffff;
+        }
+
+        /* Styling untuk textarea */
+        textarea.form-control {
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            resize: vertical;
+        }
+
+        textarea.form-control:hover {
+            border-color: #881d1d;
+            box-shadow: 0 4px 12px rgba(136, 29, 29, 0.15);
+            transform: translateY(-1px);
+        }
+
+        textarea.form-control:focus {
+            border-color: #881d1d;
+            box-shadow: 0 0 0 3px rgba(136, 29, 29, 0.1);
+            outline: none;
+            background: #ffffff;
+        }
+
+        /* Styling untuk text input */
+        input[type="text"].form-control {
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        input[type="text"].form-control:hover {
+            border-color: #881d1d;
+            box-shadow: 0 4px 12px rgba(136, 29, 29, 0.15);
+            transform: translateY(-1px);
+        }
+
+        input[type="text"].form-control:focus {
+            border-color: #881d1d;
+            box-shadow: 0 0 0 3px rgba(136, 29, 29, 0.1);
+            outline: none;
+            background: #ffffff;
+        }
+
+        /* === STYLING UNTUK TIME PICKER === */
+        /* Styling untuk input time yang lebih user-friendly */
+        input[type="time"] {
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        input[type="time"]:hover {
+            border-color: #881d1d;
+            box-shadow: 0 4px 12px rgba(136, 29, 29, 0.15);
+            transform: translateY(-1px);
+        }
+
+        input[type="time"]:focus {
+            border-color: #881d1d;
+            box-shadow: 0 0 0 3px rgba(136, 29, 29, 0.1);
+            outline: none;
+            background: #ffffff;
+        }
+
+        /* Styling untuk datetime-local yang lebih spesifik */
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            background-color: transparent;
+            border-radius: 4px;
+            padding: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: brightness(0.7);
+        }
+
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.05);
+            filter: brightness(1);
+        }
+
+        /* Styling untuk time picker dropdown */
+        input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-minute-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-year-field {
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        input[type="datetime-local"]::-webkit-datetime-edit-hour-field:focus,
+        input[type="datetime-local"]::-webkit-datetime-edit-minute-field:focus,
+        input[type="datetime-local"]::-webkit-datetime-edit-day-field:focus,
+        input[type="datetime-local"]::-webkit-datetime-edit-month-field:focus,
+        input[type="datetime-local"]::-webkit-datetime-edit-year-field:focus {
+            background-color: rgba(136, 29, 29, 0.1);
+            outline: none;
+        }
+
+        /* Styling untuk Firefox */
+        input[type="datetime-local"]::-moz-calendar-picker-indicator {
+            background-color: transparent;
+            border-radius: 4px;
+            padding: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: brightness(0.7);
+        }
+
+        input[type="datetime-local"]::-moz-calendar-picker-indicator:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.05);
+            filter: brightness(1);
+        }
+
+        /* Custom styling untuk time picker popup */
+        input[type="datetime-local"]:focus {
+            position: relative;
+        }
+
+        /* Animasi untuk saat picker dibuka */
+        @keyframes pickerFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Styling untuk placeholder text */
+        input[type="datetime-local"]::placeholder {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        /* Active state untuk picker */
+        input[type="datetime-local"].picker-active {
+            border-color: #881d1d;
+            box-shadow: 0 0 0 3px rgba(136, 29, 29, 0.2);
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Smooth transition untuk semua datetime elements */
+        input[type="datetime-local"] * {
+            transition: all 0.2s ease;
+        }
     </style>
 
 </head>
@@ -377,7 +585,11 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Tanggal & Waktu</label>
-                                                <input type="datetime-local" class="form-control" name="tanggal_sidang" value="{{ \Carbon\Carbon::parse($jadwal->tanggal_sidang)->format('Y-m-d\TH:i') }}" required>
+                                                <input type="datetime-local" class="form-control" name="tanggal_sidang" 
+                                                       value="{{ \Carbon\Carbon::parse($jadwal->tanggal_sidang)->format('Y-m-d\TH:i') }}" 
+                                                       onclick="this.showPicker()" 
+                                                       required>
+                                                <small class="text-muted">Klik pada kotak untuk memilih tanggal dan waktu</small>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Ruangan</label>
@@ -486,7 +698,9 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Tanggal & Waktu</label>
-                        <input type="datetime-local" class="form-control" name="tanggal_sidang" required>
+                        <input type="datetime-local" class="form-control" name="tanggal_sidang" 
+                               onclick="this.showPicker()" 
+                               required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Ruangan</label>
@@ -580,6 +794,33 @@
             var selectedOption = $(this).find('option:selected');
             var judul = selectedOption.data('judul');
             $('#selected_judul').val(judul);
+        });
+
+        // Enhanced datetime picker experience
+        $('input[type="datetime-local"]').on('click', function() {
+            // Add smooth animation when picker opens
+            $(this).addClass('picker-active');
+            
+            // Auto-focus on the input for better UX
+            setTimeout(() => {
+                this.showPicker();
+            }, 100);
+        });
+
+        // Add visual feedback when picker is active
+        $('input[type="datetime-local"]').on('focus', function() {
+            $(this).addClass('picker-active');
+        });
+
+        $('input[type="datetime-local"]').on('blur', function() {
+            $(this).removeClass('picker-active');
+        });
+
+        // Smooth scrolling for time picker
+        $(document).on('wheel', function(e) {
+            if ($(e.target).closest('input[type="datetime-local"]').length) {
+                e.preventDefault();
+            }
         });
     });
 </script>

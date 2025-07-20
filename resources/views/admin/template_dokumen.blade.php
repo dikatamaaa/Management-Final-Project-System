@@ -359,9 +359,6 @@
                                                 <button class="btn btn-danger btn-sm ms-1 me-1" type="button" data-bs-toggle="modal" data-bs-target="#ModalHapusTemplate{{ $data->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-                                                <a href="{{ url('/download/' . $data->template_dokumen) }}" class="btn btn-info btn-sm tooltip-btn" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Unduh File Template Dokumen">
-                                                    <i class="fas fa-file-download"></i>
-                                                </a>
                                                 </p>
 
                                                 <div class="modal fade" role="dialog" tabindex="-1" id="ModalEditTemplate{{ $data->id }}">

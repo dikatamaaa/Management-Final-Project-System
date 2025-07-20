@@ -228,6 +228,177 @@
                 font-size: 1.01rem;
             }
         }
+        
+        /* Select2 Styling untuk Modal */
+        .select2-container--default .select2-selection--multiple {
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            min-height: 38px;
+        }
+        
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border-color: #881d1d;
+            box-shadow: 0 0 0 0.2rem rgba(136, 29, 29, 0.25);
+        }
+        
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #881d1d;
+            border: 1px solid #881d1d;
+            color: white;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin: 2px;
+        }
+        
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: white;
+            margin-right: 5px;
+        }
+        
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+            color: #f8f9fa;
+        }
+        
+        .select2-dropdown {
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+        }
+        
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #881d1d;
+        }
+        
+        /* Memastikan Select2 dropdown muncul di atas modal */
+        .select2-dropdown {
+            z-index: 9999 !important;
+        }
+        
+        .select2-container {
+            z-index: 9999 !important;
+        }
+        
+        /* Styling untuk placeholder */
+        .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
+            color: #6c757d;
+            padding-left: 8px;
+        }
+        
+        /* Memperbaiki tampilan dalam modal */
+        .modal .select2-container {
+            width: 100% !important;
+        }
+        
+        /* Styling untuk multiple selection */
+        .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            padding: 2px;
+        }
+        
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            display: flex;
+            align-items: center;
+            background-color: #881d1d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin: 1px;
+            font-size: 0.875em;
+        }
+        
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: white;
+            margin-left: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+            color: #f8f9fa;
+        }
+        
+        /* Memastikan tampilan konsisten dengan form control lainnya */
+        .form-control.bidang-select,
+        .form-control.bidang-edit-select {
+            min-height: 38px;
+            padding: 0.375rem 0.75rem;
+        }
+        
+        /* Styling untuk search box dalam Select2 */
+        .select2-container--default .select2-search--inline .select2-search__field {
+            margin-top: 0;
+            margin-left: 0;
+            padding: 0;
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+        
+        .select2-container--default .select2-search--inline .select2-search__field:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        /* Responsive design untuk Select2 */
+        @media (max-width: 768px) {
+            .select2-container {
+                width: 100% !important;
+            }
+            
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                font-size: 0.8em;
+                padding: 1px 6px;
+                margin: 1px;
+            }
+            
+            .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+                margin-left: 3px;
+            }
+        }
+        
+        /* Memastikan tampilan yang konsisten */
+        .select2-container--default .select2-selection--multiple {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            cursor: text;
+        }
+        
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border-color: #881d1d;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(136, 29, 29, 0.25);
+        }
+        
+        /* Memastikan tampilan yang konsisten dengan Bootstrap */
+        .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            padding: 0.375rem 0.75rem;
+            line-height: 1.5;
+        }
+        
+        .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        /* Memastikan tampilan yang konsisten dengan form control lainnya */
+        .select2-container--default .select2-selection--multiple {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        /* Styling untuk dropdown options */
+        .select2-results__option {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .select2-results__option--highlighted[aria-selected] {
+            background-color: #881d1d !important;
+            color: white !important;
+        }
     </style>
 </head>
 
@@ -389,7 +560,7 @@
                                                                     <br>
                                                                 @enderror
                                                                 <label class="form-label text-dark mt-3" style="font-weight: bold;">Bidang :</label>
-                                                                <select class="form-control bidang-edit-select" name="bidang[]" multiple required>
+                                                                <select class="form-control bidang-select" name="bidang[]" multiple required>
                                                                     @foreach($bidangList as $bidang)
                                                                         <option value="{{ $bidang }}" {{ (collect(old('bidang'))->contains($bidang)) ? 'selected' : '' }}>{{ $bidang }}</option>
                                                                     @endforeach
@@ -1208,10 +1379,20 @@
         });
 
     $(document).ready(function() {
-        $('#bidang').select2({
-            placeholder: "-- Pilih Bidang --",
-            dropdownParent: $('#ModalTambahDaftarTopik'),
-            width: '100%'
+        // Inisialisasi Select2 untuk modal tambah topik
+        $('#ModalTambahDaftarTopik').on('shown.bs.modal', function() {
+            $('.bidang-select', this).select2({
+                placeholder: "-- Pilih Bidang --",
+                dropdownParent: $(this),
+                width: '100%',
+                allowClear: true,
+                closeOnSelect: false
+            });
+        });
+
+        // Hancurkan Select2 saat modal ditutup
+        $('#ModalTambahDaftarTopik').on('hidden.bs.modal', function() {
+            $('.bidang-select', this).select2('destroy');
         });
     });
 
@@ -1220,26 +1401,46 @@ $(document).ready(function() {
     function initSelect2ForModal(modalId) {
         $(modalId).on('shown.bs.modal', function() {
             // Cari select bidang dalam modal ini
-            var select = $('.bidang-select', this);
+            var select = $('.bidang-edit-select', this);
             
             // Inisialisasi Select2
             select.select2({
                 placeholder: "-- Pilih Bidang --",
                 dropdownParent: $(this), // Mengarah ke modal yang sedang aktif
-                width: '100%'
+                width: '100%',
+                allowClear: true,
+                closeOnSelect: false
             });
         });
 
         // Hancurkan Select2 saat modal ditutup
         $(modalId).on('hidden.bs.modal', function() {
-            $('.bidang-select', this).select2('destroy');
+            $('.bidang-edit-select', this).select2('destroy');
         });
     }
 
     // Inisialisasi untuk semua modal yang ada
-    @foreach($modalTopik as $data)
+    @foreach($menampilkanDataDaftarTopik as $data)
         initSelect2ForModal('#ModalEditDaftarTopik{{ $data->id }}');
     @endforeach
+    
+    // Alternatif: inisialisasi untuk semua modal edit secara dinamis
+    $(document).on('shown.bs.modal', '[id^="ModalEditDaftarTopik"]', function() {
+        var $select = $(this).find('.bidang-edit-select');
+        if ($select.length && !$select.hasClass('select2-hidden-accessible')) {
+            $select.select2({
+                placeholder: "-- Pilih Bidang --",
+                dropdownParent: $(this),
+                width: '100%',
+                allowClear: true,
+                closeOnSelect: false
+            });
+        }
+    });
+    
+    $(document).on('hidden.bs.modal', '[id^="ModalEditDaftarTopik"]', function() {
+        $(this).find('.bidang-edit-select').select2('destroy');
+    });
 });
 
 $(document).ready(function() {
@@ -1377,30 +1578,149 @@ try {
     });
 } catch(e) { console.error('Dropdown Prodi Error:', e); }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // ... kode lain ...
-    const bidangSelectDosen = document.getElementById('bidangSelectDosen');
-    if (bidangSelectDosen) {
-        new Choices(bidangSelectDosen, {
-            removeItemButton: true,
-            searchResultLimit: 100,
-            shouldSort: false,
-            placeholder: true,
-            placeholderValue: 'Pilih bidang...'
-        });
-    }
-    // ... kode lain ...
-});
+// Kode untuk Choices.js dihapus karena menggunakan Select2
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.bidang-edit-select').forEach(function(select) {
-        new Choices(select, {
-            removeItemButton: true,
-            searchResultLimit: 100,
-            shouldSort: false,
-            placeholder: true,
-            placeholderValue: 'Pilih bidang...'
-        });
+// Handle form reset untuk Select2
+$(document).ready(function() {
+    $('#ModalTambahDaftarTopik').on('reset', function() {
+        // Reset Select2 setelah form di-reset
+        setTimeout(function() {
+            $('.bidang-select').val(null).trigger('change');
+        }, 100);
+    });
+    
+    // Handle form reset untuk modal edit
+    $('[id^="ModalEditDaftarTopik"]').on('reset', function() {
+        var modalId = $(this).attr('id');
+        setTimeout(function() {
+            $('#' + modalId + ' .bidang-edit-select').val(null).trigger('change');
+        }, 100);
+    });
+    
+    // Pastikan Select2 tidak konflik dengan Bootstrap modal
+    $(document).on('select2:open', function() {
+        // Pastikan dropdown Select2 muncul di atas modal
+        setTimeout(function() {
+            $('.select2-dropdown').css('z-index', 9999);
+        }, 0);
+    });
+    
+    // Debug: Log untuk memastikan Select2 berfungsi
+    $(document).on('select2:select', function(e) {
+        console.log('Bidang dipilih:', e.params.data);
+    });
+    
+    $(document).on('select2:unselect', function(e) {
+        console.log('Bidang dihapus:', e.params.data);
+    });
+    
+    // Validasi form sebelum submit
+    $('#formTambahTopik').on('submit', function(e) {
+        var selectedBidang = $('.bidang-select').val();
+        if (!selectedBidang || selectedBidang.length === 0) {
+            e.preventDefault();
+            alert('Silakan pilih minimal satu bidang!');
+            return false;
+        }
+    });
+    
+    // Validasi form edit sebelum submit
+    $('form[action*="daftar_topik/edit"]').on('submit', function(e) {
+        var modalId = $(this).closest('.modal').attr('id');
+        var selectedBidang = $('#' + modalId + ' .bidang-edit-select').val();
+        if (!selectedBidang || selectedBidang.length === 0) {
+            e.preventDefault();
+            alert('Silakan pilih minimal satu bidang!');
+            return false;
+        }
+    });
+    
+    // Memastikan Select2 diinisialisasi dengan benar
+    $(document).on('shown.bs.modal', function() {
+        // Tunggu sebentar agar modal benar-benar terbuka
+        setTimeout(function() {
+            // Inisialisasi Select2 untuk modal tambah
+            if ($('#ModalTambahDaftarTopik').hasClass('show')) {
+                if (!$('#ModalTambahDaftarTopik .bidang-select').hasClass('select2-hidden-accessible')) {
+                    $('#ModalTambahDaftarTopik .bidang-select').select2({
+                        placeholder: "-- Pilih Bidang --",
+                        dropdownParent: $('#ModalTambahDaftarTopik'),
+                        width: '100%',
+                        allowClear: true,
+                        closeOnSelect: false
+                    });
+                }
+            }
+            
+            // Inisialisasi Select2 untuk modal edit
+            $('.modal.show .bidang-edit-select').each(function() {
+                if (!$(this).hasClass('select2-hidden-accessible')) {
+                    $(this).select2({
+                        placeholder: "-- Pilih Bidang --",
+                        dropdownParent: $(this).closest('.modal'),
+                        width: '100%',
+                        allowClear: true,
+                        closeOnSelect: false
+                    });
+                }
+            });
+        }, 100);
+    });
+    
+    // Cleanup Select2 saat modal ditutup
+    $(document).on('hidden.bs.modal', function() {
+        // Destroy Select2 untuk modal tambah
+        $('#ModalTambahDaftarTopik .bidang-select').select2('destroy');
+        
+        // Destroy Select2 untuk modal edit
+        $('.modal .bidang-edit-select').select2('destroy');
+    });
+    
+    // Tambahkan event listener untuk memastikan Select2 berfungsi
+    $(document).on('select2:select', '.bidang-select, .bidang-edit-select', function(e) {
+        console.log('Bidang dipilih:', e.params.data.text);
+    });
+    
+    $(document).on('select2:unselect', '.bidang-select, .bidang-edit-select', function(e) {
+        console.log('Bidang dihapus:', e.params.data.text);
+    });
+    
+    // Memastikan form validation berfungsi
+    $(document).on('submit', '#formTambahTopik, form[action*="daftar_topik/edit"]', function(e) {
+        var $form = $(this);
+        var $select = $form.find('.bidang-select, .bidang-edit-select');
+        var selectedValues = $select.val();
+        
+        if (!selectedValues || selectedValues.length === 0) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan',
+                text: 'Silakan pilih minimal satu bidang!',
+                confirmButtonColor: '#881d1d'
+            });
+            return false;
+        }
+    });
+    
+    // Memastikan Select2 berfungsi dengan baik
+    $(document).ready(function() {
+        // Inisialisasi Select2 untuk modal tambah saat halaman dimuat
+        if ($('#ModalTambahDaftarTopik').length) {
+            $('#ModalTambahDaftarTopik').on('shown.bs.modal', function() {
+                var $select = $(this).find('.bidang-select');
+                if ($select.length && !$select.hasClass('select2-hidden-accessible')) {
+                    $select.select2({
+                        placeholder: "-- Pilih Bidang --",
+                        dropdownParent: $(this),
+                        width: '100%',
+                        allowClear: true,
+                        closeOnSelect: false,
+                        tags: false
+                    });
+                }
+            });
+        }
     });
 });
 </script>

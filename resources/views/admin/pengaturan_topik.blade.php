@@ -301,14 +301,14 @@
                                     @foreach($bidang as $i => $b)
                                         <div class="input-group mb-2 bidang-item">
                                             <input type="text" name="list_bidang[]" class="form-control" value="{{ $b }}" required>
-                                            <button type="button" class="btn btn-danger btn-remove-bidang">Hapus</button>
+                                            <button type="button" class="btn" style="background: #6c757d; color: #fff;">Hapus</button>
                                         </div>
                                     @endforeach
                                 </div>
-                                <button type="button" class="btn btn-sm link-light" id="btn-tambah-bidang" style="background: #881d1d;"><i class="fas fa-plus"></i> Tambah Bidang</button>
+                                <button type="button" class="btn btn-sm link-light mt-3" id="btn-tambah-bidang" style="background: #881d1d;"><i class="fas fa-plus"></i> Tambah Bidang</button>
                                 @error('list_bidang')<div class="text-danger">{{ $message }}</div>@enderror
                             </div>
-                            <button type="submit" class="btn btn-success">Simpan Pengaturan</button>
+                            <button type="submit" class="btn mt-2" style="background: #881d1d; color: #fff;">Simpan Pengaturan</button>
                         </form>
                     </div>
                 </div>

@@ -148,30 +148,7 @@ class PageController extends Controller
             $anggotaKelompok = \App\Models\Kelompok::where('judul', $kelompok->judul)->get();
             $nims = $anggotaKelompok->pluck('nim')->toArray();
         }
-        // Progress Bimbingan per Pembimbing 1 & 2 kelompok ini
-        $progressLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
-        $progressData = [];
-        $pembimbingChartLabels = [];
-        if ($pembimbingSatu && $pembimbingSatu != '-') {
-            $pembimbingChartLabels[] = $pembimbingSatu;
-            $progressData[$pembimbingSatu] = [];
-            foreach (range(1, 6) as $bulan) {
-                $progressData[$pembimbingSatu][] = \App\Models\Bimbingan::whereMonth('created_at', $bulan)
-                    ->whereIn('nim', $nims)
-                    ->where('pembimbing', 1)
-                    ->count();
-            }
-        }
-        if ($pembimbingDua && $pembimbingDua != '-') {
-            $pembimbingChartLabels[] = $pembimbingDua;
-            $progressData[$pembimbingDua] = [];
-            foreach (range(1, 6) as $bulan) {
-                $progressData[$pembimbingDua][] = \App\Models\Bimbingan::whereMonth('created_at', $bulan)
-                    ->whereIn('nim', $nims)
-                    ->where('pembimbing', 2)
-                    ->count();
-            }
-        }
+
         // Ambil jadwal sidang untuk kelompok mahasiswa ini
         $jadwalSidang = null;
         if ($kelompok) {
@@ -183,9 +160,8 @@ class PageController extends Controller
             'statusLabels', 'statusCounts',
             'bidangLabels', 'bidangData',
             'dosenLabels', 'dosenData',
-            'progressLabels', 'progressData',
             'pembimbingSatu', 'pembimbingDua',
-            'anggotaKelompok', 'pembimbingChartLabels',
+            'anggotaKelompok',
             'jadwalSidang'
         ));
     }

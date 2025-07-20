@@ -311,24 +311,34 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/mahasiswa/beranda"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+                    @php
+                        $currentUrl = request()->path();
+                        $isBeranda = $currentUrl == 'mahasiswa/beranda' || $currentUrl == 'mahasiswa';
+                        $isDaftarTopik = str_contains($currentUrl, 'daftar_topik') || str_contains($currentUrl, 'buat_topik');
+                        $isTemplateLaporan = str_contains($currentUrl, 'template_laporan');
+                        $isPembimbingDua = str_contains($currentUrl, 'pembimbing-dua');
+                        $isBimbingan = str_contains($currentUrl, 'dokumen-bimbingan');
+                        $isProfil = str_contains($currentUrl, 'profil');
+                    @endphp
+                    
+                    <li class="nav-item {{ $isBeranda ? 'active' : '' }}">
+                        <a class="nav-link {{ $isBeranda ? 'active' : '' }}" href="/mahasiswa/beranda"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/mahasiswa/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a>
+                    <li class="nav-item {{ $isDaftarTopik ? 'active' : '' }}">
+                        <a class="nav-link {{ $isDaftarTopik ? 'active' : '' }}" href="/mahasiswa/daftar_topik"><i class="far fa-file-alt"></i><span>Daftar Topik</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/mahasiswa/template_laporan"><i class="fas fa-file-word"></i><span>Template Laporan</span></a>
+                    <li class="nav-item {{ $isTemplateLaporan ? 'active' : '' }}">
+                        <a class="nav-link {{ $isTemplateLaporan ? 'active' : '' }}" href="/mahasiswa/template_laporan"><i class="fas fa-file-word"></i><span>Template Laporan</span></a>
                     </li>                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="/mahasiswa/pembimbing-dua"><i class="fas fa-users"></i><span>Pembimbing 2</span></a>
+                    <li class="nav-item {{ $isPembimbingDua ? 'active' : '' }}">
+                        <a class="nav-link {{ $isPembimbingDua ? 'active' : '' }}" href="/mahasiswa/pembimbing-dua"><i class="fas fa-users"></i><span>Pembimbing 2</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/mahasiswa/dokumen-bimbingan"><i class="fas fa-comments"></i><span>Bimbingan</span></a>
+                    <li class="nav-item {{ $isBimbingan ? 'active' : '' }}">
+                        <a class="nav-link {{ $isBimbingan ? 'active' : '' }}" href="/mahasiswa/dokumen-bimbingan"><i class="fas fa-comments"></i><span>Bimbingan</span></a>
                     </li>
-                    <li class="nav-item mt-auto">
+                    <li class="nav-item mt-auto {{ $isProfil ? 'active' : '' }}">
                         <hr class="sidebar-divider my-0">
-                        <a class="nav-link" href="/mahasiswa/profil"><i class="fas fa-user"></i><span>Profil</span></a>
+                        <a class="nav-link {{ $isProfil ? 'active' : '' }}" href="/mahasiswa/profil"><i class="fas fa-user"></i><span>Profil</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a>

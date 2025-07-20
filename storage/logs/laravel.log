@@ -1,0 +1,177 @@
+[2025-07-19 20:13:46] local.ERROR: PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1 {"exception":"[object] (Psy\\Exception\\ParseErrorException(code: 0): PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1 at C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Exception\\ParseErrorException.php:44)
+[stacktrace]
+#0 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\CodeCleaner.php(306): Psy\\Exception\\ParseErrorException::fromParseError()
+#1 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\CodeCleaner.php(240): Psy\\CodeCleaner->parse()
+#2 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(852): Psy\\CodeCleaner->clean()
+#3 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(881): Psy\\Shell->addCode()
+#4 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(1390): Psy\\Shell->setCode()
+#5 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\tinker\\src\\Console\\TinkerCommand.php(76): Psy\\Shell->execute()
+#6 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Laravel\\Tinker\\Console\\TinkerCommand->handle()
+#7 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#8 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#9 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#10 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(754): Illuminate\\Container\\BoundMethod::call()
+#11 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call()
+#12 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Command\\Command.php(279): Illuminate\\Console\\Command->execute()
+#13 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#14 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(1094): Illuminate\\Console\\Command->run()
+#15 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#16 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#17 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#18 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1234): Illuminate\\Foundation\\Console\\Kernel->handle()
+#19 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#20 {main}
+"} 
+[2025-07-19 20:14:24] local.ERROR: PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1 {"exception":"[object] (Psy\\Exception\\ParseErrorException(code: 0): PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1 at C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Exception\\ParseErrorException.php:44)
+[stacktrace]
+#0 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\CodeCleaner.php(306): Psy\\Exception\\ParseErrorException::fromParseError()
+#1 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\CodeCleaner.php(240): Psy\\CodeCleaner->parse()
+#2 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(852): Psy\\CodeCleaner->clean()
+#3 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(881): Psy\\Shell->addCode()
+#4 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(1390): Psy\\Shell->setCode()
+#5 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\tinker\\src\\Console\\TinkerCommand.php(76): Psy\\Shell->execute()
+#6 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Laravel\\Tinker\\Console\\TinkerCommand->handle()
+#7 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#8 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#9 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#10 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(754): Illuminate\\Container\\BoundMethod::call()
+#11 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call()
+#12 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Command\\Command.php(279): Illuminate\\Console\\Command->execute()
+#13 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#14 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(1094): Illuminate\\Console\\Command->run()
+#15 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#16 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#17 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#18 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1234): Illuminate\\Foundation\\Console\\Kernel->handle()
+#19 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#20 {main}
+"} 
+[2025-07-19 20:15:12] local.ERROR: PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1 {"exception":"[object] (Psy\\Exception\\ParseErrorException(code: 0): PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1 at C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Exception\\ParseErrorException.php:44)
+[stacktrace]
+#0 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\CodeCleaner.php(306): Psy\\Exception\\ParseErrorException::fromParseError()
+#1 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\CodeCleaner.php(240): Psy\\CodeCleaner->parse()
+#2 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(852): Psy\\CodeCleaner->clean()
+#3 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(881): Psy\\Shell->addCode()
+#4 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(1390): Psy\\Shell->setCode()
+#5 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\tinker\\src\\Console\\TinkerCommand.php(76): Psy\\Shell->execute()
+#6 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Laravel\\Tinker\\Console\\TinkerCommand->handle()
+#7 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#8 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#9 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#10 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(754): Illuminate\\Container\\BoundMethod::call()
+#11 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call()
+#12 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Command\\Command.php(279): Illuminate\\Console\\Command->execute()
+#13 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#14 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(1094): Illuminate\\Console\\Command->run()
+#15 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#16 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#17 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#18 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1234): Illuminate\\Foundation\\Console\\Kernel->handle()
+#19 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#20 {main}
+"} 
+[2025-07-19 20:25:46] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:25:46] local.INFO: Pembimbing Chart Labels: ["IFQ"]  
+[2025-07-19 20:25:46] local.INFO: Progress Data: {"IFQ":[0,0,0,0,0,0]}  
+[2025-07-19 20:27:05] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:27:05] local.INFO: Pembimbing Chart Labels: ["IFQ"]  
+[2025-07-19 20:27:05] local.INFO: Progress Data: {"IFQ":[0,0,0,0,0,0]}  
+[2025-07-19 20:28:33] local.ERROR: PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1 {"exception":"[object] (Psy\\Exception\\ParseErrorException(code: 0): PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1 at C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Exception\\ParseErrorException.php:44)
+[stacktrace]
+#0 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\CodeCleaner.php(306): Psy\\Exception\\ParseErrorException::fromParseError()
+#1 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\CodeCleaner.php(240): Psy\\CodeCleaner->parse()
+#2 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(852): Psy\\CodeCleaner->clean()
+#3 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(881): Psy\\Shell->addCode()
+#4 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\psy\\psysh\\src\\Shell.php(1390): Psy\\Shell->setCode()
+#5 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\tinker\\src\\Console\\TinkerCommand.php(76): Psy\\Shell->execute()
+#6 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Laravel\\Tinker\\Console\\TinkerCommand->handle()
+#7 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#8 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#9 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#10 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(754): Illuminate\\Container\\BoundMethod::call()
+#11 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call()
+#12 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Command\\Command.php(279): Illuminate\\Console\\Command->execute()
+#13 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#14 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(1094): Illuminate\\Console\\Command->run()
+#15 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#16 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\symfony\\console\\Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#17 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#18 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1234): Illuminate\\Foundation\\Console\\Kernel->handle()
+#19 C:\\Users\\irfan\\LaravelP\\infotager\\infota\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#20 {main}
+"} 
+[2025-07-19 20:28:52] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:28:52] local.INFO: Pembimbing Chart Labels: ["IFQ"]  
+[2025-07-19 20:28:52] local.INFO: Progress Data: {"IFQ":[0,0,0,0,0,0]}  
+[2025-07-19 20:30:59] local.INFO: All Bimbingan Data: [{"id":5,"nim":"1103213224","judul":"CD 1 IoT","dokumen_terkait":"3","pembimbing":"1","jadwal":"2025-07-07 12:00:00","status":"selesai","catatan":"pembahasan cd 1","kritik_saran":"Sudah cukup baik cuma ada beberapa kekurangan dalam format dokumen","alasan_tolak":null,"created_at":"2025-07-19T19:28:41.000000Z","updated_at":"2025-07-19T19:30:05.000000Z"},{"id":6,"nim":"1103213224","judul":"cd 1","dokumen_terkait":"4","pembimbing":"1","jadwal":"2025-07-22 12:00:00","status":"selesai","catatan":"cd 1 lagi","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-07-19T20:08:00.000000Z","updated_at":"2025-07-19T20:08:12.000000Z"},{"id":7,"nim":"1103213224","judul":"cd 1 kali","dokumen_terkait":"5","pembimbing":"1","jadwal":"2025-07-21 12:00:00","status":"selesai","catatan":"cd 1","kritik_saran":"bagus kali","alasan_tolak":null,"created_at":"2025-07-19T20:26:34.000000Z","updated_at":"2025-07-19T20:26:55.000000Z"}]  
+[2025-07-19 20:30:59] local.INFO: NIMs in group: [1103213224,1103210041,1103210140]  
+[2025-07-19 20:30:59] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:30:59] local.INFO: Pembimbing Chart Labels: ["IFQ"]  
+[2025-07-19 20:30:59] local.INFO: Progress Data: {"IFQ":[0,0,0,0,0,0]}  
+[2025-07-19 20:32:57] local.INFO: All Bimbingan Data: [{"id":5,"nim":"1103213224","judul":"CD 1 IoT","dokumen_terkait":"3","pembimbing":"1","jadwal":"2025-07-07 12:00:00","status":"selesai","catatan":"pembahasan cd 1","kritik_saran":"Sudah cukup baik cuma ada beberapa kekurangan dalam format dokumen","alasan_tolak":null,"created_at":"2025-07-19T19:28:41.000000Z","updated_at":"2025-07-19T19:30:05.000000Z"},{"id":6,"nim":"1103213224","judul":"cd 1","dokumen_terkait":"4","pembimbing":"1","jadwal":"2025-07-22 12:00:00","status":"selesai","catatan":"cd 1 lagi","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-07-19T20:08:00.000000Z","updated_at":"2025-07-19T20:08:12.000000Z"},{"id":7,"nim":"1103213224","judul":"cd 1 kali","dokumen_terkait":"5","pembimbing":"1","jadwal":"2025-07-21 12:00:00","status":"selesai","catatan":"cd 1","kritik_saran":"bagus kali","alasan_tolak":null,"created_at":"2025-07-19T20:26:34.000000Z","updated_at":"2025-07-19T20:26:55.000000Z"}]  
+[2025-07-19 20:32:57] local.INFO: NIMs in group: [1103213224,1103210041,1103210140]  
+[2025-07-19 20:32:57] local.INFO: Total bimbingan found: 3  
+[2025-07-19 20:32:57] local.INFO: Bimbingan: NIM=1103213224, Pembimbing=1, Status=selesai, Created=2025-07-19 19:28:41  
+[2025-07-19 20:32:57] local.INFO: Bimbingan: NIM=1103213224, Pembimbing=1, Status=selesai, Created=2025-07-19 20:08:00  
+[2025-07-19 20:32:57] local.INFO: Bimbingan: NIM=1103213224, Pembimbing=1, Status=selesai, Created=2025-07-19 20:26:34  
+[2025-07-19 20:32:57] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:32:57] local.INFO: Pembimbing Chart Labels: ["IFQ"]  
+[2025-07-19 20:32:57] local.INFO: Progress Data: {"IFQ":[0,0,0,0,0,0]}  
+[2025-07-19 20:33:13] local.INFO: All Bimbingan Data: [{"id":5,"nim":"1103213224","judul":"CD 1 IoT","dokumen_terkait":"3","pembimbing":"1","jadwal":"2025-07-07 12:00:00","status":"selesai","catatan":"pembahasan cd 1","kritik_saran":"Sudah cukup baik cuma ada beberapa kekurangan dalam format dokumen","alasan_tolak":null,"created_at":"2025-07-19T19:28:41.000000Z","updated_at":"2025-07-19T19:30:05.000000Z"},{"id":6,"nim":"1103213224","judul":"cd 1","dokumen_terkait":"4","pembimbing":"1","jadwal":"2025-07-22 12:00:00","status":"selesai","catatan":"cd 1 lagi","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-07-19T20:08:00.000000Z","updated_at":"2025-07-19T20:08:12.000000Z"},{"id":7,"nim":"1103213224","judul":"cd 1 kali","dokumen_terkait":"5","pembimbing":"1","jadwal":"2025-07-21 12:00:00","status":"selesai","catatan":"cd 1","kritik_saran":"bagus kali","alasan_tolak":null,"created_at":"2025-07-19T20:26:34.000000Z","updated_at":"2025-07-19T20:26:55.000000Z"}]  
+[2025-07-19 20:33:13] local.INFO: NIMs in group: [1103213224,1103210041,1103210140]  
+[2025-07-19 20:33:13] local.INFO: Total bimbingan found: 3  
+[2025-07-19 20:33:13] local.INFO: Bimbingan: NIM=1103213224, Pembimbing=1, Status=selesai, Created=2025-07-19 19:28:41  
+[2025-07-19 20:33:13] local.INFO: Bimbingan: NIM=1103213224, Pembimbing=1, Status=selesai, Created=2025-07-19 20:08:00  
+[2025-07-19 20:33:13] local.INFO: Bimbingan: NIM=1103213224, Pembimbing=1, Status=selesai, Created=2025-07-19 20:26:34  
+[2025-07-19 20:33:13] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:33:13] local.INFO: Pembimbing Chart Labels: ["IFQ"]  
+[2025-07-19 20:33:13] local.INFO: Progress Data: {"IFQ":[0,0,0,0,0,0]}  
+[2025-07-19 20:33:49] local.INFO: All Bimbingan Data: [{"id":1,"nim":"1103213127","judul":"CD 1 Awal","dokumen_terkait":"1","pembimbing":"1","jadwal":"2025-06-04 12:00:00","status":"selesai","catatan":"Membahas tentang mekanisme cd 1","kritik_saran":"Masih kurang banyak","alasan_tolak":null,"created_at":"2025-06-03T16:31:18.000000Z","updated_at":"2025-06-03T16:37:28.000000Z"},{"id":2,"nim":"1103213127","judul":"cd 2","dokumen_terkait":"2","pembimbing":"1","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"cd 2","kritik_saran":"sudah baik","alasan_tolak":null,"created_at":"2025-06-03T17:45:12.000000Z","updated_at":"2025-06-03T17:45:36.000000Z"},{"id":4,"nim":"1103213127","judul":"abc","dokumen_terkait":"1","pembimbing":"2","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"abc","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-06-03T17:50:09.000000Z","updated_at":"2025-06-03T17:51:21.000000Z"}]  
+[2025-07-19 20:33:49] local.INFO: NIMs in group: [1103213127,1103213034,1103210206]  
+[2025-07-19 20:33:49] local.INFO: Total bimbingan found: 3  
+[2025-07-19 20:33:49] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 16:31:18  
+[2025-07-19 20:33:49] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 17:45:12  
+[2025-07-19 20:33:49] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=2, Status=selesai, Created=2025-06-03 17:50:09  
+[2025-07-19 20:33:49] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:33:49] local.INFO: Pembimbing Chart Labels: ["RLC","PBD"]  
+[2025-07-19 20:33:49] local.INFO: Progress Data: {"RLC":[0,0,0,0,0,2],"PBD":[0,0,0,0,0,1]}  
+[2025-07-19 20:35:49] local.INFO: All Bimbingan Data: [{"id":1,"nim":"1103213127","judul":"CD 1 Awal","dokumen_terkait":"1","pembimbing":"1","jadwal":"2025-06-04 12:00:00","status":"selesai","catatan":"Membahas tentang mekanisme cd 1","kritik_saran":"Masih kurang banyak","alasan_tolak":null,"created_at":"2025-06-03T16:31:18.000000Z","updated_at":"2025-06-03T16:37:28.000000Z"},{"id":2,"nim":"1103213127","judul":"cd 2","dokumen_terkait":"2","pembimbing":"1","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"cd 2","kritik_saran":"sudah baik","alasan_tolak":null,"created_at":"2025-06-03T17:45:12.000000Z","updated_at":"2025-06-03T17:45:36.000000Z"},{"id":4,"nim":"1103213127","judul":"abc","dokumen_terkait":"1","pembimbing":"2","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"abc","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-06-03T17:50:09.000000Z","updated_at":"2025-06-03T17:51:21.000000Z"},{"id":8,"nim":"1103213127","judul":"cd 4","dokumen_terkait":"6","pembimbing":"1","jadwal":"2025-07-21 12:00:00","status":"selesai","catatan":"cd 4","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-07-19T20:34:40.000000Z","updated_at":"2025-07-19T20:35:11.000000Z"}]  
+[2025-07-19 20:35:49] local.INFO: NIMs in group: [1103213127,1103213034,1103210206]  
+[2025-07-19 20:35:49] local.INFO: Total bimbingan found: 4  
+[2025-07-19 20:35:49] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 16:31:18  
+[2025-07-19 20:35:49] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 17:45:12  
+[2025-07-19 20:35:49] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=2, Status=selesai, Created=2025-06-03 17:50:09  
+[2025-07-19 20:35:49] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-07-19 20:34:40  
+[2025-07-19 20:35:49] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:35:49] local.INFO: Pembimbing Chart Labels: ["RLC","PBD"]  
+[2025-07-19 20:35:49] local.INFO: Progress Data: {"RLC":[0,0,0,0,0,2],"PBD":[0,0,0,0,0,1]}  
+[2025-07-19 20:36:11] local.INFO: All Bimbingan Data: [{"id":1,"nim":"1103213127","judul":"CD 1 Awal","dokumen_terkait":"1","pembimbing":"1","jadwal":"2025-06-04 12:00:00","status":"selesai","catatan":"Membahas tentang mekanisme cd 1","kritik_saran":"Masih kurang banyak","alasan_tolak":null,"created_at":"2025-06-03T16:31:18.000000Z","updated_at":"2025-06-03T16:37:28.000000Z"},{"id":2,"nim":"1103213127","judul":"cd 2","dokumen_terkait":"2","pembimbing":"1","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"cd 2","kritik_saran":"sudah baik","alasan_tolak":null,"created_at":"2025-06-03T17:45:12.000000Z","updated_at":"2025-06-03T17:45:36.000000Z"},{"id":4,"nim":"1103213127","judul":"abc","dokumen_terkait":"1","pembimbing":"2","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"abc","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-06-03T17:50:09.000000Z","updated_at":"2025-06-03T17:51:21.000000Z"},{"id":8,"nim":"1103213127","judul":"cd 4","dokumen_terkait":"6","pembimbing":"1","jadwal":"2025-07-21 12:00:00","status":"selesai","catatan":"cd 4","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-07-19T20:34:40.000000Z","updated_at":"2025-07-19T20:35:11.000000Z"}]  
+[2025-07-19 20:36:11] local.INFO: NIMs in group: [1103213127,1103213034,1103210206]  
+[2025-07-19 20:36:11] local.INFO: Total bimbingan found: 4  
+[2025-07-19 20:36:11] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 16:31:18  
+[2025-07-19 20:36:11] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 17:45:12  
+[2025-07-19 20:36:11] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=2, Status=selesai, Created=2025-06-03 17:50:09  
+[2025-07-19 20:36:11] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-07-19 20:34:40  
+[2025-07-19 20:36:11] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-19 20:36:11] local.INFO: Pembimbing Chart Labels: ["RLC","PBD"]  
+[2025-07-19 20:36:11] local.INFO: Progress Data: {"RLC":[0,0,0,0,0,2],"PBD":[0,0,0,0,0,1]}  
+[2025-07-20 08:05:55] local.INFO: All Bimbingan Data: [{"id":1,"nim":"1103213127","judul":"CD 1 Awal","dokumen_terkait":"1","pembimbing":"1","jadwal":"2025-06-04 12:00:00","status":"selesai","catatan":"Membahas tentang mekanisme cd 1","kritik_saran":"Masih kurang banyak","alasan_tolak":null,"created_at":"2025-06-03T16:31:18.000000Z","updated_at":"2025-06-03T16:37:28.000000Z"},{"id":2,"nim":"1103213127","judul":"cd 2","dokumen_terkait":"2","pembimbing":"1","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"cd 2","kritik_saran":"sudah baik","alasan_tolak":null,"created_at":"2025-06-03T17:45:12.000000Z","updated_at":"2025-06-03T17:45:36.000000Z"},{"id":4,"nim":"1103213127","judul":"abc","dokumen_terkait":"1","pembimbing":"2","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"abc","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-06-03T17:50:09.000000Z","updated_at":"2025-06-03T17:51:21.000000Z"},{"id":8,"nim":"1103213127","judul":"cd 4","dokumen_terkait":"6","pembimbing":"1","jadwal":"2025-07-21 12:00:00","status":"selesai","catatan":"cd 4","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-07-19T20:34:40.000000Z","updated_at":"2025-07-19T20:35:11.000000Z"}]  
+[2025-07-20 08:05:55] local.INFO: NIMs in group: [1103213127,1103213034,1103210206]  
+[2025-07-20 08:05:55] local.INFO: Total bimbingan found: 4  
+[2025-07-20 08:05:55] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 16:31:18  
+[2025-07-20 08:05:55] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 17:45:12  
+[2025-07-20 08:05:55] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=2, Status=selesai, Created=2025-06-03 17:50:09  
+[2025-07-20 08:05:55] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-07-19 20:34:40  
+[2025-07-20 08:05:55] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-20 08:05:55] local.INFO: Pembimbing Chart Labels: ["RLC","PBD"]  
+[2025-07-20 08:05:55] local.INFO: Progress Data: {"RLC":[0,0,0,0,0,2],"PBD":[0,0,0,0,0,1]}  
+[2025-07-20 08:06:19] local.INFO: All Bimbingan Data: [{"id":1,"nim":"1103213127","judul":"CD 1 Awal","dokumen_terkait":"1","pembimbing":"1","jadwal":"2025-06-04 12:00:00","status":"selesai","catatan":"Membahas tentang mekanisme cd 1","kritik_saran":"Masih kurang banyak","alasan_tolak":null,"created_at":"2025-06-03T16:31:18.000000Z","updated_at":"2025-06-03T16:37:28.000000Z"},{"id":2,"nim":"1103213127","judul":"cd 2","dokumen_terkait":"2","pembimbing":"1","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"cd 2","kritik_saran":"sudah baik","alasan_tolak":null,"created_at":"2025-06-03T17:45:12.000000Z","updated_at":"2025-06-03T17:45:36.000000Z"},{"id":4,"nim":"1103213127","judul":"abc","dokumen_terkait":"1","pembimbing":"2","jadwal":"2025-06-05 12:00:00","status":"selesai","catatan":"abc","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-06-03T17:50:09.000000Z","updated_at":"2025-06-03T17:51:21.000000Z"},{"id":8,"nim":"1103213127","judul":"cd 4","dokumen_terkait":"6","pembimbing":"1","jadwal":"2025-07-21 12:00:00","status":"selesai","catatan":"cd 4","kritik_saran":"bagus","alasan_tolak":null,"created_at":"2025-07-19T20:34:40.000000Z","updated_at":"2025-07-19T20:35:11.000000Z"}]  
+[2025-07-20 08:06:19] local.INFO: NIMs in group: [1103213127,1103213034,1103210206]  
+[2025-07-20 08:06:19] local.INFO: Total bimbingan found: 4  
+[2025-07-20 08:06:19] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 16:31:18  
+[2025-07-20 08:06:19] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-06-03 17:45:12  
+[2025-07-20 08:06:19] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=2, Status=selesai, Created=2025-06-03 17:50:09  
+[2025-07-20 08:06:19] local.INFO: Bimbingan: NIM=1103213127, Pembimbing=1, Status=selesai, Created=2025-07-19 20:34:40  
+[2025-07-20 08:06:19] local.INFO: Progress Labels: ["Jan","Feb","Mar","Apr","Mei","Jun"]  
+[2025-07-20 08:06:19] local.INFO: Pembimbing Chart Labels: ["RLC","PBD"]  
+[2025-07-20 08:06:19] local.INFO: Progress Data: {"RLC":[0,0,0,0,0,2],"PBD":[0,0,0,0,0,1]}  

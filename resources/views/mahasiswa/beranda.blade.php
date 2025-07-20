@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - Brand</title>
+    <title>Dashboard - Mahasiswa</title>
     <link rel="stylesheet" href="{{ asset('/storage/assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
@@ -393,18 +393,6 @@
                         <div class="col-md-6 mb-4">
                             <div class="card shadow">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <p class="text-dark m-0 fw-bold">Jumlah Topik per Bidang</p>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="bidangTopikChart" height="180"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6 mb-4">
-                            <div class="card shadow">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <p class="text-dark m-0 fw-bold">Proporsi Topik per Dosen</p>
                                 </div>
                                 <div class="card-body">
@@ -412,16 +400,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-4">
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 mb-4">
                             <div class="card shadow">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <p class="text-dark m-0 fw-bold">Progress Bimbingan per Dosen</p>
+                                    <p class="text-dark m-0 fw-bold">Jumlah Topik per Bidang</p>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="lineBimbinganChart" height="180"></canvas>
+                                    <canvas id="bidangTopikChart" height="200"></canvas>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="row mt-3 d-flex align-items-stretch">
                         <div class="col-md-4 mb-4 d-flex">
@@ -432,9 +423,9 @@
                                         Lihat Selengkapnya... <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path></svg>
                                     </button>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body p-4">
                                     <!-- Tabel Data Pembimbing -->
-                                    <div class="table-responsive table mt-2">
+                                    <div class="table-responsive table mt-0">
                                         <table class="table table-striped table-hover" id="tableData1">
                                             <thead>
                                                 <tr>
@@ -489,12 +480,12 @@
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <p class="text-dark m-0 fw-bold">Data Kelompok</p>
                                     <button class="btn btn-sm" type="button" style="color: rgb(136,29,29); background: none; font-weight: bold;" data-bs-toggle="modal" data-bs-target="#modalDataKelompok">
-                                        Lihat Selengkapnya... <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path></svg>
+                                        Lihat Selengkapnya... <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right"><path fill-rule="evenodd" d="M1 8a.0.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path></svg>
                                     </button>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body p-4">
                                     <!-- Tabel Data Kelompok -->
-                                    <div class="table-responsive table mt-2">
+                                    <div class="table-responsive table mt-0">
                                         <table class="table table-striped table-hover" id="tableData2">
                                             <thead>
                                                 <tr>
@@ -568,46 +559,67 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-4 d-flex">
-                            <div class="card shadow h-100 w-100 d-flex flex-column justify-content-between">
-                                <div>
-                                    <div class="card-header py-3 d-flex align-items-center" style="gap: 8px;">
+                            <div class="card shadow h-100 w-100">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center" style="gap: 8px;">
                                         <i class="fas fa-calendar-alt me-2" style="font-size: 1.3em; color: #4f6ef7;"></i>
                                         <p class="text-dark m-0 fw-bold">Jadwal Sidang Kamu</p>
                                     </div>
-                                    <div class="card-body d-flex flex-column justify-content-center align-items-center" style="min-height: 340px;">
-                                        @if(isset($jadwalSidang) && $jadwalSidang && $jadwalSidang->judul)
-                                        <div class="w-100">
-                                            <table class="table table-borderless mb-0">
-                                                <tbody>
-                                                    <tr><th class="ps-0" style="width: 140px;">Judul TA</th><td>: {{ $jadwalSidang->judul }}</td></tr>
-                                                    <tr><th class="ps-0">Tanggal & Waktu</th><td>: {{ isset($jadwalSidang->tanggal_sidang) ? \Carbon\Carbon::parse($jadwalSidang->tanggal_sidang)->format('d/m/Y H:i') : '-' }}</td></tr>
-                                                    <tr><th class="ps-0">Ruangan</th><td>: {{ $jadwalSidang->ruangan ?? '-' }}</td></tr>
-                                                    <tr><th class="ps-0">Penguji 1</th><td>: {{ $jadwalSidang->dosenPenguji1->nama ?? '-' }}</td></tr>
-                                                    <tr><th class="ps-0">Penguji 2</th><td>: {{ $jadwalSidang->dosenPenguji2->nama ?? '-' }}</td></tr>
-                                                    <tr><th class="ps-0">Jenis Sidang</th><td>: {{ $jadwalSidang->jenis_sidang ?? '-' }}</td></tr>
-                                                    <tr><th class="ps-0">Status</th>
-                                                        <td>:
-                                                            @php
-                                                                $badge = 'secondary';
-                                                                if($jadwalSidang->status == 'Scheduled') $badge = 'primary';
-                                                                elseif($jadwalSidang->status == 'Completed') $badge = 'success';
-                                                                elseif($jadwalSidang->status == 'Postponed') $badge = 'warning';
-                                                            @endphp
-                                                            <span class="badge bg-{{ $badge }}">{{ $jadwalSidang->status ?? '-' }}</span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr><th class="ps-0">Catatan</th><td>: {{ $jadwalSidang->catatan ?? '-' }}</td></tr>
-                                                </tbody>
-                                            </table>
+                                    <button class="btn btn-sm" type="button" style="color: rgb(136,29,29); background: none; font-weight: bold;" data-bs-toggle="modal" data-bs-target="#modalJadwalSidang">
+                                        Lihat Selengkapnya... <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path></svg>
+                                    </button>
+                                </div>
+                                <div class="card-body p-4">
+                                    @if(isset($jadwalSidang) && $jadwalSidang && $jadwalSidang->judul)
+                                    <div class="jadwal-sidang-content">
+                                        <div class="jadwal-item mb-3">
+                                            <div class="jadwal-label">Judul TA</div>
+                                            <div class="jadwal-value">{{ $jadwalSidang->judul }}</div>
                                         </div>
-                                        @else
-                                        <div class="text-center w-100 d-flex flex-column align-items-center justify-content-center" style="min-height: 220px;">
-                                            <i class="fas fa-calendar-times mb-3" style="font-size: 3em; color: #e5e7eb;"></i>
-                                            <p class="fw-bold text-muted mb-1">Belum ada jadwal sidang</p>
-                                            <p class="text-muted" style="font-size: 0.97em;">Silakan cek secara berkala atau hubungi admin jika ada kendala.</p>
+                                        <div class="jadwal-item mb-3">
+                                            <div class="jadwal-label">Tanggal & Waktu</div>
+                                            <div class="jadwal-value">{{ isset($jadwalSidang->tanggal_sidang) ? \Carbon\Carbon::parse($jadwalSidang->tanggal_sidang)->format('d/m/Y H:i') : '-' }}</div>
                                         </div>
-                                        @endif
+                                        <div class="jadwal-item mb-3">
+                                            <div class="jadwal-label">Ruangan</div>
+                                            <div class="jadwal-value">{{ $jadwalSidang->ruangan ?? '-' }}</div>
+                                        </div>
+                                        <div class="jadwal-item mb-3">
+                                            <div class="jadwal-label">Penguji 1</div>
+                                            <div class="jadwal-value">{{ $jadwalSidang->dosenPenguji1->nama ?? '-' }}</div>
+                                        </div>
+                                        <div class="jadwal-item mb-3">
+                                            <div class="jadwal-label">Penguji 2</div>
+                                            <div class="jadwal-value">{{ $jadwalSidang->dosenPenguji2->nama ?? '-' }}</div>
+                                        </div>
+                                        <div class="jadwal-item mb-3">
+                                            <div class="jadwal-label">Jenis Sidang</div>
+                                            <div class="jadwal-value">{{ $jadwalSidang->jenis_sidang ?? '-' }}</div>
+                                        </div>
+                                        <div class="jadwal-item mb-3">
+                                            <div class="jadwal-label">Status</div>
+                                            <div class="jadwal-value">
+                                                @php
+                                                    $badge = 'secondary';
+                                                    if($jadwalSidang->status == 'Scheduled') $badge = 'primary';
+                                                    elseif($jadwalSidang->status == 'Completed') $badge = 'success';
+                                                    elseif($jadwalSidang->status == 'Postponed') $badge = 'warning';
+                                                @endphp
+                                                <span class="badge bg-{{ $badge }}">{{ $jadwalSidang->status ?? '-' }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="jadwal-item mb-0">
+                                            <div class="jadwal-label">Catatan</div>
+                                            <div class="jadwal-value">{{ $jadwalSidang->catatan ?? '-' }}</div>
+                                        </div>
                                     </div>
+                                    @else
+                                    <div class="text-center d-flex flex-column align-items-center justify-content-center" style="min-height: 280px;">
+                                        <i class="fas fa-calendar-times mb-3" style="font-size: 3.5em; color: #e5e7eb;"></i>
+                                        <p class="fw-bold text-muted mb-2" style="font-size: 1.1em;">Belum ada jadwal sidang</p>
+                                        <p class="text-muted text-center" style="font-size: 0.95em; line-height: 1.5;">Silakan cek secara berkala atau hubungi admin jika ada kendala.</p>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -768,15 +780,25 @@
                 maintainAspectRatio: false
             }
         });
-        // Chart.js Bar Chart: Jumlah Topik per Bidang
+        // Chart.js Bar Chart: Jumlah Topik per Bidang - Fleksibel
         const ctxBidang = document.getElementById('bidangTopikChart').getContext('2d');
+        
+        // Data untuk chart
+        const bidangData = @json($bidangData);
+        const bidangLabels = @json($bidangLabels);
+        
+        // Hitung nilai maksimum untuk menentukan skala Y yang fleksibel
+        const maxValue = Math.max(...bidangData);
+        const stepSize = maxValue <= 5 ? 1 : Math.ceil(maxValue / 5);
+        const maxYAxis = Math.ceil(maxValue * 1.2); // Tambah 20% untuk ruang di atas
+        
         new Chart(ctxBidang, {
             type: 'bar',
             data: {
-                labels: @json($bidangLabels),
+                labels: bidangLabels,
                 datasets: [{
                     label: 'Jumlah Topik',
-                    data: @json($bidangData),
+                    data: bidangData,
                     backgroundColor: '#60a5fa',
                     borderRadius: 8,
                     maxBarThickness: 32
@@ -796,12 +818,22 @@
                 scales: {
                     x: {
                         grid: { display: false },
-                        ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 } }
+                        ticks: { 
+                            color: '#64748b', 
+                            font: { family: 'Poppins', size: 13 },
+                            maxRotation: 45,
+                            minRotation: 0
+                        }
                     },
                     y: {
                         beginAtZero: true,
                         grid: { color: '#e5e7eb' },
-                        ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 }, stepSize: 1 }
+                        ticks: { 
+                            color: '#64748b', 
+                            font: { family: 'Poppins', size: 13 }, 
+                            stepSize: stepSize,
+                            max: maxYAxis
+                        }
                     }
                 },
                 responsive: true,
@@ -838,65 +870,226 @@
                 maintainAspectRatio: false
             }
         });
-        // Line Chart: Progress Bimbingan per Dosen
-        const ctxLineBimbingan = document.getElementById('lineBimbinganChart').getContext('2d');
-        new Chart(ctxLineBimbingan, {
-            type: 'line',
-            data: {
-                labels: @json($progressLabels),
-                datasets: [
-                    @foreach($pembimbingChartLabels as $i => $label)
-                    {
-                        label: '{{ $label }}',
-                        data: @json($progressData[$label]),
-                        borderColor: ['#60a5fa', '#4ade80'][{{ $i }} % 2],
-                        backgroundColor: 'rgba(96,165,250,0.12)',
-                        tension: 0.4,
-                        fill: false,
-                        pointRadius: 4,
-                        pointBackgroundColor: ['#60a5fa', '#4ade80'][{{ $i }} % 2],
-                    },
-                    @endforeach
-                ]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            color: '#334155',
-                            font: { family: 'Poppins', size: 14 }
-                        }
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 } }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#e5e7eb' },
-                        ticks: { color: '#64748b', font: { family: 'Poppins', size: 13 }, stepSize: 1 }
-                    }
-                },
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
+        
     </script>
     <style>
-    #statusTopikChart, #bidangTopikChart {
+    #statusTopikChart, #pieDosenTopikChart {
         min-height: 180px;
         max-height: 260px;
     }
+    
+    #bidangTopikChart {
+        min-height: 200px;
+        max-height: 350px;
+        width: 100% !important;
+    }
+    
+    /* Responsif untuk chart bar */
+    @media (max-width: 768px) {
+        #bidangTopikChart {
+            min-height: 250px;
+            max-height: 400px;
+        }
+    }
     .card .card-body {
         padding-bottom: 1.5rem;
+    }
+    
+    /* Jadwal Sidang Styling */
+    .jadwal-sidang-content {
+        padding: 0.5rem 0;
+    }
+    
+    .jadwal-item {
+        display: flex;
+        flex-direction: column;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background-color 0.2s ease;
+    }
+    
+    .jadwal-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    
+    .jadwal-item:hover {
+        background-color: #f8fafc;
+        border-radius: 8px;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+    }
+    
+    .jadwal-label {
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .jadwal-value {
+        font-size: 0.95em;
+        font-weight: 500;
+        color: #1e293b;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
+    
+    .jadwal-value .badge {
+        font-size: 0.8em;
+        padding: 0.4em 0.8em;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .jadwal-item {
+            padding: 0.5rem 0;
+        }
+        
+        .jadwal-label {
+            font-size: 0.8em;
+        }
+        
+        .jadwal-value {
+            font-size: 0.9em;
+        }
+    }
+    
+    /* Table styling improvements */
+    .table-responsive.table {
+        margin-bottom: 0;
+    }
+    
+    .table-responsive.table .table {
+        margin-bottom: 0;
+        font-size: 0.9em;
+    }
+    
+    .table-responsive.table .table thead th {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #64748b;
+        background-color: #f8fafc;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .table-responsive.table .table tbody td {
+        padding: 0.75rem 0.5rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    
+    .table-responsive.table .table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    
+    .table-responsive.table .table tfoot th {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.8em;
+        font-weight: 600;
+        color: #64748b;
+        background-color: #f8fafc;
+        border-top: 2px solid #e2e8f0;
+    }
+    
+    /* DataTables styling improvements */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 1rem;
+    }
+    
+    .dataTables_wrapper .dataTables_length select {
+        padding: 0.25rem 0.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-size: 0.85em;
+    }
+    
+    .dataTables_wrapper .dataTables_filter input {
+        padding: 0.25rem 0.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-size: 0.85em;
+        margin-left: 0.5rem;
+    }
+    
+    .dataTables_wrapper .dataTables_info {
+        font-size: 0.85em;
+        color: #64748b;
+        margin-top: 1rem;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate {
+        margin-top: 1rem;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        margin: 0 0.125rem;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-size: 0.85em;
+        color: #64748b !important;
+        background: #ffffff;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        border-color: #cbd5e1;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #881d1d !important;
+        color: #ffffff !important;
+        border-color: #881d1d;
+    }
+    
+    /* Modal Jadwal Sidang Styling */
+    .jadwal-detail-item {
+        padding: 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+    }
+    
+    .jadwal-detail-item:hover {
+        background-color: #f1f5f9;
+        border-color: #cbd5e1;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .jadwal-detail-label {
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .jadwal-detail-value {
+        font-size: 1em;
+        font-weight: 500;
+        color: #1e293b;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
+    
+    .jadwal-detail-value .badge {
+        font-size: 0.9em;
+        padding: 0.5em 1em;
+        border-radius: 6px;
+        font-weight: 600;
     }
     </style>
     <!-- Modal Data Pembimbing -->
@@ -981,6 +1174,80 @@
                 @endforelse
               </tbody>
             </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal Jadwal Sidang -->
+    <div class="modal fade" id="modalJadwalSidang" tabindex="-1" aria-labelledby="modalJadwalSidangLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalJadwalSidangLabel">
+              <i class="fas fa-calendar-alt me-2" style="color: #4f6ef7;"></i>
+              Detail Jadwal Sidang
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            @if(isset($jadwalSidang) && $jadwalSidang && $jadwalSidang->judul)
+            <div class="row">
+              <div class="col-md-6">
+                <div class="jadwal-detail-item mb-3">
+                  <div class="jadwal-detail-label">Judul TA</div>
+                  <div class="jadwal-detail-value">{{ $jadwalSidang->judul }}</div>
+                </div>
+                <div class="jadwal-detail-item mb-3">
+                  <div class="jadwal-detail-label">Tanggal & Waktu</div>
+                  <div class="jadwal-detail-value">{{ isset($jadwalSidang->tanggal_sidang) ? \Carbon\Carbon::parse($jadwalSidang->tanggal_sidang)->format('d/m/Y H:i') : '-' }}</div>
+                </div>
+                <div class="jadwal-detail-item mb-3">
+                  <div class="jadwal-detail-label">Ruangan</div>
+                  <div class="jadwal-detail-value">{{ $jadwalSidang->ruangan ?? '-' }}</div>
+                </div>
+                <div class="jadwal-detail-item mb-3">
+                  <div class="jadwal-detail-label">Jenis Sidang</div>
+                  <div class="jadwal-detail-value">{{ $jadwalSidang->jenis_sidang ?? '-' }}</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="jadwal-detail-item mb-3">
+                  <div class="jadwal-detail-label">Penguji 1</div>
+                  <div class="jadwal-detail-value">{{ $jadwalSidang->dosenPenguji1->nama ?? '-' }}</div>
+                </div>
+                <div class="jadwal-detail-item mb-3">
+                  <div class="jadwal-detail-label">Penguji 2</div>
+                  <div class="jadwal-detail-value">{{ $jadwalSidang->dosenPenguji2->nama ?? '-' }}</div>
+                </div>
+                <div class="jadwal-detail-item mb-3">
+                  <div class="jadwal-detail-label">Status</div>
+                  <div class="jadwal-detail-value">
+                    @php
+                        $badge = 'secondary';
+                        if($jadwalSidang->status == 'Scheduled') $badge = 'primary';
+                        elseif($jadwalSidang->status == 'Completed') $badge = 'success';
+                        elseif($jadwalSidang->status == 'Postponed') $badge = 'warning';
+                    @endphp
+                    <span class="badge bg-{{ $badge }} fs-6">{{ $jadwalSidang->status ?? '-' }}</span>
+                  </div>
+                </div>
+                <div class="jadwal-detail-item mb-3">
+                  <div class="jadwal-detail-label">Catatan</div>
+                  <div class="jadwal-detail-value">{{ $jadwalSidang->catatan ?? '-' }}</div>
+                </div>
+              </div>
+            </div>
+            @else
+            <div class="text-center py-5">
+              <i class="fas fa-calendar-times mb-3" style="font-size: 4em; color: #e5e7eb;"></i>
+              <h5 class="fw-bold text-muted mb-2">Belum ada jadwal sidang</h5>
+              <p class="text-muted">Silakan cek secara berkala atau hubungi admin jika ada kendala.</p>
+            </div>
+            @endif
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>

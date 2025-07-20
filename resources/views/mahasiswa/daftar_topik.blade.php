@@ -375,12 +375,16 @@
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">
                             <p class="text-dark m-0 fw-bold">Data Daftar Topik</p><button class="btn btn-sm link-light" type="button" style="background: #881d1d;" data-bs-toggle="modal" data-bs-target="#ModalDaftarTopikYangDipilih"><i class="fas fa-eye"></i>&nbsp;Daftar Topik Yang Dipilih</button>
                             <div class="modal fade" role="dialog" tabindex="-1" id="ModalDaftarTopikYangDipilih">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-dark" style="color: var(--bs-emphasis-color);font-weight: bold;">Daftar Topik Yang Dipilih</h5><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                                        <div class="modal-header bg-gradient-primary text-white">
+                                            <h5 class="modal-title fw-bold">
+                                                <i class="fas fa-check-circle me-2"></i>
+                                                Daftar Topik Yang Dipilih
+                                            </h5>
+                                            <button class="btn-close btn-close-white" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                                         </div>
-                                        <div class="modal-body">
+                                        <div class="modal-body p-4">
                                             @php
                                                 $nim = auth()->guard('mahasiswa')->user()->nim;
                                                 $topik_dipilih = null;
@@ -393,55 +397,150 @@
                                                 $anggota = $topik_dipilih ? \App\Models\Kelompok::where('judul', $topik_dipilih->judul)->get() : collect();
                                             @endphp
                                             @if($topik_dipilih)
-                                            <div class="row">
-                                                <div class="col"><span class="text-dark fw-bold">Judul</span></div>
-                                                <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;{{ $topik_dipilih->judul }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col"><span class="text-dark fw-bold">Kode Dosen</span></div>
-                                                <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;{{ $topik_dipilih->kode_dosen }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col"><span class="text-dark fw-bold">Kelompok</span></div>
-                                                <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;
-                                                        @foreach($anggota as $a)
-                                                            <span class="badge rounded-pill bg-dark m-1">{{ $a->nama_anggota }}</span>
-                                                        @endforeach
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col"><span class="text-dark fw-bold">Status</span></div>
-                                                <div class="col">
-                                                    <p class="text-dark"><span class="text-dark fw-bold">:</span>&nbsp;
+                                            <div class="topik-detail-container">
+                                                <!-- Header Info -->
+                                                <div class="topik-header mb-4">
+                                                    <div class="topik-title-section">
+                                                        <h4 class="topik-title mb-2">{{ $topik_dipilih->judul }}</h4>
+                                                        <div class="topik-meta">
+                                                            <span class="topik-dosen">
+                                                                <i class="fas fa-user-tie me-1"></i>
+                                                                {{ $topik_dipilih->kode_dosen }}
+                                                            </span>
+                                                            <span class="topik-kuota ms-3">
+                                                                <i class="fas fa-users me-1"></i>
+                                                                {{ $topik_dipilih->kuota }} Orang
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="topik-status-section">
                                                         @if($topik_dipilih->status == 'Tersedia' || $topik_dipilih->status == 'Available')
-                                                            <span class="badge rounded-pill bg-success">Available</span>
+                                                            <span class="status-badge status-available">
+                                                                <i class="fas fa-check-circle me-1"></i>Available
+                                                            </span>
                                                         @elseif($topik_dipilih->status == 'Penuh' || $topik_dipilih->status == 'Full')
-                                                            <span class="badge rounded-pill bg-danger">Full</span>
+                                                            <span class="status-badge status-full">
+                                                                <i class="fas fa-times-circle me-1"></i>Full
+                                                            </span>
                                                         @elseif($topik_dipilih->status == 'Proposal')
-                                                            <span class="badge rounded-pill bg-primary">Proposal</span>
+                                                            <span class="status-badge status-proposal">
+                                                                <i class="fas fa-file-alt me-1"></i>Proposal
+                                                            </span>
                                                         @elseif($topik_dipilih->status == 'TA')
-                                                            <span class="badge rounded-pill bg-info text-dark">Tugas Akhir</span>
+                                                            <span class="status-badge status-ta">
+                                                                <i class="fas fa-graduation-cap me-1"></i>Tugas Akhir
+                                                            </span>
                                                         @elseif($topik_dipilih->status == 'Sidang')
-                                                            <span class="badge rounded-pill" style="background-color: #800080; color: #fff;">Sidang</span>
+                                                            <span class="status-badge status-sidang">
+                                                                <i class="fas fa-gavel me-1"></i>Sidang
+                                                            </span>
                                                         @elseif($topik_dipilih->status == 'Selesai')
-                                                            <span class="badge rounded-pill bg-secondary">Selesai</span>
+                                                            <span class="status-badge status-selesai">
+                                                                <i class="fas fa-trophy me-1"></i>Selesai
+                                                            </span>
                                                         @else
-                                                            <span class="badge rounded-pill bg-warning text-dark">{{ $topik_dipilih->status }}</span>
+                                                            <span class="status-badge status-other">
+                                                                <i class="fas fa-info-circle me-1"></i>{{ $topik_dipilih->status }}
+                                                            </span>
                                                         @endif
-                                                    </p>
+                                                    </div>
                                                 </div>
+
+                                                <!-- Detail Sections -->
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="detail-section">
+                                                            <h6 class="section-title">
+                                                                <i class="fas fa-info-circle me-2"></i>
+                                                                Informasi Topik
+                                                            </h6>
+                                                            <div class="detail-item">
+                                                                <div class="detail-label">Bidang</div>
+                                                                <div class="detail-value">
+                                                                    @if(is_array($topik_dipilih->bidang))
+                                                                        @foreach($topik_dipilih->bidang as $bidang)
+                                                                            <span class="badge bg-primary me-1">{{ $bidang }}</span>
+                                                                        @endforeach
+                                                                    @else
+                                                                        <span class="badge bg-primary">{{ $topik_dipilih->bidang }}</span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="detail-item">
+                                                                <div class="detail-label">Program Studi</div>
+                                                                <div class="detail-value">{{ $topik_dipilih->program_studi ?? '-' }}</div>
+                                                            </div>
+                                                            <div class="detail-item">
+                                                                <div class="detail-label">Fakultas</div>
+                                                                <div class="detail-value">{{ $topik_dipilih->fakultas ?? '-' }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="detail-section">
+                                                            <h6 class="section-title">
+                                                                <i class="fas fa-users me-2"></i>
+                                                                Anggota Kelompok
+                                                            </h6>
+                                                            <div class="kelompok-members">
+                                                                @if($anggota->count() > 0)
+                                                                    @foreach($anggota as $a)
+                                                                        <div class="member-card">
+                                                                            <div class="member-avatar">
+                                                                                <i class="fas fa-user"></i>
+                                                                            </div>
+                                                                            <div class="member-info">
+                                                                                <div class="member-name">{{ $a->nama_anggota }}</div>
+                                                                                <div class="member-nim">{{ $a->nim }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                @else
+                                                                    <div class="no-members">
+                                                                        <i class="fas fa-user-plus text-muted"></i>
+                                                                        <p class="text-muted mb-0">Belum ada anggota kelompok</p>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Deskripsi Section -->
+                                                @if($topik_dipilih->deskripsi)
+                                                <div class="detail-section mt-4">
+                                                    <h6 class="section-title">
+                                                        <i class="fas fa-align-left me-2"></i>
+                                                        Deskripsi Topik
+                                                    </h6>
+                                                    <div class="deskripsi-content">
+                                                        {{ $topik_dipilih->deskripsi }}
+                                                    </div>
+                                                </div>
+                                                @endif
                                             </div>
                                             @else
-                                            <div class="row">
-                                                <div class="col text-center text-muted">Belum ada topik yang dipilih oleh kelompok Anda.</div>
+                                            <div class="empty-state">
+                                                <div class="empty-icon">
+                                                    <i class="fas fa-folder-open"></i>
+                                                </div>
+                                                <h5 class="empty-title">Belum Ada Topik Yang Dipilih</h5>
+                                                <p class="empty-description">
+                                                    Kelompok Anda belum memilih topik Tugas Akhir. 
+                                                    Silakan pilih topik dari daftar yang tersedia.
+                                                </p>
+                                                <button class="btn btn-primary" data-bs-dismiss="modal">
+                                                    <i class="fas fa-list me-2"></i>
+                                                    Lihat Daftar Topik
+                                                </button>
                                             </div>
                                             @endif
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                <i class="fas fa-times me-2"></i>
+                                                Tutup
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -688,22 +787,22 @@
     <div class="modal fade" id="ModalLihatDaftarTopik{{ $topik->id }}" tabindex="-1" aria-labelledby="ModalLihatDaftarTopikLabel{{ $topik->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLihatDaftarTopikLabel{{ $topik->id }}">Lihat Topik {{ $topik->judul }}
+                <div class="modal-header bg-gradient-primary">
+                    <h5 class="modal-title fw-bold text-white" id="ModalLihatDaftarTopikLabel{{ $topik->id }}">
+                        <span class="modal-title-text">Lihat Topik {{ $topik->judul }}</span>
                         @php
                             $nim = auth()->guard('mahasiswa')->user()->nim;
                             $sudah_booking = \App\Models\Kelompok::where('judul', $topik->judul)->where('nim', $nim)->exists();
                         @endphp
                         
-                            @if($sudah_booking && $topik->status == 'Booked')
-                                <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}" onclick="event.stopPropagation();">
-                                    Tambah Anggota
-                                </button>
-                            @endif
-                            
-                        
+                        @if($sudah_booking && $topik->status == 'Booked')
+                            <button type="button" class="btn btn-light btn-sm modal-action-btn" data-bs-toggle="modal" data-bs-target="#modalTambahAnggota{{ $topik->id }}" onclick="event.stopPropagation();">
+                                <i class="fas fa-user-plus me-1"></i>
+                                Tambah Anggota
+                            </button>
+                        @endif
                     </h5>
-                    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                    <button class="btn-close btn-close-white" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -963,6 +1062,344 @@
         max-width: 100%;
         font-size: 0.98em;
         padding: 0.45em 1em;
+    }
+    
+    /* Modal Daftar Topik Yang Dipilih Styling */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #881d1d 0%, #a83232 100%) !important;
+    }
+    
+    .topik-detail-container {
+        padding: 0.5rem 0;
+    }
+    
+    .topik-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 2rem;
+    }
+    
+    .topik-title {
+        color: #1e293b;
+        font-weight: 700;
+        font-size: 1.4em;
+        line-height: 1.3;
+        margin-bottom: 0.5rem;
+    }
+    
+    .topik-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.9em;
+        color: #64748b;
+    }
+    
+    .topik-dosen, .topik-kuota {
+        display: flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 6px;
+        font-weight: 500;
+    }
+    
+    .topik-status-section {
+        display: flex;
+        align-items: center;
+    }
+    
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .status-available {
+        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        color: #ffffff;
+    }
+    
+    .status-full {
+        background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+        color: #ffffff;
+    }
+    
+    .status-proposal {
+        background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+        color: #ffffff;
+    }
+    
+    .status-ta {
+        background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+        color: #ffffff;
+    }
+    
+    .status-sidang {
+        background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+        color: #ffffff;
+    }
+    
+    .status-selesai {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        color: #ffffff;
+    }
+    
+    .status-other {
+        background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+        color: #92400e;
+    }
+    
+    .detail-section {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+    }
+    
+    .detail-section:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        transform: translateY(-1px);
+    }
+    
+    .section-title {
+        color: #881d1d;
+        font-weight: 600;
+        font-size: 1.1em;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #f1f5f9;
+    }
+    
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    
+    .detail-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #64748b;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        min-width: 120px;
+    }
+    
+    .detail-value {
+        color: #1e293b;
+        font-weight: 500;
+        text-align: right;
+        flex: 1;
+        margin-left: 1rem;
+    }
+    
+    .kelompok-members {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .member-card {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+    }
+    
+    .member-card:hover {
+        background: #f1f5f9;
+        transform: translateX(4px);
+    }
+    
+    .member-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #881d1d 0%, #a83232 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.1em;
+        margin-right: 0.75rem;
+    }
+    
+    .member-info {
+        flex: 1;
+    }
+    
+    .member-name {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 0.95em;
+        margin-bottom: 0.25rem;
+    }
+    
+    .member-nim {
+        color: #64748b;
+        font-size: 0.85em;
+        font-weight: 500;
+    }
+    
+    .no-members {
+        text-align: center;
+        padding: 2rem;
+        color: #94a3b8;
+    }
+    
+    .no-members i {
+        font-size: 2em;
+        margin-bottom: 0.5rem;
+    }
+    
+    .deskripsi-content {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 4px solid #881d1d;
+        color: #374151;
+        line-height: 1.6;
+        font-size: 0.95em;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+    
+    .empty-icon {
+        font-size: 4em;
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-title {
+        color: #64748b;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .empty-description {
+        color: #94a3b8;
+        font-size: 0.95em;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Modal Header Styling */
+    .modal-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1rem;
+    }
+    
+    .modal-title-text {
+        font-weight: 700;
+        color: #ffffff;
+        font-size: 1.1em;
+        flex: 1;
+    }
+    
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #881d1d 0%, #a83232 100%) !important;
+    }
+    
+    .modal-action-btn {
+        margin-left: 1rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.9em;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+        white-space: nowrap;
+        flex-shrink: 0;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .modal-action-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+        background-color: #f8f9fa !important;
+        color: #881d1d !important;
+    }
+    
+    .modal-action-btn i {
+        font-size: 0.9em;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .topik-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch;
+        }
+        
+        .topik-meta {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .detail-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .detail-value {
+            text-align: left;
+            margin-left: 0;
+        }
+        
+        .member-card {
+            padding: 0.5rem;
+        }
+        
+        .member-avatar {
+            width: 35px;
+            height: 35px;
+            font-size: 1em;
+        }
+        
+        .modal-title {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .modal-action-btn {
+            margin-left: 0;
+            align-self: stretch;
+            text-align: center;
+        }
     }
     </style>
 </body>

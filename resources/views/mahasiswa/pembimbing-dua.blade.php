@@ -299,6 +299,371 @@
                 font-size: 1.01rem;
             }
         }
+        
+        /* Pembimbing 2 Page Styling */
+        .info-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+        }
+        
+        .info-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .info-header i {
+            color: #d97706;
+            font-size: 1.2em;
+            margin-right: 0.75rem;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            color: #92400e;
+            font-size: 1.1em;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .info-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            color: #78350f;
+            line-height: 1.5;
+        }
+        
+        .info-list li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-list li i {
+            color: #059669;
+            margin-right: 0.75rem;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+        
+        /* Pembimbing Cards */
+        .pembimbing-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 2px solid #f1f5f9;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pembimbing-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border-color: #e2e8f0;
+        }
+        
+        .pembimbing-1 {
+            border-left: 4px solid #881d1d;
+        }
+        
+        .pembimbing-2 {
+            border-left: 4px solid #2563eb;
+        }
+        
+        .pembimbing-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .pembimbing-1 .pembimbing-icon {
+            background: linear-gradient(135deg, #881d1d 0%, #a83232 100%);
+            color: white;
+        }
+        
+        .pembimbing-2 .pembimbing-icon {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+        }
+        
+        .pembimbing-icon i {
+            font-size: 1.5em;
+        }
+        
+        .pembimbing-info {
+            flex: 1;
+        }
+        
+        .pembimbing-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-size: 1em;
+        }
+        
+        .pembimbing-name {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.95em;
+        }
+        
+        .pembimbing-placeholder {
+            color: #9ca3af;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            font-size: 0.9em;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.35em 0.75em;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        /* Selection Form */
+        .selection-form {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .form-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .form-header i {
+            color: #881d1d;
+            margin-right: 0.75rem;
+            font-size: 1.2em;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.75rem;
+        }
+        
+        .form-label i {
+            color: #881d1d;
+            margin-right: 0.5rem;
+        }
+        
+        .pembimbing-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+        
+        .pembimbing-select:focus {
+            border-color: #881d1d;
+            box-shadow: 0 0 0 3px rgba(136, 29, 29, 0.1);
+        }
+        
+        .form-actions {
+            text-align: center;
+        }
+        
+        .btn-select {
+            background: linear-gradient(135deg, #881d1d 0%, #a83232 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(136, 29, 29, 0.2);
+        }
+        
+        .btn-select:hover {
+            background: linear-gradient(135deg, #6e1717 0%, #881d1d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(136, 29, 29, 0.3);
+        }
+        
+        /* Status Messages */
+        .status-message {
+            margin-top: 1rem;
+        }
+        
+        .status-card {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .status-pending-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+        }
+        
+        .status-success-card {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 1px solid #22c55e;
+        }
+        
+        .status-danger-card {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 1px solid #ef4444;
+        }
+        
+        .status-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .status-pending-card .status-icon {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .status-success-card .status-icon {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .status-danger-card .status-icon {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .status-icon i {
+            font-size: 1.3em;
+        }
+        
+        .status-content h6 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        
+        .status-content p {
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .empty-icon {
+            font-size: 4em;
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state h5 {
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .pembimbing-card {
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+            
+            .pembimbing-icon {
+                width: 50px;
+                height: 50px;
+                margin-right: 0.75rem;
+            }
+            
+            .pembimbing-icon i {
+                font-size: 1.2em;
+            }
+            
+            .selection-form {
+                padding: 1.5rem;
+            }
+            
+            .status-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.25rem;
+            }
+            
+            .status-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .info-card {
+                padding: 1.25rem;
+            }
+        }
     </style>
 </head>
 
@@ -405,68 +770,157 @@
                     </div>
                     <div class="card shadow">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                            <p class="text-dark m-0 fw-bold">Mencari Pembimbing 2</p>
+                            <h5 class="text-dark m-0 fw-bold">
+                                <i class="fas fa-user-friends me-2" style="color: #881d1d;"></i>
+                                Pilih Pembimbing 2
+                            </h5>
+                            <span class="badge bg-primary">{{ $dosenList->count() }} Dosen Tersedia</span>
                         </div>
-                        <div class="card-body">
-                            <div class="alert alert-warning" role="alert"><span><strong>Catatan :</strong></span>
-                                <ul>                                  
-                                    <li>Pembimbing 1 Akan Otomatis Dipilih Sesuai Dengan Topik Yang Dimiliki Oleh Dosen Bersangkutan</li>
-                                    <li>Pembimbing 2 Bisa Dipilih Setelah Mendapatkan Topik dan Pembimbing 1</li>
-                                </ul>
+                        <div class="card-body p-4">
+                            <!-- Info Card -->
+                            <div class="info-card mb-4">
+                                <div class="info-header">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="info-title">Informasi Penting</span>
+                                </div>
+                                <div class="info-content">
+                                    <ul class="info-list">
+                                        <li><i class="fas fa-check-circle"></i> Pembimbing 1 akan otomatis dipilih sesuai dengan topik yang dimiliki oleh dosen bersangkutan</li>
+                                        <li><i class="fas fa-check-circle"></i> Pembimbing 2 bisa dipilih setelah mendapatkan topik dan pembimbing 1</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="row">
-                                <div class="col">
-                                    <h5>Pembimbing</h5>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label class="form-label">Pembimbing 1</label>
+
+                            <!-- Pembimbing Status Cards -->
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="pembimbing-card pembimbing-1">
+                                        <div class="pembimbing-icon">
+                                            <i class="fas fa-user-tie"></i>
+                                        </div>
+                                        <div class="pembimbing-info">
+                                            <h6 class="pembimbing-title">Pembimbing 1</h6>
                                             @if(isset($kelompokSaya) && $kelompokSaya)
-                                                <input class="form-control-sm form-control" type="text" value="{{ $kelompokSaya->pembimbing_satu }}" readonly>
+                                                <p class="pembimbing-name">{{ $kelompokSaya->pembimbing_satu }}</p>
+                                                <span class="status-badge status-active">Aktif</span>
                                             @else
-                                                <input class="form-control-sm form-control" type="text" value="" readonly placeholder="Akan muncul otomatis setelah Anda memiliki kelompok">
+                                                <p class="pembimbing-placeholder">Belum tersedia</p>
+                                                <span class="status-badge status-inactive">Menunggu</span>
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="row mt-3">
-                                        <div class="col">
-                                            <label class="form-label">Pembimbing 2</label>
-                                            @if(isset($kelompokSaya) && $kelompokSaya)
-                                                @php
-                                                    $disablePembimbing2 = ($kelompokSaya->status_pembimbing_dua === 'pending' || $kelompokSaya->status_pembimbing_dua === 'accepted');
-                                                @endphp
-                                                <form action="{{ route('mahasiswa.pilih_pembimbing_dua') }}" method="POST">
-                                                    @csrf
-                                                    <select class="form-select form-select-sm" name="pembimbing_dua" id="pembimbing_2" required @if($disablePembimbing2) disabled @endif>
-                                                        <option value="">-- Pilih Pembimbing 2 --</option>
-                                                        @foreach($dosenList as $dosen)
-                                                            @if(!isset($kelompokSaya) || $kelompokSaya->pembimbing_satu != $dosen->nama)
-                                                                <option value="{{ $dosen->nama }}" {{ isset($kelompokSaya) && $kelompokSaya->pembimbing_dua == $dosen->nama ? 'selected' : '' }}>{{ $dosen->nama }} ({{ $dosen->kode_dosen }})</option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                    <div class="d-grid gap-2 mt-2">
-                                                        <button class="btn btn-sm" type="submit" style="background: #881d1d;color: rgb(255,255,255);" @if($disablePembimbing2) disabled @endif>
-                                                            <i class="fas fa-save"></i>&nbsp;Pilih Pembimbing 2
-                                                        </button>
-                                                    </div>
-                                                </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="pembimbing-card pembimbing-2">
+                                        <div class="pembimbing-icon">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <div class="pembimbing-info">
+                                            <h6 class="pembimbing-title">Pembimbing 2</h6>
+                                            @if(isset($kelompokSaya) && $kelompokSaya && $kelompokSaya->pembimbing_dua)
+                                                <p class="pembimbing-name">{{ $kelompokSaya->pembimbing_dua }}</p>
                                                 @if($kelompokSaya->status_pembimbing_dua === 'pending')
-                                                    <div class="alert alert-info mt-2">Menunggu konfirmasi dosen pembimbing dua.</div>
+                                                    <span class="status-badge status-pending">Menunggu Konfirmasi</span>
                                                 @elseif($kelompokSaya->status_pembimbing_dua === 'accepted')
-                                                    <div class="alert alert-success mt-2">Pembimbing dua sudah diterima oleh dosen.</div>
+                                                    <span class="status-badge status-active">Diterima</span>
                                                 @elseif($kelompokSaya->status_pembimbing_dua === 'rejected')
-                                                    <div class="alert alert-danger mt-2">Permintaan pembimbing dua ditolak. Silakan pilih ulang pembimbing dua.</div>
+                                                    <span class="status-badge status-rejected">Ditolak</span>
                                                 @endif
                                             @else
-                                                <select class="form-select form-select-sm" disabled>
-                                                    <option>-- Pilih Pembimbing 2 --</option>
-                                                </select>
-                                                <div class="alert alert-info mt-2">Fitur ini hanya bisa digunakan setelah Anda memiliki kelompok.</div>
+                                                <p class="pembimbing-placeholder">Belum dipilih</p>
+                                                <span class="status-badge status-inactive">Tersedia</span>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Selection Form -->
+                            @if(isset($kelompokSaya) && $kelompokSaya)
+                                @php
+                                    $disablePembimbing2 = ($kelompokSaya->status_pembimbing_dua === 'pending' || $kelompokSaya->status_pembimbing_dua === 'accepted');
+                                @endphp
+                                
+                                @if(!$disablePembimbing2)
+                                    <div class="selection-form">
+                                        <div class="form-header">
+                                            <i class="fas fa-hand-pointer"></i>
+                                            <span>Pilih Pembimbing 2</span>
+                                        </div>
+                                        <form action="{{ route('mahasiswa.pilih_pembimbing_dua') }}" method="POST">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label class="form-label">
+                                                    <i class="fas fa-user-graduate me-2"></i>
+                                                    Dosen Pembimbing 2
+                                                </label>
+                                                <select class="form-select pembimbing-select" name="pembimbing_dua" id="pembimbing_2" required>
+                                                    <option value="">-- Pilih Pembimbing 2 --</option>
+                                                    @foreach($dosenList as $dosen)
+                                                        @if(!isset($kelompokSaya) || $kelompokSaya->pembimbing_satu != $dosen->nama)
+                                                            <option value="{{ $dosen->nama }}" {{ isset($kelompokSaya) && $kelompokSaya->pembimbing_dua == $dosen->nama ? 'selected' : '' }}>
+                                                                {{ $dosen->nama }} ({{ $dosen->kode_dosen }})
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-actions">
+                                                <button class="btn btn-primary btn-select" type="submit">
+                                                    <i class="fas fa-save me-2"></i>
+                                                    Pilih Pembimbing 2
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div class="status-message">
+                                        @if($kelompokSaya->status_pembimbing_dua === 'pending')
+                                            <div class="status-card status-pending-card">
+                                                <div class="status-icon">
+                                                    <i class="fas fa-clock"></i>
+                                                </div>
+                                                <div class="status-content">
+                                                    <h6>Menunggu Konfirmasi</h6>
+                                                    <p>Permintaan pembimbing 2 sedang menunggu konfirmasi dari dosen. Mohon tunggu beberapa saat.</p>
+                                                </div>
+                                            </div>
+                                        @elseif($kelompokSaya->status_pembimbing_dua === 'accepted')
+                                            <div class="status-card status-success-card">
+                                                <div class="status-icon">
+                                                    <i class="fas fa-check-circle"></i>
+                                                </div>
+                                                <div class="status-content">
+                                                    <h6>Pembimbing 2 Diterima</h6>
+                                                    <p>Selamat! Pembimbing 2 Anda telah diterima dan siap untuk membimbing.</p>
+                                                </div>
+                                            </div>
+                                        @elseif($kelompokSaya->status_pembimbing_dua === 'rejected')
+                                            <div class="status-card status-danger-card">
+                                                <div class="status-icon">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </div>
+                                                <div class="status-content">
+                                                    <h6>Permintaan Ditolak</h6>
+                                                    <p>Permintaan pembimbing 2 ditolak. Silakan pilih pembimbing 2 yang lain.</p>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
+                            @else
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <h5>Belum Memiliki Kelompok</h5>
+                                    <p>Anda harus memiliki kelompok terlebih dahulu sebelum dapat memilih pembimbing 2.</p>
+                                    <a href="/mahasiswa/daftar_topik" class="btn btn-outline-primary">
+                                        <i class="fas fa-arrow-right me-2"></i>
+                                        Daftar Topik
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
